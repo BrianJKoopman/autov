@@ -1,0 +1,83 @@
+! How to run me: C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\seq\script.seq
+
+! Load a clean copy of the optical design.
+in "E:\ownCloud\optics\len\clean_copies\ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq"
+
+! automated glass defintion removal
+GL1 S6
+GL1 S9
+GL1 S11
+GL1 S13
+GL1 S15
+GL1 S17
+GL1 S19
+GL1 S21
+GL1 S23
+GL1 S25
+GL1 S27
+GL1 S34
+
+! apply MUL 138, 250 coating
+MLT S32 "E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
+MLT S33 "E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
+MLT S36 "E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
+MLT S37 "E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
+MLT S39 "E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
+MLT S40 "E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
+
+! modify wavelengths
+WL W1 2140000
+WL W2 2070000
+WL W3 2000000
+WTW W2 1
+WTW W3 1
+! change reference wavelength to W2
+REF  2
+
+! fields for PA2 are good from clean file
+! set vignetting
+run "C:\CODEV105_FCS\macro\setvig.seq" 1e-007 0.1 100 NO ;GO
+
+! activate polarization ray tracing
+POL YES
+
+! set polarization fraction of all fields to 1
+PFR F1  1
+PFR F2  1
+PFR F3  1
+PFR F4  1
+PFR F5  1
+PFR F6  1
+PFR F7  1
+PFR F8  1
+PFR F9  1
+PFR F10  1
+PFR F11  1
+PFR F12  1
+PFR F13  1
+PFR F14  1
+PFR F15  1
+PFR F16  1
+PFR F17  1
+PFR F18  1
+PFR F19  1
+PFR F20  1
+PFR F21  1
+PFR F22  1
+PFR F23  1
+PFR F24  1
+PFR F25  1
+
+! quick best focus, twice
+WAV ; BES; RFO; GO
+WAV ; BES; RFO; GO
+
+! try calling psf_out.seq
+! Note: is kinda slow.
+!in "E:\ownCloud\optics\\autov\seq\auto_psf.seq"
+
+! call ray trace with no output redirection
+in "E:\ownCloud\optics\\autov\seq\auto_ray_trace.seq"
+
+! to exit without prompt when finished
+exit y
