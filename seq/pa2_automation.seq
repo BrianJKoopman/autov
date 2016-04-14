@@ -77,13 +77,13 @@ WAV ; BES; RFO; GO
 
 ! try calling psf_out.seq
 ! Note: is kinda slow.
-!in "E:\ownCloud\optics\\autov\seq\auto_psf.seq"
+in "E:\ownCloud\optics\\autov\seq\auto_psf.seq"
 
 ! call ray trace with no output redirection
 in "E:\ownCloud\optics\\autov\seq\auto_ray_trace.seq"
 
 ! call auto_poldsp.seq
-!in "E:\ownCloud\optics\\autov\seq\auto_poldsp_0_90_23_rays_PA2.seq"
+in "E:\ownCloud\optics\\autov\seq\auto_poldsp_0_90_23_rays_PA2.seq"
 
 ! to exit without prompt when finished
 !exit y
