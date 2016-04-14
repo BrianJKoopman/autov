@@ -69,8 +69,8 @@ PFR F24  1
 PFR F25  1
 
 ! quick best focus, twice
-WAV ; BES; RFO; GO
-WAV ; BES; RFO; GO
+! WAV ; BES; RFO; GO
+! WAV ; BES; RFO; GO
 
 ! try calling psf_out.seq
 ! Note: is kinda slow.
