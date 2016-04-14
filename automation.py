@@ -6,7 +6,7 @@ import argparse
 
 # Parse arguments passed to the script.
 parser = argparse.ArgumentParser()
-parser.add_argument("array", choices=[1,2,3], help="Array you want to automate.")
+parser.add_argument("array", choices=['1','2','3'], help="Array you want to automate.")
 args = parser.parse_args()
 
 ARRAY = args.array
