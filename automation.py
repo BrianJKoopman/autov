@@ -2,13 +2,20 @@ import subprocess
 import time
 import os
 import hashlib
+import argparse
 
+# Parse arguments passed to the script.
+parser = argparse.ArgumentParser()
+parser.add_argument("array", choices=[1,2,3], help="Array you want to automate.")
+args = parser.parse_args()
+
+ARRAY = args.array
 DATE = time.strftime('%Y%m%d')
 CTIME = int(time.time())
 
 outDir = "E:\ownCloud\optics\data\\"
 tmpDir = "E:\ownCloud\optics\data\\tmp\\"
-autoseq = "pa2_automation.seq"
+autoseq = "pa%s_automation.seq"%ARRAY
 
 # Check md5sum of "clean" files to make sure they're clean.
 md5sums = {'ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq': 'a90ffa3f0983dbb303ceec66ae689edd', 
@@ -30,32 +37,17 @@ def checkDir(directory):
 
 # Make copy of automation .seq file for permanent record
 checkDir("%s%s"%(outDir,DATE))
-print "cp E:\ownCloud\optics\\autov\seq\%s %s%s\\%s_%s"%(autoseq, outDir, DATE, CTIME, autoseq)
-subprocess.call("cp E:\ownCloud\optics\\autov\seq\%s %s%s\\%s_%s"%(autoseq, outDir, DATE, CTIME, autoseq))
+print "cp E:\ownCloud\optics\\autov\seq\%s %s%s\\%s_pa%s_%s"%(autoseq, outDir, DATE, CTIME, ARRAY, autoseq)
+subprocess.call("cp E:\ownCloud\optics\\autov\seq\%s %s%s\\%s_pa%s_%s"%(autoseq, outDir, DATE, CTIME, ARRAY, autoseq))
 
 # Move temporary output files to permanent storage location
-def store_output(filename, tmpDir, outDir, DATE, CTIME):
+def store_output(filename, tmpDir, outDir, DATE, CTIME, ARRAY):
     if (os.path.isfile("%s\%s"%(tmpDir,filename))):
         checkDir("%s%s"%(outDir,DATE))
-        print "mv %s\%s %s%s\\%s_%s"%(tmpDir,filename,outDir,DATE,CTIME,filename)
-        subprocess.call("mv %s\%s %s%s\\%s_%s"%(tmpDir,filename,outDir,DATE,CTIME,filename))
+        print "mv %s\%s %s%s\\%s_pa%s_%s"%(tmpDir,filename,outDir,DATE,CTIME,ARRAY,filename)
+        subprocess.call("mv %s\%s %s%s\\%s_pa%s_%s"%(tmpDir,filename,outDir,DATE,CTIME,ARRAY,filename))
 
-store_output("psf.txt", tmpDir, outDir, DATE, CTIME)
-store_output("real_ray_trace.txt", tmpDir, outDir, DATE, CTIME)
-store_output("poldsp_0deg.txt", tmpDir, outDir, DATE, CTIME)
-store_output("poldsp_90deg.txt", tmpDir, outDir, DATE, CTIME)
-
-    
-#if (os.path.isfile("%s\psf.txt"%tmpDir)):
-#    checkDir("%s%s"%(outDir,DATE))
-#    print "mv %s\psf.txt %s%s\\%s_psf.txt"%(tmpDir,outDir,DATE,CTIME)
-#    subprocess.call("mv %s\psf.txt %s%s\\%s_psf.txt"%(tmpDir,outDir,DATE,CTIME))
-#
-#if (os.path.isfile("%s\\real_ray_trace.txt"%tmpDir)):
-#    checkDir("%s%s"%(outDir,DATE))
-#    subprocess.call("mv %s\\real_ray_trace.txt %s%s\\%s_real_ray_trace.txt"%(tmpDir,outDir,DATE,CTIME))
-#
-#if (os.path.isfile("%s\\poldsp_0deg.txt"%tmpDir)):
-#    checkDir("%s%s"%(outDir,DATE))
-#    subprocess.call("mv %s\\polsdp_0deg.txt %s%s\\%s_poldsp_0deg.txt"%(tmpDir,outDir,DATE,CTIME))
-#
+store_output("psf.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
+store_output("real_ray_trace.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
+store_output("poldsp_0deg.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
+store_output("poldsp_90deg.txt", tmpDir, outDir, DATE, CTIME, ARRAY)

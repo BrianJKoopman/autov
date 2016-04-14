@@ -1,0 +1,154 @@
+! Automated script for PA1
+! How to run me: C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\seq\script.seq
+
+! Load a clean copy of the optical design.
+! Note: This is for PA2, we'll need to flip some signs to make it for PA1.
+in "E:\ownCloud\optics\len\clean_copies\ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq"
+
+! automated glass defintion removal
+GL1 S6
+GL1 S9
+GL1 S11
+GL1 S13
+GL1 S15
+GL1 S17
+GL1 S19
+GL1 S21
+GL1 S23
+GL1 S25
+GL1 S27
+GL1 S34
+
+! apply MUL 138, 250 coating
+MLT S32 "E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
+MLT S33 "E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
+MLT S36 "E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
+MLT S37 "E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
+MLT S39 "E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
+MLT S40 "E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
+
+! modify wavelengths
+WL W1 2140000
+WL W2 2070000
+WL W3 2000000
+WTW W2 1
+WTW W3 1
+! change reference wavelength to W2
+REF  2
+
+! Change optics tube position to be PA1
+XDE  S8 -16.1
+XDE  S15 -0.2
+XDE  S25 -0.2
+XDE  S30 -0.4338
+XDE  S36 -0.9184880045643
+XDE  S39 -1.381514985547
+XDE  S42 -1.6
+BDE  S30 2.914
+BDE  S42 4.039980255467
+
+! Change fields to be for PA1
+xan f1 0.625000
+xan f2 0.456667
+xan f3 0.625000
+xan f4 0.793333
+xan f5 0.625000
+xan f6 0.288333
+xan f7 0.386941
+xan f8 0.625000
+xan f9 0.863059
+xan f10 0.961667
+xan f11 0.863059
+xan f12 0.625000
+xan f13 0.386941
+xan f14 0.120000
+xan f15 0.187657
+xan f16 0.372500
+xan f17 0.625000
+xan f18 0.877500
+xan f19 1.06234
+xan f20 1.13000
+xan f21 1.06234
+xan f22 0.877500
+xan f23 0.625000
+xan f24 0.372500
+xan f25 0.187657
+
+yan f1 0.480000
+yan f2 0.480000
+yan f3 0.648333
+yan f4 0.480000
+yan f5 0.311667
+yan f6 0.480000
+yan f7 0.718059
+yan f8 0.816667
+yan f9 0.718059
+yan f10 0.480000
+yan f11 0.241941
+yan f12 0.143333
+yan f13 0.241941
+yan f14 0.480000
+yan f15 0.732500
+yan f16 0.917343
+yan f17 0.985000
+yan f18 0.917343
+yan f19 0.732500
+yan f20 0.480000
+yan f21 0.227500
+yan f22 0.0426571
+yan f23 -0.0250000
+yan f24 0.0426571
+yan f25 0.227500
+
+! set vignetting
+run "C:\CODEV105_FCS\macro\setvig.seq" 1e-007 0.1 100 NO ;GO
+
+! activate polarization ray tracing
+POL YES
+
+! set polarization fraction of all fields to 1
+PFR F1  1
+PFR F2  1
+PFR F3  1
+PFR F4  1
+PFR F5  1
+PFR F6  1
+PFR F7  1
+PFR F8  1
+PFR F9  1
+PFR F10  1
+PFR F11  1
+PFR F12  1
+PFR F13  1
+PFR F14  1
+PFR F15  1
+PFR F16  1
+PFR F17  1
+PFR F18  1
+PFR F19  1
+PFR F20  1
+PFR F21  1
+PFR F22  1
+PFR F23  1
+PFR F24  1
+PFR F25  1
+
+! Modify Semi-Aperture of Image surface for poldsp output
+CIR S42 8
+
+! quick best focus, twice
+WAV ; BES; RFO; GO
+WAV ; BES; RFO; GO
+
+! try calling psf_out.seq
+! Note: is kinda slow.
+in "E:\ownCloud\optics\\autov\seq\auto_psf.seq"
+
+! call ray trace with no output redirection
+in "E:\ownCloud\optics\\autov\seq\auto_ray_trace.seq"
+
+! call auto_poldsp.seq
+in "E:\ownCloud\optics\\autov\seq\auto_poldsp_0_90_23_rays_PA2.seq"
+
+! to exit without prompt when finished
+exit y
