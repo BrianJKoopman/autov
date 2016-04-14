@@ -1,0 +1,64 @@
+! Fields all to 0 Degree Orientation
+POR F1  0
+POR F2  0
+POR F3  0
+POR F4  0
+POR F5  0
+POR F6  0
+POR F7  0
+POR F8  0
+POR F9  0
+POR F10  0
+POR F11  0
+POR F12  0
+POR F13  0
+POR F14  0
+POR F15  0
+POR F16  0
+POR F17  0
+POR F18  0
+POR F19  0
+POR F20  0
+POR F21  0
+POR F22  0
+POR F23  0
+POR F24  0
+POR F25  0
+
+! Run poldsp for 23 rays across 
+OUT "E:\owncloud\optics\data\tmp\poldsp_0deg.txt" ! Sets output file
+! old format was 20141107_0deg_23_rays_138_250_mul_PA2.txt
+RUN "C:\CODEV105_FCS\macro\poldsp.seq" 0 23 "Polarization State" "Full" 
+OUT T ! Restores regular output
+
+! Fields all to 90 Degree Orientation
+POR F1  90
+POR F2  90
+POR F3  90
+POR F4  90
+POR F5  90
+POR F6  90
+POR F7  90
+POR F8  90
+POR F9  90
+POR F10  90
+POR F11  90
+POR F12  90
+POR F13  90
+POR F14  90
+POR F15  90
+POR F16  90
+POR F17  90
+POR F18  90
+POR F19  90
+POR F20  90
+POR F21  90
+POR F22  90
+POR F23  90
+POR F24  90
+POR F25  90
+
+! Run poldsp for 23 rays across
+OUT "E:\owncloud\optics\data\\tmp\poldsp_90deg.txt" ! Sets output file
+RUN "C:\CODEV105_FCS\macro\poldsp.seq" 0 23 "Polarization State" "Full" 
+OUT T ! Restores regular output
