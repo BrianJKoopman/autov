@@ -8,6 +8,7 @@ CTIME = int(time.time())
 
 outDir = "E:\ownCloud\optics\data\\"
 tmpDir = "E:\ownCloud\optics\data\\tmp\\"
+autoseq = "pa2_automation.seq"
 
 # Check md5sum of "clean" files to make sure they're clean.
 md5sums = {'ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq': 'a90ffa3f0983dbb303ceec66ae689edd', 
@@ -21,11 +22,16 @@ for item in md5sums.keys():
         exit
 
 # Make the CODEV Call
-subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\pa2_automation.seq")
+subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\%s"%(autoseq))
 
 def checkDir(directory):
     if not os.path.exists(outDir + DATE):
         os.makedirs(outDir + DATE)
+
+# Make copy of automation .seq file for permanent record
+checkDir("%s%s"%(outDir,DATE))
+print "cp E:\ownCloud\optics\\autov\seq\%s %s%s\\%s_%s"%(autoseq, outDir, DATE, CTIME, autoseq)
+subprocess.call("cp E:\ownCloud\optics\\autov\seq\%s %s%s\\%s_%s"%(autoseq, outDir, DATE, CTIME, autoseq))
 
 # Move temporary output files to permanent storage location
 if (os.path.isfile("%s\psf.txt"%tmpDir)):
