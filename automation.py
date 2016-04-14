@@ -51,3 +51,7 @@ store_output("psf.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
 store_output("real_ray_trace.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
 store_output("poldsp_0deg.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
 store_output("poldsp_90deg.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
+
+# cleanup
+tmpDir = "E:\ownCloud\optics\data\\tmp\\"
+subprocess.call("rm -i %s\*.txt"%(tmpDir))
