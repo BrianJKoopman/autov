@@ -68,9 +68,12 @@ PFR F23  1
 PFR F24  1
 PFR F25  1
 
+! Modify Semi-Aperture of Image surface for poldsp output
+CIR S42 8
+
 ! quick best focus, twice
-! WAV ; BES; RFO; GO
-! WAV ; BES; RFO; GO
+WAV ; BES; RFO; GO
+WAV ; BES; RFO; GO
 
 ! try calling psf_out.seq
 ! Note: is kinda slow.
