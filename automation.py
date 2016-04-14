@@ -14,7 +14,7 @@ DATE = time.strftime('%Y%m%d')
 CTIME = int(time.time())
 
 outDir = "E:\ownCloud\optics\data\\"
-tmpDir = "E:\ownCloud\optics\data\\tmp\\"
+tmpDir = "E:\ownCloud\optics\data\\tmp\\" # Deleted at end of script
 autoseq = "pa%s_automation.seq"%ARRAY
 
 # Check md5sum of "clean" files to make sure they're clean.
@@ -51,7 +51,3 @@ store_output("psf.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
 store_output("real_ray_trace.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
 store_output("poldsp_0deg.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
 store_output("poldsp_90deg.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
-
-# cleanup
-subprocess.call("rm -ri %s"%(tmpDir))
-subprocess.call("mkdir %s"%(tmpDir))
