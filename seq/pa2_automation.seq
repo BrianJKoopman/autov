@@ -80,7 +80,7 @@ WAV ; BES; RFO; GO
 in "E:\ownCloud\optics\\autov\seq\auto_ray_trace.seq"
 
 ! call auto_poldsp.seq
-in "E:\ownCloud\optics\\autov\seq\auto_poldsp_0_90_23_rays_PA2.seq"
+!in "E:\ownCloud\optics\\autov\seq\auto_poldsp_0_90_23_rays_PA2.seq"
 
 ! to exit without prompt when finished
-exit y
+!exit y
