@@ -44,8 +44,8 @@ subprocess.call("cp E:\ownCloud\optics\\autov\seq\%s %s%s\\%s_pa%s_%s"%(autoseq,
 def store_output(filename, tmpDir, outDir, DATE, CTIME, ARRAY):
     if (os.path.isfile("%s\%s"%(tmpDir,filename))):
         checkDir("%s%s"%(outDir,DATE))
-        print "mv %s\%s %s%s\\%s_pa%s_%s"%(tmpDir,filename,outDir,DATE,CTIME,ARRAY,filename)
-        subprocess.call("mv %s\%s %s%s\\%s_pa%s_%s"%(tmpDir,filename,outDir,DATE,CTIME,ARRAY,filename))
+        print "mv %s\%s %s%s\\%s_%s.pa%s"%(tmpDir,filename,outDir,DATE,CTIME,filename,ARRAY)
+        subprocess.call("mv %s\%s %s%s\\%s_%s.pa%s"%(tmpDir,filename,outDir,DATE,CTIME,filename,ARRAY))
 
 store_output("psf.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
 store_output("real_ray_trace.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
@@ -53,5 +53,5 @@ store_output("poldsp_0deg.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
 store_output("poldsp_90deg.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
 
 # cleanup
-tmpDir = "E:\ownCloud\optics\data\\tmp\\"
-subprocess.call("rm -i %s\*.txt"%(tmpDir))
+subprocess.call("rm -ri %s"%(tmpDir))
+subprocess.call("mkdir %s"%(tmpDir))
