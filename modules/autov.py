@@ -166,6 +166,13 @@ class AutoV(object):
         self.seq.append(text)
         return text
 
+    def exit(self):
+        text = "! exit without prompt when finished\n"
+        text += "exit y\n"
+        self.seq.append(text)
+        return text
+
+
 def readseq(seqfile):
     """Read a CODEV sequence file, for use in combining a master .seq for
        automation."""
