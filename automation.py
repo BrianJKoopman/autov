@@ -1,7 +1,6 @@
 import subprocess
 import time
 import os
-import hashlib
 import argparse
 import autov
 

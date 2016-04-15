@@ -93,7 +93,7 @@ class AutoV(object):
         self.seq.append(text)
         return text
 
-    def active_polarization_ray_tracing(self):
+    def activate_polarization_ray_tracing(self):
         """Active polarization ray tracing."""
         text = "! activate polarization ray tracing\n"
         text += "POL YES\n"
