@@ -30,6 +30,7 @@ qq.activate_polarization_ray_tracing()
 qq.set_image_semi_aperture()
 qq.quick_best_focus()
 qq.run_psf()
+qq.run_real_ray_trace()
 autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
 
 # Make the CODEV Call

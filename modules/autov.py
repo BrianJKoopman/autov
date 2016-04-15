@@ -12,7 +12,7 @@ class AutoV(object):
     def create_header(self):
         # TODO: Add parameters to the header, which array, etc. anything in __init__.
         header = "! This .seq file was created by the AutoV automation class. \n"
-        header += r"! How to run me: C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\autov\seq\script.seq"
+        header += r"! How to run me: C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\autov\seq\script.seq" + "\n"
         self.seq.append(header)
         return header
 
@@ -140,6 +140,16 @@ class AutoV(object):
         text += "PLO NO\n"
         text += "DIS NO\n"
         text += "GO\n"
+        text += "OUT T ! Restores regular output\n"
+        self.seq.append(text)
+        return text
+
+    def run_real_ray_trace(self):
+        # TODO: This wants to know about the fields set.
+        text = "! Adopted from auto_ray_trace.seq, which was used for 20141107 analysis\n"
+        text += "OUT " + r"E:\owncloud\optics\data\tmp\real_ray_trace.txt" + " ! Sets output file\n"
+        for i in range(25):
+            text += "RSI S42 R1 F%s\n"%(i+1)
         text += "OUT T ! Restores regular output\n"
         self.seq.append(text)
         return text
