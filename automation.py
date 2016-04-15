@@ -26,6 +26,11 @@ qq.remove_glass()
 qq.apply_ar_coatings()
 qq.set_wavelengths(wavelengths=[2140000, 2070000, 2000000], reference=2)
 qq.set_vignetting()
+qq.set_fields()
+qq.activate_polarization_ray_tracing()
+qq.set_image_semi_aperture()
+qq.quick_best_focus()
+qq.run_psf()
 autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
 
 # Make the CODEV Call
