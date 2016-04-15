@@ -18,22 +18,13 @@ outDir = "E:\ownCloud\optics\data\\"
 tmpDir = "E:\ownCloud\optics\data\\tmp\\"
 autoseq = "pa%s_automation.seq"%ARRAY
 
-# Moved to load_clean_len method of autov
-### # Check md5sum of "clean" files to make sure they're clean.
-### md5sums = {'ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq': 'a90ffa3f0983dbb303ceec66ae689edd', 
-###            'ACTPol_90GHz_v29_optical_filter_aperture_study_20111204.seq': 'da8d3ecb420283261220ab4175b0a7d6'}
-### 
-### clean_file_dir = "E:\ownCloud\optics\len\clean_copies\\"
-### for item in md5sums.keys():
-###     md5 = hashlib.md5(open(clean_file_dir + item,'rb').read()).hexdigest()
-###     if md5 != md5sums[item]:
-###         raise RuntimeError("The md5sum does not match a known value! This means a 'clean' file has been modified! Exiting.")
-
+# Build .seq file for automated run.
 qq = autov.AutoV(ARRAY)
 qq.create_header()
 qq.load_clean_len()
 qq.remove_glass()
 qq.apply_ar_coatings()
+qq.set_wavelengths(wavelengths=[2140000, 2070000, 2000000], reference=2)
 autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
 
 # Make the CODEV Call

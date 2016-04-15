@@ -61,6 +61,27 @@ class AutoV(object):
         else:
             raise ValueError("Automation only setup for array 1 and 2 at this time.")
 
+    def set_wavelengths(self, wavelengths=None, reference=None):
+        """Set the wavelengths in CODEV.
+
+        Keyword arguments:
+        wavelengths -- list of wavelengths, max length is 21
+        reference -- change what the reference wavelength is
+        """
+        if wavelengths is None:
+            wavelengths = []
+        else:
+            if len(wavelengths)>21:
+                raise ValueError("More than 21 wavelengths submitted, this is too many.")
+            if len(wavelenghts) != len(np.unique(wavelengths)):
+                raise ValueError("Wavelengths submitted not unique, please remove duplicates.")
+
+        text = "! modify wavelengths\n"
+        for wavelength in wavelengths:
+            text += "WL W%s %s\n"%(wavelengths.index(wavelength)+1, wavelength)
+        self.seq.append(text)
+        return text
+
 def readseq(seqfile):
     """Read a CODEV sequence file, for use in combining a master .seq for
        automation."""
@@ -79,3 +100,15 @@ def writeseq(inputs, seqfile):
         for item in inputs:
             f.write(item)
             f.write('\n')
+
+SPEED_OF_LIGHT = 299792458 # [m/s]
+
+def lambda2freq(wavelength):
+    # This is currently relying on the fact that wavelength is in nm and we want to give GHz.
+    # wavelength given in nm
+    return SPEED_OF_LIGHT/wavelength #[GHz]
+
+def freq2lambda(freq):
+    # freq in Ghz gives wavelength in nm, like CODEV wants
+    return SPEED_OF_LIGHT/freq #[nm]
+
