@@ -154,6 +154,18 @@ class AutoV(object):
         self.seq.append(text)
         return text
 
+    def run_poldsp(self, input_angle, filename, pupil_number=11):
+        # TODO: This also wants to know about the fields set
+        text = "! Set input field orientation\n"
+        for i in range(25):
+            text += "POR F%s %s\n"%((i+1), input_angle)
+
+        text += "OUT " r"E:\owncloud\optics\data\tmp" + "\\" + filename + " ! Sets output file\n"
+        text += "RUN " r"C:\CODEV105_FCS\macro\poldsp.seq" + " 0 %s \"Polarization State\" \"Full\"\n"%(pupil_number)
+        text += "OUT T ! Restores regular output\n"
+        self.seq.append(text)
+        return text
+
 def readseq(seqfile):
     """Read a CODEV sequence file, for use in combining a master .seq for
        automation."""

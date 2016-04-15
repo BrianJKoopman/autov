@@ -29,8 +29,12 @@ qq.set_fields()
 qq.activate_polarization_ray_tracing()
 qq.set_image_semi_aperture()
 qq.quick_best_focus()
-qq.run_psf()
+#qq.run_psf()
 qq.run_real_ray_trace()
+qq.run_poldsp(input_angle=0, filename='poldsp_0deg.txt')
+qq.run_poldsp(input_angle=90, filename='poldsp_90deg.txt')
+
+# Write the file
 autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
 
 # Make the CODEV Call
