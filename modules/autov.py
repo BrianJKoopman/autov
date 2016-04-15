@@ -78,6 +78,8 @@ class AutoV(object):
                 raise ValueError("Wavelengths submitted not unique, please remove duplicates.")
 
         text = "! modify wavelengths\n"
+        text += "WTW W2 1\nWTW W3 1\n" # to modify defaults in clean copy
+
         for wavelength in wavelengths:
             text += "WL W%s %s\n"%(wavelengths.index(wavelength)+1, wavelength)
 
