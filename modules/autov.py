@@ -14,7 +14,7 @@ class AutoV(object):
         return header
 
     def load_clean_len(self):
-        if self.array in [1, 2]:
+        if self.array in ['1', '2']:
             text = "! Load a clean copy of the optical design.\n"
             text += r'in "E:\ownCloud\optics\len\clean_copies\ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq"'
         else:
