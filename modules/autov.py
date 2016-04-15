@@ -2,6 +2,7 @@
 # Brian Koopman
 """Module for helping autov functions."""
 import hashlib
+import numpy as np
 
 class AutoV(object):
     def __init__(self, array):
@@ -52,7 +53,7 @@ class AutoV(object):
         if self.array in ['1', '2']:
             text = "! apply MUL coating\n"
             if coating_file is None:
-                coating_file = r"E:\ownCloud\optics\mul\two_layer_coating_138_250.mul" 
+                coating_file = r"E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
             surfaces = [32, 33, 36, 37, 39, 40]
             for surface in surfaces:
                 text += "MLT S%s %s\n"%(surface, coating_file)
@@ -71,14 +72,16 @@ class AutoV(object):
         if wavelengths is None:
             wavelengths = []
         else:
-            if len(wavelengths)>21:
+            if len(wavelengths) > 21:
                 raise ValueError("More than 21 wavelengths submitted, this is too many.")
-            if len(wavelenghts) != len(np.unique(wavelengths)):
+            if len(wavelengths) != len(np.unique(wavelengths)):
                 raise ValueError("Wavelengths submitted not unique, please remove duplicates.")
 
         text = "! modify wavelengths\n"
         for wavelength in wavelengths:
             text += "WL W%s %s\n"%(wavelengths.index(wavelength)+1, wavelength)
+
+        text += "REF %s\n"%reference
         self.seq.append(text)
         return text
 
