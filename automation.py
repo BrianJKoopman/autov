@@ -32,6 +32,7 @@ autoseq = "pa%s_automation.seq"%ARRAY
 qq = autov.AutoV(ARRAY)
 qq.create_header()
 qq.load_clean_len()
+qq.remove_glass()
 autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
 
 # Make the CODEV Call
