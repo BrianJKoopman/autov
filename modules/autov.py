@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 # Brian Koopman
 """Module for helping autov functions."""
+import hashlib
 
 class AutoV(object):
     def __init__(self, array):
@@ -14,6 +15,18 @@ class AutoV(object):
         return header
 
     def load_clean_len(self):
+        # Check md5sum of "clean" files to make sure they're clean.
+        md5sums = {'ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq': 'a90ffa3f0983dbb303ceec66ae689edd',
+                   'ACTPol_90GHz_v29_optical_filter_aperture_study_20111204.seq': 'da8d3ecb420283261220ab4175b0a7d6'}
+        
+        clean_file_dir = "E:\ownCloud\optics\len\clean_copies\\"
+        for item in md5sums.keys():
+            md5 = hashlib.md5(open(clean_file_dir + item, 'rb').read()).hexdigest()
+            if md5 != md5sums[item]:
+                raise RuntimeError("The md5sum does not match a known value! This means a 'clean' file has been modified! Exiting.")
+            else:
+                print item, "md5sum matches, proceeding"
+
         if self.array in ['1', '2']:
             text = "! Load a clean copy of the optical design.\n"
             text += r'in "E:\ownCloud\optics\len\clean_copies\ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq"'
@@ -22,6 +35,18 @@ class AutoV(object):
 
         self.seq.append(text)
         return text
+
+    def remove_glass(self):
+        if self.array in ['1', '2']:
+            text = "! automated glass defintion removal\n"
+            surfaces = [6, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 34]
+            for surface in surfaces:
+                text += "GL1 S%s\n"%surface
+            self.seq.append(text)
+            return text
+        else:
+            raise ValueError("Automation only setup for array 1 and 2 at this time.")
+        
 
 def readseq(seqfile):
     """Read a CODEV sequence file, for use in combining a master .seq for
