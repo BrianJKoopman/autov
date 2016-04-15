@@ -6,6 +6,7 @@ class AutoV(object):
     def __init__(self, array):
         self.array = array
         self.seq = []
+
     def create_header(self):
         header = "! This .seq file was created by the AutoV automation class. \n"
         header += r"! How to run me: C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\autov\seq\script.seq"
@@ -13,12 +14,11 @@ class AutoV(object):
         return header
 
     def load_clean_len(self):
-        if self.array in [1,2]:
+        if self.array in [1, 2]:
             text = "! Load a clean copy of the optical design.\n"
-            text += 'in "E:\ownCloud\optics\len\clean_copies\ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq"'
+            text += r'in "E:\ownCloud\optics\len\clean_copies\ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq"'
         else:
             raise ValueError("Automation only setup for array 1 and 2 at this time.")
-            exit
 
         self.seq.append(text)
         return text

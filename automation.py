@@ -3,6 +3,7 @@ import time
 import os
 import hashlib
 import argparse
+import autov
 
 # Parse arguments passed to the script.
 parser = argparse.ArgumentParser()
@@ -14,7 +15,7 @@ DATE = time.strftime('%Y%m%d')
 CTIME = int(time.time())
 
 outDir = "E:\ownCloud\optics\data\\"
-tmpDir = "E:\ownCloud\optics\data\\tmp\\" # Deleted at end of script
+tmpDir = "E:\ownCloud\optics\data\\tmp\\"
 autoseq = "pa%s_automation.seq"%ARRAY
 
 # Check md5sum of "clean" files to make sure they're clean.
@@ -28,17 +29,23 @@ for item in md5sums.keys():
         raise RuntimeError("The md5sum does not match a known value! This means a 'clean' file has been modified! Exiting.")
         exit
 
+qq = autov.AutoV(ARRAY)
+qq.create_header()
+qq.load_clean_len()
+autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
+
 # Make the CODEV Call
-subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\%s"%(autoseq))
+#subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\%s"%(autoseq))
+subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\\autov.seq")
 
 def checkDir(directory):
     if not os.path.exists(outDir + DATE):
         os.makedirs(outDir + DATE)
 
-# Make copy of automation .seq file for permanent record
-checkDir("%s%s"%(outDir,DATE))
-print "cp E:\ownCloud\optics\\autov\seq\%s %s%s\\%s_pa%s_%s"%(autoseq, outDir, DATE, CTIME, ARRAY, autoseq)
-subprocess.call("cp E:\ownCloud\optics\\autov\seq\%s %s%s\\%s_pa%s_%s"%(autoseq, outDir, DATE, CTIME, ARRAY, autoseq))
+### # Make copy of automation .seq file for permanent record
+### checkDir("%s%s"%(outDir,DATE))
+### print "cp E:\ownCloud\optics\\autov\seq\%s %s%s\\%s_pa%s_%s"%(autoseq, outDir, DATE, CTIME, ARRAY, autoseq)
+### subprocess.call("cp E:\ownCloud\optics\\autov\seq\%s %s%s\\%s_pa%s_%s"%(autoseq, outDir, DATE, CTIME, ARRAY, autoseq))
 
 # Move temporary output files to permanent storage location
 def store_output(filename, tmpDir, outDir, DATE, CTIME, ARRAY):
