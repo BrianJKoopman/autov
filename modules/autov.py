@@ -50,9 +50,9 @@ class AutoV(object):
 
     def apply_ar_coatings(self, coating_file=None):
         if self.array in ['1', '2']:
-            text = "! apply MUL coating"
+            text = "! apply MUL coating\n"
             if coating_file is None:
-                coating_file = r"E:\ownCloud\optics\mul\two_layer_coating_138_250.mul" + "\n"
+                coating_file = r"E:\ownCloud\optics\mul\two_layer_coating_138_250.mul" 
             surfaces = [32, 33, 36, 37, 39, 40]
             for surface in surfaces:
                 text += "MLT S%s %s\n"%(surface, coating_file)
