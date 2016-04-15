@@ -25,6 +25,7 @@ qq.load_clean_len()
 qq.remove_glass()
 qq.apply_ar_coatings()
 qq.set_wavelengths(wavelengths=[2140000, 2070000, 2000000], reference=2)
+qq.set_vignetting()
 autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
 
 # Make the CODEV Call

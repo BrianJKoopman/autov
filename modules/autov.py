@@ -87,6 +87,12 @@ class AutoV(object):
         self.seq.append(text)
         return text
 
+    def set_vignetting(self):
+        text = "! set vignetting\n"
+        text += "run " + r"C:\CODEV105_FCS\macro\setvig.seq" + " 1e-007 0.1 100 NO ;GO\n"
+        self.seq.append(text)
+        return text
+
 def readseq(seqfile):
     """Read a CODEV sequence file, for use in combining a master .seq for
        automation."""
