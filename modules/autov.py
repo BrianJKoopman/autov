@@ -10,6 +10,8 @@ class AutoV(object):
         header = "! This .seq file was created by the AutoV automation class. \n"
         header += r"! How to run me: C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\autov\seq\script.seq"
         self.seq.append(header)
+        return header
+
     def load_clean_len(self):
         if self.array in [1,2]:
             text = "! Load a clean copy of the optical design.\n"
@@ -17,6 +19,9 @@ class AutoV(object):
         else:
             raise ValueError("Automation only setup for array 1 and 2 at this time.")
             exit
+
+        self.seq.append(text)
+        return text
 
 def readseq(seqfile):
     """Read a CODEV sequence file, for use in combining a master .seq for
