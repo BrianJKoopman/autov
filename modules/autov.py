@@ -171,7 +171,7 @@ def writeseq(inputs, seqfile):
     with open(seqfile, 'w') as f:
         for item in inputs:
             f.write(item)
-            #f.write('\n')
+            f.write('\n')
 
 SPEED_OF_LIGHT = 299792458 # [m/s]
 
