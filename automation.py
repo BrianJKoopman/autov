@@ -33,6 +33,7 @@ qq = autov.AutoV(ARRAY)
 qq.create_header()
 qq.load_clean_len()
 qq.remove_glass()
+qq.apply_ar_coatings()
 autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
 
 # Make the CODEV Call
@@ -43,10 +44,10 @@ def checkDir(directory):
     if not os.path.exists(outDir + DATE):
         os.makedirs(outDir + DATE)
 
-### # Make copy of automation .seq file for permanent record
-### checkDir("%s%s"%(outDir,DATE))
-### print "cp E:\ownCloud\optics\\autov\seq\%s %s%s\\%s_pa%s_%s"%(autoseq, outDir, DATE, CTIME, ARRAY, autoseq)
-### subprocess.call("cp E:\ownCloud\optics\\autov\seq\%s %s%s\\%s_pa%s_%s"%(autoseq, outDir, DATE, CTIME, ARRAY, autoseq))
+# Move automation .seq file for permanent record
+checkDir("%s%s"%(outDir,DATE))
+print "mv E:\ownCloud\optics\\autov\seq\\autov.seq %s%s\\%s_autov.seq.pa%s"%(outDir, DATE, CTIME, ARRAY)
+subprocess.call("mv E:\ownCloud\optics\\autov\seq\\autov.seq %s%s\\%s_autov.seq.pa%s"%(outDir, DATE, CTIME, ARRAY))
 
 # Move temporary output files to permanent storage location
 def store_output(filename, tmpDir, outDir, DATE, CTIME, ARRAY):
