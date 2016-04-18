@@ -2,6 +2,8 @@
 # Brian Koopman
 """Module for helping autov functions."""
 import hashlib
+import subprocess
+import os
 import numpy as np
 
 class AutoV(object):
@@ -19,6 +21,10 @@ class AutoV(object):
     def __init__(self, array):
         self.array = array
         self.seq = []
+
+        self.out_dir = r"E:\ownCloud\optics\data" + "\\"
+        self.tmp_dir = r"E:\ownCloud\optics\data\tmp" + "\\"
+
 
     def create_header(self):
         """Create header comments for the .seq file."""
@@ -102,10 +108,11 @@ class AutoV(object):
 
         Keyword arguments:
         wavelengths -- list of wavelengths, max length is 21
-        reference -- change what the reference wavelength is
+        reference -- change what the reference wavelength is (note, indexed on 0)
         """
         if wavelengths is None:
             wavelengths = []
+            print "No wavelenth specified, presumably just changing reference."
         else:
             if len(wavelengths) > 21:
                 raise ValueError("More than 21 wavelengths submitted, this is too many.")
@@ -119,8 +126,10 @@ class AutoV(object):
             text += "WL W%s %s\n"%(wavelengths.index(wavelength)+1, wavelength)
             text += "WTW W%s 1\n"%(wavelengths.index(wavelength)+1)
 
-        text += "REF %s\n"%reference
-        self.seq.append(text)
+        if reference is not None:
+            text += "REF %s\n"%(reference+1)
+            self.seq.append(text)
+
         return text
 
     def set_vignetting(self):
@@ -237,6 +246,22 @@ class AutoV(object):
         self.seq.append(text)
         return text
 
+    #def store_output(filename, tmpDir, outDir, date, ctime, ARRAY):
+    def store_output(self, filename, descriptors, date, ctime):
+        if os.path.isfile("%s%s"%(self.tmp_dir, filename)):
+            check_dir("%s%s"%(self.out_dir, date))
+
+            out_file = "%s%s\\%s_%s"%(self.out_dir, date, ctime, filename)
+            for descriptor in descriptors:
+                out_file += "_%s"%(descriptor)
+            out_file += ".pa%s"%(self.array)
+
+            print "mv %s%s %s"%(self.tmp_dir, filename, out_file)
+            subprocess.call("mv %s%s %s"%(self.tmp_dir, filename, out_file))
+
+def check_dir(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
 def readseq(seqfile):
     """Read a CODEV sequence file, for use in combining a master .seq for
@@ -284,3 +309,7 @@ def freq2lambda(freq):
         wavelength (float): wavelength in nm
     """
     return SPEED_OF_LIGHT/float(freq) #[nm]
+
+#class AutoMul(object):
+#    def __init__(self):
+#    def
