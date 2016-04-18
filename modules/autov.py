@@ -5,11 +5,23 @@ import hashlib
 import numpy as np
 
 class AutoV(object):
+    """Class for writing custom .seq files for automating CODEV.
+
+    The methods in this class will append the appropriate text for writing a
+    .seq file which can be called by CODEV and used to automate testing
+    parameters in a lens design.
+
+    Attributes:
+        array (str): Which ACTPol array we're automating
+        seq (list[str]): List of strings which will be written sequentially to
+                         a .seq file for running in CODEV
+    """
     def __init__(self, array):
         self.array = array
         self.seq = []
 
     def create_header(self):
+        """Create header comments for the .seq file."""
         # TODO: Add parameters to the header, which array, etc. anything in __init__.
         header = "! This .seq file was created by the AutoV automation class. \n"
         header += "! How to run me: " + \
@@ -18,6 +30,14 @@ class AutoV(object):
         return header
 
     def load_clean_len(self):
+        """Load a clean optical design.
+
+        This method first checks the md5sums of both optical designs
+        (regardless of the chosen one to load. These should never be modified,
+        so it's good to check either way.
+
+        The correct copy of the optical design is then setup to be imported to
+        CODEV."""
         # Check md5sum of "clean" files to make sure they're clean.
         md5sums = {'ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq':
                    'a90ffa3f0983dbb303ceec66ae689edd',
@@ -44,6 +64,12 @@ class AutoV(object):
         return text
 
     def remove_glass(self):
+        """Remove glass definitions for polarization study.
+
+        We don't know the properties of the filters very well, so in my initial
+        study I just removed all the glass definitions that weren't the silicon
+        lenses. Do that again here. Note this is specific to the loaded lens
+        system."""
         if self.array in ['1', '2']:
             text = "! automated glass defintion removal\n"
             surfaces = [6, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 34]
@@ -55,6 +81,10 @@ class AutoV(object):
             raise ValueError("Automation only setup for array 1 and 2 at this time.")
 
     def apply_ar_coatings(self, coating_file=None):
+        """Apply .mul anti-reflection coatings to lenses.
+
+        Requires .mul file to already be generated from a .seq AR coating
+        file."""
         if self.array in ['1', '2']:
             text = "! apply MUL coating\n"
             if coating_file is None:
@@ -83,16 +113,18 @@ class AutoV(object):
                 raise ValueError("Wavelengths submitted not unique, please remove duplicates.")
 
         text = "! modify wavelengths\n"
-        text += "WTW W2 1\nWTW W3 1\n" # to modify defaults in clean copy
+        #text += "WTW W2 1\nWTW W3 1\n" # to modify defaults in clean copy
 
         for wavelength in wavelengths:
             text += "WL W%s %s\n"%(wavelengths.index(wavelength)+1, wavelength)
+            text += "WTW W%s 1\n"%(wavelengths.index(wavelength)+1)
 
         text += "REF %s\n"%reference
         self.seq.append(text)
         return text
 
     def set_vignetting(self):
+        """Run the default set vignetting command in CODEV."""
         text = "! set vignetting\n"
         text += "run " + r"C:\CODEV105_FCS\macro\setvig.seq" + " 1e-007 0.1 100 NO ;GO\n"
         self.seq.append(text)
@@ -106,6 +138,11 @@ class AutoV(object):
         return text
 
     def set_fields(self):
+        """Set the CODEV fields.
+
+        Currently only defined for PA2, since they're already in the clean lens
+        system file. This currently just sets the polarization fraction to 1
+        for all fields, something we'll always want to do."""
         if self.array in ['2']:
             text = "! set polarization fraction of all fields to 1\n"
             for i in range(25):
@@ -116,6 +153,8 @@ class AutoV(object):
             ValueError("Automation not complete for arrays other than 2 right now.")
 
     def set_image_semi_aperture(self):
+        """Enlarge the semi-aperture of the image surface for polarization
+        studies."""
         if self.array in ['2']:
             text = "! Modify Semi-Aperture of Image surface for poldsp output\n"
             text += "CIR S42 8\n"
@@ -125,6 +164,7 @@ class AutoV(object):
             ValueError("Automation not complete for arrays other than 2 right now.")
 
     def quick_best_focus(self):
+        """Insert two quick best focus commands."""
         text = "! quick best focus, twice\n"
         text += "WAV ; BES; RFO; GO\n"
         text += "WAV ; BES; RFO; GO\n"
@@ -132,6 +172,12 @@ class AutoV(object):
         return text
 
     def run_psf(self):
+        """Run the point spread function commands.
+
+        Will output psf results to a tmp file, psf.txt which will be moved by
+        the user later for permanent storage."""
+        # TODO: make a method for storing temporary files, rather than having
+        # the user worry about it.
         text = "! auto_psf.seq\n"
         text += "OUT " + r"E:\owncloud\optics\data\tmp\psf.txt" + " ! Sets output file\n"
         text += "! Script generated by PSF GUI interface.\n"
@@ -150,6 +196,10 @@ class AutoV(object):
         return text
 
     def run_real_ray_trace(self):
+        """Run the real ray trace commands.
+
+        Will output ray trace results to temp file, real_ray_trace.txt, which
+        will be moved by the user later for permanent storage."""
         # TODO: This wants to know about the fields set.
         text = "! Adopted from auto_ray_trace.seq, which was used for 20141107 analysis\n"
         text += "OUT " + r"E:\owncloud\optics\data\tmp\real_ray_trace.txt" + " ! Sets output file\n"
@@ -160,6 +210,14 @@ class AutoV(object):
         return text
 
     def run_poldsp(self, input_angle, filename, pupil_number=11):
+        """Run the poldsp macro for polarization studies.
+
+        Keyword arguments:
+        input_angle -- Sets the field orientation angle at the input for all
+                       fields.
+        filename -- Set the filename for temporary output. This is likely to
+                    want to change based on input angle.
+        pupil_number -- Number of rays across the pupil diameter."""
         # TODO: This also wants to know about the fields set
         text = "! Set input field orientation\n"
         for i in range(25):
@@ -173,6 +231,7 @@ class AutoV(object):
         return text
 
     def exit(self):
+        """Exit from CODEV without prompt."""
         text = "! exit without prompt when finished\n"
         text += "exit y\n"
         self.seq.append(text)
@@ -201,11 +260,27 @@ def writeseq(inputs, seqfile):
 SPEED_OF_LIGHT = 299792458 # [m/s]
 
 def lambda2freq(wavelength):
-    # This is currently relying on the fact that wavelength is in nm and we want to give GHz.
-    # wavelength given in nm
-    return SPEED_OF_LIGHT/wavelength #[GHz]
+    """Convert from wavelength to frequency.
+
+    Keeping CODEV in mind, wavelengths in CODEV are in nm and we want GHz.
+
+    Args:
+        wavelength (float): wavelength in nm
+
+    Returns:
+        freq (float): Frequency in GHz
+    """
+    return SPEED_OF_LIGHT/float(wavelength) #[GHz]
 
 def freq2lambda(freq):
-    # freq in Ghz gives wavelength in nm, like CODEV wants
-    return SPEED_OF_LIGHT/freq #[nm]
+    """Convert from frequency to wavelength.
 
+    Keeping CODEV in mind, wavelengths in CODEV are in nm and we think in GHz.
+
+    Args:
+        freq (float): Frequency in GHz
+
+    Returns:
+        wavelength (float): wavelength in nm
+    """
+    return SPEED_OF_LIGHT/float(freq) #[nm]
