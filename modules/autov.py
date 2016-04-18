@@ -249,18 +249,18 @@ class AutoV(object):
 
     #def store_output(filename, tmpDir, outDir, date, ctime, ARRAY):
     def store_output(self, filename, descriptors, date, ctime):
+        check_dir("%s%s"%(self.out_dir, date))
+
+        out_file = "%s%s\\%s_%s"%(self.out_dir, date, ctime, filename)
+        for descriptor in descriptors:
+            out_file += "_%s"%(descriptor)
+        out_file += ".pa%s"%(self.array)
+
         # I guess we'll do this regardless of whether the file exists
         text = "! mv %s%s %s \n"%(self.tmp_dir, filename, out_file)
         self.seq.append(text) # inform the .seq script we're moving things
 
         if os.path.isfile("%s%s"%(self.tmp_dir, filename)):
-            check_dir("%s%s"%(self.out_dir, date))
-
-            out_file = "%s%s\\%s_%s"%(self.out_dir, date, ctime, filename)
-            for descriptor in descriptors:
-                out_file += "_%s"%(descriptor)
-            out_file += ".pa%s"%(self.array)
-
             print "mv %s%s %s"%(self.tmp_dir, filename, out_file)
             subprocess.call("mv %s%s %s"%(self.tmp_dir, filename, out_file))
 
