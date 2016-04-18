@@ -43,10 +43,10 @@ for ref_wl in range(21):
     qq.run_real_ray_trace()
     qq.run_poldsp(input_angle=0, filename='poldsp_0deg.txt')
     qq.run_poldsp(input_angle=90, filename='poldsp_90deg.txt')
-    qq.store_output("psf.txt", descriptors=[str(wavelengths[ref_wl])], DATE, CTIME)
-    qq.store_output("real_ray_trace.txt", descriptors=[str(wavelengths[ref_wl])], DATE, CTIME)
-    qq.store_output("poldsp_0deg.txt", descriptors=[str(wavelengths[ref_wl])], DATE, CTIME)
-    qq.store_output("poldsp_90deg.txt", descriptors=[str(wavelengths[ref_wl])], DATE, CTIME)
+    qq.store_output("psf.txt", str(wavelengths[ref_wl])], DATE, CTIME)
+    qq.store_output("real_ray_trace.txt", [str(wavelengths[ref_wl])], DATE, CTIME)
+    qq.store_output("poldsp_0deg.txt", [str(wavelengths[ref_wl])], DATE, CTIME)
+    qq.store_output("poldsp_90deg.txt", [str(wavelengths[ref_wl])], DATE, CTIME)
 
 qq.exit()
 
@@ -55,7 +55,7 @@ autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
 
 # Make the CODEV Call
 #subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\%s"%(autoseq))
-subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\\autov.seq")
+#subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\\autov.seq")
 
 # Move automation .seq file for permanent record
 autov.check_dir("%s%s"%(outDir, DATE))
