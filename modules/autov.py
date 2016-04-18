@@ -62,7 +62,8 @@ class AutoV(object):
         if self.array in ['1', '2']:
             text = "! Load a clean copy of the optical design.\n"
             text += r'in "E:\ownCloud\optics\len\clean_copies' + \
-                    r'\ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq"'
+                    r'\ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq"' + \
+                    "\n"
         else:
             raise ValueError("Automation only setup for array 1 and 2 at this time.")
 
@@ -257,6 +258,8 @@ class AutoV(object):
             out_file += ".pa%s"%(self.array)
 
             print "mv %s%s %s"%(self.tmp_dir, filename, out_file)
+            text = "! mv %s%s %s"%(self.tmp_dir, filename, out_file)
+            self.seq.append(text) # inform the .seq script we're moving things
             subprocess.call("mv %s%s %s"%(self.tmp_dir, filename, out_file))
 
 def check_dir(directory):

@@ -41,12 +41,12 @@ for ref_wl in range(21):
     qq.quick_best_focus()
     qq.run_psf()
     qq.run_real_ray_trace()
-    qq.run_poldsp(input_angle=0, filename='poldsp_0deg.txt')
-    qq.run_poldsp(input_angle=90, filename='poldsp_90deg.txt')
-    qq.store_output("psf.txt", str(wavelengths[ref_wl])], DATE, CTIME)
+    qq.run_poldsp(input_angle=0, filename='poldsp_0deg.txt', pupil_number=23)
+    qq.run_poldsp(input_angle=90, filename='poldsp_90deg.txt', pupil_number=23)
+    qq.store_output("psf.txt", [str(wavelengths[ref_wl])], DATE, CTIME)
     qq.store_output("real_ray_trace.txt", [str(wavelengths[ref_wl])], DATE, CTIME)
-    qq.store_output("poldsp_0deg.txt", [str(wavelengths[ref_wl])], DATE, CTIME)
-    qq.store_output("poldsp_90deg.txt", [str(wavelengths[ref_wl])], DATE, CTIME)
+    qq.store_output("poldsp_0deg.txt", [str(int(wavelengths[ref_wl])), "23_rays"], DATE, CTIME)
+    qq.store_output("poldsp_90deg.txt", [str(int(wavelengths[ref_wl])), "23_rays"], DATE, CTIME)
 
 qq.exit()
 
