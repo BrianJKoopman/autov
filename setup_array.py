@@ -27,9 +27,9 @@ qq.load_clean_len()
 qq.remove_glass()
 qq.apply_ar_coatings()
 if ARRAY in ['1', '2']:
-    qq.set_wavelengths(wavelengths=[2140000, 2070000, 2000000], reference=2) # ar1, ar2
+    qq.set_wavelengths(wavelengths=[2140000, 2070000, 2000000], reference=1) # ar1, ar2
 elif ARRAY in ['3']:
-    qq.set_wavelengths(wavelengths=[3331000, 2070000, 1380000], reference=2) # ar3
+    qq.set_wavelengths(wavelengths=[3000000, 2070000, 1380000], reference=0) # ar3
 qq.set_fields()
 qq.set_vignetting()
 qq.activate_pol_ray_trace()
