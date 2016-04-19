@@ -26,7 +26,10 @@ qq.create_header()
 qq.load_clean_len()
 qq.remove_glass()
 qq.apply_ar_coatings()
-qq.set_wavelengths(wavelengths=[2140000, 2070000, 2000000], reference=2)
+if ARRAY in ['1', '2']:
+    qq.set_wavelengths(wavelengths=[2140000, 2070000, 2000000], reference=2) # ar1, ar2
+elif ARRAY in ['3']:
+    qq.set_wavelengths(wavelengths=[3331000, 2070000, 1380000], reference=2) # ar3
 qq.set_fields()
 qq.set_vignetting()
 qq.activate_pol_ray_trace()
@@ -34,10 +37,12 @@ qq.set_image_semi_aperture()
 qq.quick_best_focus()
 #qq.run_psf()
 #qq.run_real_ray_trace([str('%.2f'%(autov.lambda2freq(wavelengths[ref_wl])))])
-qq.enter_single_command("DEL S6..41") # reduce to just the telescope
-qq.enter_single_command("CIR S6 35") # increase semi-aperture of image
-qq.quick_best_focus()
-qq.run_poldsp(input_angle=90, filename='poldsp_90deg_telescope_only_pa2_std_ref_wl_and_coating.txt', pupil_number=23)
+
+# just the telescope
+#qq.enter_single_command("DEL S6..41") # reduce to just the telescope
+#qq.enter_single_command("CIR S6 35") # increase semi-aperture of image
+#qq.quick_best_focus()
+#qq.run_poldsp(input_angle=0, filename='poldsp_0deg_telescope_only_pa3_std_ref_wl_and_coating.txt', pupil_number=23)
 
 #qq.exit()
 

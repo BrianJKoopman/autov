@@ -67,8 +67,11 @@ class AutoV(object):
             text += r'in "E:\ownCloud\optics\len\clean_copies' + \
                     r'\ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq"' + \
                     "\n"
-        else:
-            raise ValueError("Automation only setup for array 1 and 2 at this time.")
+        elif self.array in ['3']:
+            text = "! Load a clean copy of the optical design.\n"
+            text += r'in "E:\ownCloud\optics\len\clean_copies' + \
+                    r'\ACTPol_90GHz_v29_optical_filter_aperture_study_20111204.seq"' + \
+                    "\n"
 
         self.seq.append(text)
         return text
@@ -78,34 +81,37 @@ class AutoV(object):
 
         We don't know the properties of the filters very well, so in my initial
         study I just removed all the glass definitions that weren't the silicon
-        lenses. Do that again here. Note this is specific to the loaded lens
-        system."""
-        if self.array in ['1', '2']:
-            text = "! automated glass defintion removal\n"
-            surfaces = [6, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 34]
-            for surface in surfaces:
-                text += "GL1 S%s\n"%surface
-            self.seq.append(text)
-            return text
-        else:
-            raise ValueError("Automation only setup for array 1 and 2 at this time.")
+        lenses. Do that again here.
+        """
+        text = "! automated glass defintion removal\n"
+        surfaces = [6, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 34]
+        for surface in surfaces:
+            text += "GL1 S%s\n"%surface
+        self.seq.append(text)
+        return text
 
     def apply_ar_coatings(self, coating_file=None):
         """Apply .mul anti-reflection coatings to lenses.
 
         Requires .mul file to already be generated from a .seq AR coating
         file."""
+
+        text = "! apply MUL coating\n"
+        surfaces = [32, 33, 36, 37, 39, 40]
+
         if self.array in ['1', '2']:
-            text = "! apply MUL coating\n"
             if coating_file is None:
                 coating_file = r"E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
-            surfaces = [32, 33, 36, 37, 39, 40]
-            for surface in surfaces:
-                text += "MLT S%s %s\n"%(surface, coating_file)
-            self.seq.append(text)
-            return text
-        else:
-            raise ValueError("Automation only setup for array 1 and 2 at this time.")
+
+        elif self.array in ['3']:
+            if coating_file is None:
+                coating_file = r"E:\ownCloud\optics\mul\three_layer_coating_128_195_284.mul"
+
+        for surface in surfaces:
+            text += "MLT S%s %s\n"%(surface, coating_file)
+        self.seq.append(text)
+
+        return text
 
     def set_wavelengths(self, wavelengths=None, reference=None):
         """Set the wavelengths in CODEV.
@@ -127,7 +133,8 @@ class AutoV(object):
         #text += "WTW W2 1\nWTW W3 1\n" # to modify defaults in clean copy
 
         for wavelength in wavelengths:
-            text += "IN CV_MACRO:inswl %s+1\n"%(wavelengths.index(wavelength))
+            if wavelengths.index(wavelength) > 2:
+                text += "IN CV_MACRO:inswl %s+1\n"%(wavelengths.index(wavelength))
             text += "WL W%s %s\n"%(wavelengths.index(wavelength)+1, wavelength)
             text += "WTW W%s 1\n"%(wavelengths.index(wavelength)+1)
 
@@ -157,25 +164,25 @@ class AutoV(object):
         Currently only defined for PA2, since they're already in the clean lens
         system file. This currently just sets the polarization fraction to 1
         for all fields, something we'll always want to do."""
-        if self.array in ['2']:
+        if self.array in ['2', '3']:
             text = "! set polarization fraction of all fields to 1\n"
             for i in range(25):
                 text += "PFR F%s 1\n"%(i+1)
             self.seq.append(text)
             return text
         else:
-            ValueError("Automation not complete for arrays other than 2 right now.")
+            ValueError("Automation not complete for array 1 right now.")
 
     def set_image_semi_aperture(self):
         """Enlarge the semi-aperture of the image surface for polarization
         studies."""
-        if self.array in ['2']:
+        if self.array in ['2', '3']:
             text = "! Modify Semi-Aperture of Image surface for poldsp output\n"
             text += "CIR S42 8\n"
             self.seq.append(text)
             return text
         else:
-            ValueError("Automation not complete for arrays other than 2 right now.")
+            ValueError("Automation not complete for array 1 right now.")
 
     def quick_best_focus(self):
         """Insert two quick best focus commands."""
