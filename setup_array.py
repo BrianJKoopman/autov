@@ -35,6 +35,7 @@ qq.quick_best_focus()
 #qq.run_psf()
 #qq.run_real_ray_trace([str('%.2f'%(autov.lambda2freq(wavelengths[ref_wl])))])
 qq.enter_single_command("DEL S6..41") # reduce to just the telescope
+qq.enter_single_command("CIR S6 35") # increase semi-aperture of image
 qq.quick_best_focus()
 qq.run_poldsp(input_angle=90, filename='poldsp_90deg_telescope_only_pa2_std_ref_wl_and_coating.txt', pupil_number=23)
 
