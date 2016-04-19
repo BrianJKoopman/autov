@@ -192,6 +192,7 @@ class AutoV(object):
         the user later for permanent storage."""
         # TODO: make a method for storing temporary files, rather than having
         # the user worry about it.
+        # Can't have file name with any .'s other than in .txt
         filename = "psf"
         out_file = "%s%s\\%s_%s"%(self.out_dir, self.date, self.ctime, filename)
         for descriptor in file_descriptors:
