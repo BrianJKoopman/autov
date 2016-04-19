@@ -124,6 +124,7 @@ class AutoV(object):
         #text += "WTW W2 1\nWTW W3 1\n" # to modify defaults in clean copy
 
         for wavelength in wavelengths:
+            text += "IN CV_MACRO:inswl %s+1"%(wavelengths.index(wavelength))
             text += "WL W%s %s\n"%(wavelengths.index(wavelength)+1, wavelength)
             text += "WTW W%s 1\n"%(wavelengths.index(wavelength)+1)
 
