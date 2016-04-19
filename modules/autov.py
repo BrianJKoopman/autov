@@ -257,6 +257,13 @@ class AutoV(object):
         self.seq.append(text)
         return text
 
+    def enter_single_command(self, command):
+        """Enter single command in event I don't have a method for it."""
+        text = "! Manual command entry\n"
+        text += "%s\n"%(command)
+        self.seq.append(text)
+        return text
+
     def exit(self):
         """Exit from CODEV without prompt."""
         text = "! exit without prompt when finished\n"

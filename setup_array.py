@@ -34,7 +34,9 @@ qq.set_image_semi_aperture()
 qq.quick_best_focus()
 #qq.run_psf()
 #qq.run_real_ray_trace([str('%.2f'%(autov.lambda2freq(wavelengths[ref_wl])))])
-#qq.run_poldsp(input_angle=0, filename='poldsp_0deg.txt', pupil_number=23)
+qq.enter_single_command("DEL S6..41") # reduce to just the telescope
+qq.quick_best_focus()
+qq.run_poldsp(input_angle=90, filename='poldsp_90deg_telescope_only_pa2_std_ref_wl_and_coating.txt', pupil_number=23)
 
 #qq.exit()
 
