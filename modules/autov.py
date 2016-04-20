@@ -99,12 +99,10 @@ class AutoV(object):
         text = "! apply MUL coating\n"
         surfaces = [32, 33, 36, 37, 39, 40]
 
-        if self.array in ['1', '2']:
-            if coating_file is None:
+        if coating_file is None:
+            if self.array in ['1', '2']:
                 coating_file = r"E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
-
-        elif self.array in ['3']:
-            if coating_file is None:
+            elif self.array in ['3']:
                 coating_file = r"E:\ownCloud\optics\mul\three_layer_coating_128_195_284.mul"
 
         for surface in surfaces:
