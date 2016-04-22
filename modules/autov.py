@@ -140,7 +140,8 @@ class AutoV(object):
                 text += "IN CV_MACRO:inswl %s+1\n"%(wavelengths.index(wavelength))
             text += "WL W%s %s\n"%(wavelengths.index(wavelength)+1, wavelength)
             text += "WTW W1 1\n" # always need a WL set to 1, make it the first
-            text += "WTW W%s 0\n"%(wavelengths.index(wavelength)+1) # set others to 0
+            if wavelengths.index(wavelength) is not 0:
+                text += "WTW W%s 0\n"%(wavelengths.index(wavelength)+1) # set others to 0
 
         if reference is not None:
             text += "REF %s\n"%(reference+1)
