@@ -139,7 +139,8 @@ class AutoV(object):
                 # always skip first 3, which are set in both clean copies
                 text += "IN CV_MACRO:inswl %s+1\n"%(wavelengths.index(wavelength))
             text += "WL W%s %s\n"%(wavelengths.index(wavelength)+1, wavelength)
-            text += "WTW W1 1\n" # always need a WL set to 1, make it the first
+            if wavelengths.index(wavelength) is 0:
+                text += "WTW W1 1\n" # always need a WL set to 1, make it the first
             if wavelengths.index(wavelength) is not 0:
                 text += "WTW W%s 0\n"%(wavelengths.index(wavelength)+1) # set others to 0
 
@@ -147,7 +148,7 @@ class AutoV(object):
             text += "REF %s\n"%(reference+1)
             text += "WTW W%s 1\n"%(reference+1) # Change the weight of ref to 1
 
-            if reference is not 1:
+            if reference is not 0:
                 text += "WTW W1 0\n" # set WL1 weight to 0 if it's not the ref
 
             self.seq.append(text)
