@@ -135,8 +135,9 @@ class AutoV(object):
             if len(wavelengths) != len(np.unique(wavelengths)):
                 raise ValueError("Wavelengths submitted not unique, please remove duplicates.")
 
-        if len(wavelengths) != len(self.wavelengths):
-            raise ValueError("Please specify same number of wavelengths for each function call.")
+        if self.wl_set is True:
+            if len(wavelengths) != len(self.wavelengths):
+                raise ValueError("Please specify same number of wavelengths for each function call.")
 
         text = "! modify wavelengths\n"
 
