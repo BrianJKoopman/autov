@@ -233,7 +233,7 @@ class AutoV(object):
         out_file = "%s%s\\%s_%s"%(self.out_dir, self.date, self.ctime, filename)
         for descriptor in file_descriptors:
             out_file += "_%s"%(descriptor)
-        out_file += ".ar%s.txt"%(self.array)
+        out_file += "_ar%s.txt"%(self.array)
 
         text = "! auto_psf.seq\n"
         text += "OUT " + out_file + " ! Sets output file\n"
