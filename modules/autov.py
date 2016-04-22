@@ -29,6 +29,9 @@ class AutoV(object):
         self.date = time.strftime('%Y%m%d')
         self.ctime = int(time.time())
 
+        self.wl_set = False # have wavelengths been set yet?
+        self.wavelengths = None # save wavelengths after setting
+
     def create_header(self):
         """Create header comments for the .seq file."""
         # TODO: Add parameters to the header, which array, etc. anything in __init__.
@@ -132,13 +135,17 @@ class AutoV(object):
             if len(wavelengths) != len(np.unique(wavelengths)):
                 raise ValueError("Wavelengths submitted not unique, please remove duplicates.")
 
+        if len(wavelengths) != len(self.wavelengths):
+            raise ValueError("Please specify same number of wavelengths for each function call.")
+
         text = "! modify wavelengths\n"
 
         for wavelength in wavelengths:
             if wavelengths.index(wavelength) > 2: 
                 # always skip first 3, which are set in both clean copies
                 text += "IN CV_MACRO:inswl %s+1\n"%(wavelengths.index(wavelength))
-            text += "WL W%s %s\n"%(wavelengths.index(wavelength)+1, wavelength)
+            if self.wl_set is False:
+                text += "WL W%s %s\n"%(wavelengths.index(wavelength)+1, wavelength)
             if wavelengths.index(wavelength) is 0:
                 text += "WTW W1 1\n" # always need a WL set to 1, make it the first
             if wavelengths.index(wavelength) is not 0:
@@ -152,6 +159,9 @@ class AutoV(object):
                 text += "WTW W1 0\n" # set WL1 weight to 0 if it's not the ref
 
             self.seq.append(text)
+
+        self.wl_set = True
+        self.wavelengths = wavelengths
 
         return text
 

@@ -38,6 +38,7 @@ qq.quick_best_focus()
 #qq.run_psf()
 #qq.run_real_ray_trace([str('%.2f'%(autov.lambda2freq(wavelengths[ref_wl])))])
 
+qq.set_wavelengths(wavelengths=[2140000, 2070000, 2000000], reference=2) # ar1, ar2
 # just the telescope
 #qq.enter_single_command("DEL S6..41") # reduce to just the telescope
 #qq.enter_single_command("CIR S6 35") # increase semi-aperture of image
