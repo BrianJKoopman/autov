@@ -121,6 +121,13 @@ class AutoV(object):
         have weight 1, the rest 0. We set the reference wavelength to 1 and the
         rest to 0. So we always need both arguments.
 
+        Warning:
+        There are some pretty subtle difficulties with setting a bunch of
+        wavelengths and then changing those wavelengths. Your best off setting
+        all the wavelengths you want in the first call and not changing them,
+        only passing the same set of wavelengths with a different reference
+        number to change the REF and weight of the REF WL.
+
         Keyword arguments:
         wavelengths -- list of wavelengths, max length is 21
         reference -- change what the reference wavelength is (note, indexed on
@@ -255,7 +262,7 @@ class AutoV(object):
         out_file = "%s%s\\%s_%s"%(self.out_dir, self.date, self.ctime, filename)
         for descriptor in file_descriptors:
             out_file += "_%s"%(descriptor)
-        out_file += ".ar%s.txt"%(self.array)
+        out_file += "_ar%s.txt"%(self.array)
 
         text = "! Adopted from auto_ray_trace.seq, which was used for 20141107 analysis\n"
         text += "OUT " + out_file + " ! Sets output file\n"
@@ -265,7 +272,7 @@ class AutoV(object):
         self.seq.append(text)
         return text
 
-    def run_poldsp(self, input_angle, filename, pupil_number=11):
+    def run_poldsp(self, input_angle, file_descriptors, pupil_number=11):
         """Run the poldsp macro for polarization studies.
 
         Keyword arguments:
@@ -275,11 +282,20 @@ class AutoV(object):
                     want to change based on input angle.
         pupil_number -- Number of rays across the pupil diameter."""
         # TODO: This also wants to know about the fields set
+        filename = "poldsp"
+        out_file = "%s%s\\%s_%s"%(self.out_dir, self.date, self.ctime, filename)
+        out_file += "_%sdeg"%(input_angle)
+        out_file += "_%srays"%(pupil_number)
+        for descriptor in file_descriptors:
+            out_file += "_%s"%(descriptor)
+        out_file += "_ar%s.txt"%(self.array)
+
         text = "! Set input field orientation\n"
         for i in range(25):
             text += "POR F%s %s\n"%((i+1), input_angle)
 
-        text += "OUT " r"E:\owncloud\optics\data\tmp" + "\\" + filename + " ! Sets output file\n"
+        #text += "OUT " r"E:\owncloud\optics\data\tmp" + "\\" + filename + " ! Sets output file\n"
+        text += "OUT " + out_file + " ! Sets output file\n"
         text += "RUN " r"C:\CODEV105_FCS\macro\poldsp.seq" + \
                 " 0 %s \"Polarization State\" \"Full\"\n"%(pupil_number)
         text += "OUT T ! Restores regular output\n"
