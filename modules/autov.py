@@ -111,16 +111,21 @@ class AutoV(object):
 
         return text
 
-    def set_wavelengths(self, wavelengths=None, reference=None):
+    def set_wavelengths(self, wavelengths, reference):
         """Set the wavelengths in CODEV.
+
+        For studies that are wavelength dependant we need only a single WL to
+        have weight 1, the rest 0. We set the reference wavelength to 1 and the
+        rest to 0. So we always need both arguments.
 
         Keyword arguments:
         wavelengths -- list of wavelengths, max length is 21
-        reference -- change what the reference wavelength is (note, indexed on 0)
+        reference -- change what the reference wavelength is (note, indexed on
+                     0). The reference is used to change the weight of the
+                     called wavelength to 1, the rest to 0.
         """
         if wavelengths is None:
-            wavelengths = []
-            print "No wavelenth specified, presumably just changing reference."
+            raise ValueError("No wavelenth specified, presumably just changing reference.")
         else:
             if len(wavelengths) > 21:
                 raise ValueError("More than 21 wavelengths submitted, this is too many.")
@@ -128,16 +133,22 @@ class AutoV(object):
                 raise ValueError("Wavelengths submitted not unique, please remove duplicates.")
 
         text = "! modify wavelengths\n"
-        #text += "WTW W2 1\nWTW W3 1\n" # to modify defaults in clean copy
 
         for wavelength in wavelengths:
-            if wavelengths.index(wavelength) > 2:
+            if wavelengths.index(wavelength) > 2: 
+                # always skip first 3, which are set in both clean copies
                 text += "IN CV_MACRO:inswl %s+1\n"%(wavelengths.index(wavelength))
             text += "WL W%s %s\n"%(wavelengths.index(wavelength)+1, wavelength)
-            text += "WTW W%s 1\n"%(wavelengths.index(wavelength)+1)
+            text += "WTW W1 1\n" # always need a WL set to 1, make it the first
+            text += "WTW W%s 0\n"%(wavelengths.index(wavelength)+1) # set others to 0
 
         if reference is not None:
             text += "REF %s\n"%(reference+1)
+            text += "WTW W%s 1\n"%(reference+1) # Change the weight of ref to 1
+
+            if reference is not 1:
+                text += "WTW W1 0\n" # set WL1 weight to 0 if it's not the ref
+
             self.seq.append(text)
 
         return text
