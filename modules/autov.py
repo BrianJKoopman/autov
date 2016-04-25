@@ -151,7 +151,8 @@ class AutoV(object):
         for wavelength in wavelengths:
             if wavelengths.index(wavelength) > 2: 
                 # always skip first 3, which are set in both clean copies
-                text += "IN CV_MACRO:inswl %s+1\n"%(wavelengths.index(wavelength))
+                if self.wl_set == False:
+                    text += "IN CV_MACRO:inswl %s+1\n"%(wavelengths.index(wavelength))
             if self.wl_set is False:
                 text += "WL W%s %s\n"%(wavelengths.index(wavelength)+1, wavelength)
             if wavelengths.index(wavelength) is 0:
