@@ -53,6 +53,9 @@ qq.exit()
 # Write the file
 autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
 
+# Check for output date directory existence.
+autov.check_dir(qq.out_dir + qq.date)
+
 # Make the CODEV Call
 #subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\%s"%(autoseq))
 subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\\autov.seq")
