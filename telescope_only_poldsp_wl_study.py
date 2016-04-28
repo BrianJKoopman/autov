@@ -18,10 +18,12 @@ outDir = "E:\ownCloud\optics\data\\"
 tmpDir = "E:\ownCloud\optics\data\\tmp\\"
 #autoseq = "pa%s_automation.seq"%ARRAY
 
-wavelengths = []
+wavelengths = [autov.freq2lambda(item) for item in np.linspace(50, 250, num=21)]
+
+# Old wavelengths
 # start, stop from 148.9 +/- 51/2.
-for item in np.linspace(123.4, 174.4, num=21):
-    wavelengths.append(autov.freq2lambda(item))
+#for item in np.linspace(123.4, 174.4, num=21):
+#    wavelengths.append(autov.freq2lambda(item))
 
 # Build .seq file for automated run.
 qq = autov.AutoV(ARRAY)
