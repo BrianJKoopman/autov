@@ -47,7 +47,7 @@ for ref_wl in range(21):
     qq.quick_best_focus()
     #qq.run_psf([str(int(autov.lambda2freq(wavelengths[ref_wl])))])
     #qq.run_real_ray_trace([str(int(autov.lambda2freq(wavelengths[ref_wl])))])
-    qq.run_poldsp(input_angle=0, file_descriptors=[str(int(autov.lambda2freq(wavelengths[ref_wl]))), 'telescope_only'], pupil_number=15)
+    qq.run_poldsp(input_angle=0, file_descriptors=[str(int(autov.lambda2freq(wavelengths[ref_wl]))), 'telescope_only'], pupil_number=19)
 
 qq.exit()
 

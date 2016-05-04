@@ -39,7 +39,7 @@ for ref_wl in range(21):
     qq.quick_best_focus()
     qq.run_psf([str(int(autov.lambda2freq(wavelengths[ref_wl])))])
     qq.run_real_ray_trace([str(int(autov.lambda2freq(wavelengths[ref_wl])))])
-    qq.run_poldsp(input_angle=0, file_descriptors=[str(int(autov.lambda2freq(wavelengths[ref_wl])))], pupil_number=15)
+    qq.run_poldsp(input_angle=0, file_descriptors=[str(int(autov.lambda2freq(wavelengths[ref_wl])))], pupil_number=19)
     #qq.run_poldsp(input_angle=90, filename='poldsp_90deg.txt', pupil_number=23)
     #qq.run_poldsp(input_angle=0, filename='poldsp_0deg.txt')
     #qq.run_poldsp(input_angle=90, filename='poldsp_90deg.txt')
