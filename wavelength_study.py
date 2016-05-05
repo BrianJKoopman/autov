@@ -19,36 +19,41 @@ tmpDir = "E:\ownCloud\optics\data\\tmp\\"
 #autoseq = "pa%s_automation.seq"%ARRAY
 
 # start, stop from 50, 250
-wavelengths = [autov.freq2lambda(item) for item in np.linspace(50, 250, num=21)]
+#wavelengths = [autov.freq2lambda(item) for item in np.linspace(50, 250, num=21)]
 
 # Build .seq file for automated run.
 qq = autov.AutoV(ARRAY)
 qq.create_header()
 qq.load_clean_len()
 qq.remove_glass()
-qq.apply_ar_coatings(coating_file=r"E:\ownCloud\optics\mul" + "\\" + "three_layer_coating_128_195_284_21_wavelengths_50_250.mul")
+qq.apply_ar_coatings(coating_file=r"E:\ownCloud\optics\mul" + "\\" + "three_layer_coating_128_195_284.mul")
 #qq.set_wavelengths(wavelengths=[2140000, 2070000, 2000000], reference=2)
-qq.set_wavelengths(wavelengths=wavelengths, reference=10)
+qq.set_wavelengths(wavelengths=[3331000, 2070000, 1380000], reference=1)
+#qq.set_wavelengths(wavelengths=wavelengths, reference=10)
 qq.set_fields()
 qq.set_vignetting()
 qq.activate_pol_ray_trace()
 qq.set_image_semi_aperture()
+qq.quick_best_focus()
+qq.run_psf([str(int(autov.lambda2freq(2070000)))])
+qq.run_real_ray_trace([str(int(autov.lambda2freq(2070000)))])
+qq.run_poldsp(input_angle=0, file_descriptors=[str(int(autov.lambda2freq(2070000)))], pupil_number=19)
 
-for ref_wl in range(21):
-    qq.set_wavelengths(wavelengths=wavelengths, reference=ref_wl)
-    qq.quick_best_focus()
-    qq.run_psf([str(int(autov.lambda2freq(wavelengths[ref_wl])))])
-    qq.run_real_ray_trace([str(int(autov.lambda2freq(wavelengths[ref_wl])))])
-    qq.run_poldsp(input_angle=0, file_descriptors=[str(int(autov.lambda2freq(wavelengths[ref_wl])))], pupil_number=19)
-    #qq.run_poldsp(input_angle=90, filename='poldsp_90deg.txt', pupil_number=23)
-    #qq.run_poldsp(input_angle=0, filename='poldsp_0deg.txt')
-    #qq.run_poldsp(input_angle=90, filename='poldsp_90deg.txt')
-    #qq.store_output("psf.txt", [str(int(wavelengths[ref_wl]))], DATE, CTIME)
-    #qq.store_output("real_ray_trace.txt", [str(int(wavelengths[ref_wl]))], DATE, CTIME)
-    #qq.store_output("poldsp_0deg.txt", [str(int(wavelengths[ref_wl])), "23_rays"], DATE, CTIME)
-    #qq.store_output("poldsp_90deg.txt", [str(int(wavelengths[ref_wl])), "23_rays"], DATE, CTIME)
+#for ref_wl in range(21):
+#    qq.set_wavelengths(wavelengths=wavelengths, reference=ref_wl)
+#    qq.quick_best_focus()
+#    qq.run_psf([str(int(autov.lambda2freq(wavelengths[ref_wl])))])
+#    qq.run_real_ray_trace([str(int(autov.lambda2freq(wavelengths[ref_wl])))])
+#    qq.run_poldsp(input_angle=0, file_descriptors=[str(int(autov.lambda2freq(wavelengths[ref_wl])))], pupil_number=19)
+#    #qq.run_poldsp(input_angle=90, filename='poldsp_90deg.txt', pupil_number=23)
+#    #qq.run_poldsp(input_angle=0, filename='poldsp_0deg.txt')
+#    #qq.run_poldsp(input_angle=90, filename='poldsp_90deg.txt')
+#    #qq.store_output("psf.txt", [str(int(wavelengths[ref_wl]))], DATE, CTIME)
+#    #qq.store_output("real_ray_trace.txt", [str(int(wavelengths[ref_wl]))], DATE, CTIME)
+#    #qq.store_output("poldsp_0deg.txt", [str(int(wavelengths[ref_wl])), "23_rays"], DATE, CTIME)
+#    #qq.store_output("poldsp_90deg.txt", [str(int(wavelengths[ref_wl])), "23_rays"], DATE, CTIME)
 
-qq.exit()
+#qq.exit()
 
 # Write the file
 autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
