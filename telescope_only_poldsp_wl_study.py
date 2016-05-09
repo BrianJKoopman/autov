@@ -18,7 +18,8 @@ outDir = "E:\ownCloud\optics\data\\"
 tmpDir = "E:\ownCloud\optics\data\\tmp\\"
 #autoseq = "pa%s_automation.seq"%ARRAY
 
-wavelengths = [autov.freq2lambda(item) for item in np.linspace(50, 250, num=21)]
+#wavelengths = [autov.freq2lambda(item) for item in np.linspace(50, 250, num=21)]
+wavelengths = [autov.freq2lambda(item) for item in [10., 20., 30., 40., 260., 270.0, 280.0, 290.0, 300.0, 310.0, 320.0, 330.0, 340.0, 350.0, 360.0, 370.0, 380.0, 390.0, 400.0, 410., 420.]]
 
 # Old wavelengths
 # start, stop from 148.9 +/- 51/2.
@@ -30,7 +31,7 @@ qq = autov.AutoV(ARRAY)
 qq.create_header()
 qq.load_clean_len()
 qq.remove_glass()
-qq.apply_ar_coatings(coating_file=r"E:\ownCloud\optics\mul" + "\\" + "three_layer_coating_128_195_284_21_wavelengths_50_250.mul")
+qq.apply_ar_coatings(coating_file=r"E:\ownCloud\optics\mul" + "\\" + "three_layer_coating_128_195_284_21_wavelengths_10_420.mul")
 qq.set_wavelengths(wavelengths=wavelengths, reference=10)
 qq.set_fields()
 qq.set_vignetting()
