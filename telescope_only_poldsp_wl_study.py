@@ -31,7 +31,11 @@ qq = autov.AutoV(ARRAY)
 qq.create_header()
 qq.load_clean_len()
 qq.remove_glass()
-qq.apply_ar_coatings(coating_file=r"E:\ownCloud\optics\mul" + "\\" + "three_layer_coating_128_195_284_21_wavelengths_50_250.mul")
+print "Array: %s"%ARRAY
+if ARRAY is 3:
+    qq.apply_ar_coatings(coating_file=r"E:\ownCloud\optics\mul" + "\\" + "three_layer_coating_128_195_284_21_wavelengths_50_250.mul")
+else:
+    qq.apply_ar_coatings(coating_file=r"E:\ownCloud\optics\mul" + "\\" + "two_layer_coating_138_248_pa1_pa2_21_wavelengths_50_250.mul")
 qq.set_wavelengths(wavelengths=wavelengths, reference=10)
 qq.set_fields()
 qq.set_vignetting()

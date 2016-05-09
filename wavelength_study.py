@@ -19,15 +19,15 @@ tmpDir = "E:\ownCloud\optics\data\\tmp\\"
 #autoseq = "pa%s_automation.seq"%ARRAY
 
 # start, stop from 50, 250
-#wavelengths = [autov.freq2lambda(item) for item in np.linspace(50, 250, num=21)]
-wavelengths = [autov.freq2lambda(item) for item in [10., 20., 30., 40., 260., 270.0, 280.0, 290.0, 300.0, 310.0, 320.0, 330.0, 340.0, 350.0, 360.0, 370.0, 380.0, 390.0, 400.0, 410., 420.]]
+wavelengths = [autov.freq2lambda(item) for item in np.linspace(50, 250, num=21)]
+#wavelengths = [autov.freq2lambda(item) for item in [10., 20., 30., 40., 260., 270.0, 280.0, 290.0, 300.0, 310.0, 320.0, 330.0, 340.0, 350.0, 360.0, 370.0, 380.0, 390.0, 400.0, 410., 420.]]
 
 # Build .seq file for automated run.
 qq = autov.AutoV(ARRAY)
 qq.create_header()
 qq.load_clean_len()
 qq.remove_glass()
-qq.apply_ar_coatings(coating_file=r"E:\ownCloud\optics\mul" + "\\" + "three_layer_coating_128_195_284_21_wavelengths_10_420.mul")
+qq.apply_ar_coatings(coating_file=r"E:\ownCloud\optics\mul" + "\\" + "two_layer_coating_138_248_pa1_pa2_21_wavelengths_50_250.mul")
 #qq.set_wavelengths(wavelengths=[2140000, 2070000, 2000000], reference=2)
 #qq.set_wavelengths(wavelengths=[3331000, 2070000, 1380000], reference=1)
 qq.set_wavelengths(wavelengths=wavelengths, reference=10)
