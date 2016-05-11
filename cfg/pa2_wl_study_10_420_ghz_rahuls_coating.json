@@ -1,5 +1,5 @@
 {"extract": {
-    "array": 2,
+    "array": "2",
     "offset_file": "./data/season2_positions/template_ar1_141030us.txt",
 
     "directories": {
