@@ -215,12 +215,13 @@ class AutoV(object):
             ValueError("Automation not complete for array 1 right now.")
 
     def quick_best_focus(self):
-        """Insert two quick best focus commands."""
-        text = "! quick best focus, twice\n"
-        text += "WAV ; BES; RFO; GO\n"
-        text += "WAV ; BES; RFO; GO\n"
-        self.seq.append(text)
-        return text
+        raise RuntimeError("Throwing this because you shouldn't be using quick_best focus.")
+        #"""Insert two quick best focus commands."""
+        #text = "! quick best focus, twice\n"
+        #text += "WAV ; BES; RFO; GO\n"
+        #text += "WAV ; BES; RFO; GO\n"
+        #self.seq.append(text)
+        #return text
 
     def run_psf(self, file_descriptors):
         """Run the point spread function commands.
@@ -333,6 +334,18 @@ class AutoV(object):
         if os.path.isfile("%s%s"%(self.tmp_dir, filename)):
             print "mv %s%s %s"%(self.tmp_dir, filename, out_file)
             subprocess.call("mv %s%s %s"%(self.tmp_dir, filename, out_file))
+
+def byteify(input):
+    # https://stackoverflow.com/questions/956867/how-to-get-string-objects-instead-of-unicode-ones-from-json-in-python/13105359#13105359
+    if isinstance(input, dict):
+        return {byteify(key): byteify(value)
+                for key, value in input.iteritems()}
+    elif isinstance(input, list):
+        return [byteify(element) for element in input]
+    elif isinstance(input, unicode):
+        return input.encode('utf-8')
+    else:
+        return input
 
 def check_dir(directory):
     if not os.path.exists(directory):

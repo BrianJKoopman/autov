@@ -1,0 +1,15 @@
+{"extract": {
+    "array": 2,
+    "offset_file": "./data/season2_positions/template_ar1_141030us.txt"},
+
+    "directories": {
+        "data_dir": "/home/koopman/ownCloud/niemack_lab/optics/data/",
+        "outDir": "/home/koopman/ownCloud/niemack_lab/analysis/codevpol/img/"
+    }, 
+
+    "inputs": {
+        "coating_file": "two_layer_coating_138_248_pa1_pa2_21_wavelengths_10_420.mul",
+        "freqs": [10.0, 20.0, 30.0, 40.0, 260.0, 270.0, 280.0, 290.0, 300.0,
+                  310.0, 320.0, 330.0, 340.0, 350.0, 360.0, 370.0, 380.0,
+                  390.0, 400.0, 410.0, 420.0]}
+}

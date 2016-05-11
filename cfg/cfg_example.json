@@ -1,0 +1,16 @@
+{"extract": {
+    "array": 1,
+    "offset_file": "./data/season2_positions/template_ar1_141030us.txt"},
+
+    "directories": {
+        "data_dir": "/home/koopman/ownCloud/niemack_lab/optics/data/",
+        "outDir": "/home/koopman/ownCloud/niemack_lab/analysis/codevpol/img/"
+    }, 
+
+    "codev_inputs": {
+        "freq": [145], 
+        "psf": "psf/20141107_psf_1024_1024_51_PA1.txt", 
+        "poldsp_0deg": ["20141107_0deg_23_rays_138_250_mul_PA1.txt"], 
+        "poldsp_90deg": ["20141107_90deg_23_rays_138_250_mul_PA1.txt"],
+        "ray_trace": ["20141107_PA1_real_ray_trace.txt"]}
+}
