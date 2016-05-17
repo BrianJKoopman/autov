@@ -34,7 +34,7 @@ qq.set_fields()
 qq.set_vignetting()
 qq.activate_pol_ray_trace()
 qq.set_image_semi_aperture()
-qq.quick_best_focus()
+#qq.quick_best_focus()
 #qq.run_psf()
 #qq.run_real_ray_trace([str('%.2f'%(autov.lambda2freq(wavelengths[ref_wl])))])
 
