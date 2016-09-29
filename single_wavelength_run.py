@@ -1,4 +1,4 @@
-# To setup PA2 for use by hand.
+# To run a single wavelength and test for difference without Quick Best Focus.
 
 import subprocess
 import time
@@ -35,7 +35,7 @@ qq.set_fields()
 qq.set_vignetting()
 qq.activate_pol_ray_trace()
 qq.set_image_semi_aperture()
-qq.run_psf()
+qq.run_psf(ref_wl)
 qq.run_real_ray_trace([str('%.2f'%(autov.lambda2freq(ref_wl)))])
 qq.run_poldsp(input_angle=0, filename='poldsp_0deg.txt', pupil_number=23)
 qq.run_poldsp(input_angle=90, filename='poldsp_90deg.txt', pupil_number=23)
