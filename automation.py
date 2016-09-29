@@ -38,7 +38,7 @@ qq.set_image_semi_aperture()
 
 for ref_wl in range(21):
     qq.set_wavelengths(wavelengths=wavelengths, reference=ref_wl)
-    qq.quick_best_focus()
+    #qq.quick_best_focus()
     #qq.run_psf([str(int(autov.lambda2freq(wavelengths[ref_wl])))])
     #qq.run_real_ray_trace([str(int(autov.lambda2freq(wavelengths[ref_wl])))])
     qq.run_poldsp(input_angle=0, file_descriptors=[str(int(autov.lambda2freq(wavelengths[ref_wl])))], pupil_number=23)
