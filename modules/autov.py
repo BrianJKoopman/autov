@@ -7,6 +7,8 @@ import os
 import time
 import numpy as np
 
+from codey import get_fields
+
 class AutoV(object):
     """Class for writing custom .seq files for automating CODEV.
 
@@ -77,6 +79,7 @@ class AutoV(object):
                     "\n"
 
         if self.array in ['1']:
+            print "change to PA1 from PA2"
             text += "! PA1 needs to have optics mirrored from PA2 clean copy.\n"
             text += "XDE S8 -16.1\n"
             text += "XDE S15 -0.2\n"
@@ -208,12 +211,29 @@ class AutoV(object):
         Currently only defined for PA2, since they're already in the clean lens
         system file. This currently just sets the polarization fraction to 1
         for all fields, something we'll always want to do."""
+        text = "! set fields\n"
+        if self.array in ['1']:
+            field_no = range(1,26)
+            fields = get_fields(self.array)
+
+            text += "! set field x values\n"
+            for (i, val) in zip(field_no, fields[:,0].tolist()):
+                text += "in CV_MACRO:cvsetfield X %s F%s\n"%(val, i)
+
+            text += "! set field y values\n"
+            for (i, val) in zip(field_no, fields[:,1].tolist()):
+                text += "in CV_MACRO:cvsetfield Y %s F%s\n"%(val, i)
+
         if self.array in ['2', '3']:
-            text = "! set polarization fraction of all fields to 1\n"
+            text += "! set polarization fraction of all fields to 1\n"
             for i in range(25):
                 text += "PFR F%s 1\n"%(i+1)
             self.seq.append(text)
             return text
+
+        text += "! set weights to 1 for all fields\n"
+        for field in range(1,26):
+            text += "WTF F%s 1\n"%(field)
         else:
             ValueError("Automation not complete for array 1 right now.")
 
