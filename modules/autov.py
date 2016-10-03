@@ -76,6 +76,20 @@ class AutoV(object):
                     r'\ACTPol_90GHz_v29_optical_filter_aperture_study_20111204.seq"' + \
                     "\n"
 
+        if self.array in ['1']:
+            text += "! PA1 needs to have optics mirrored from PA2 clean copy.\n"
+            text += "XDE S8 -16.1\n"
+            text += "XDE S15 -0.2\n"
+            text += "XDE S24 -0.2\n"
+            text += "XDE S25 -0.2\n"
+            text += "XDE S29 -0.2\n"
+            text += "XDE S30 -0.4338\n"
+            text += "XDE S36 -0.9184880045643\n"
+            text += "XDE S38 -0.9184880045643\n"
+            text += "XDE S39 -1.38151498554729\n"
+            text += "XDE S41 -1.38151498554729\n"
+            text += "XDE S42 -1.6\n"
+
         self.seq.append(text)
         return text
 
