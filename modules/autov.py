@@ -213,30 +213,28 @@ class AutoV(object):
         for all fields, something we'll always want to do."""
         text = "! set fields\n"
         if self.array in ['1']:
-            field_no = range(1,26)
+            field_no = range(1, 26)
             fields = get_fields(int(self.array))
 
             text += "! set field x values\n"
-            for (i, val) in zip(field_no, fields[:,0].tolist()):
+            for (i, val) in zip(field_no, fields[:, 0].tolist()):
                 text += "in CV_MACRO:cvsetfield X %s F%s\n"%(val, i)
 
             text += "! set field y values\n"
-            for (i, val) in zip(field_no, fields[:,1].tolist()):
+            for (i, val) in zip(field_no, fields[:, 1].tolist()):
                 text += "in CV_MACRO:cvsetfield Y %s F%s\n"%(val, i)
 
         if self.array in ['2', '3']:
             text += "! set polarization fraction of all fields to 1\n"
             for i in range(25):
                 text += "PFR F%s 1\n"%(i+1)
-            return text
 
         text += "! set weights to 1 for all fields\n"
-        for field in range(1,26):
+        for field in range(1, 26):
             text += "WTF F%s 1\n"%(field)
 
         self.seq.append(text)
-        else:
-            ValueError("Automation not complete for array 1 right now.")
+        return text
 
     def set_image_semi_aperture(self):
         """Enlarge the semi-aperture of the image surface for polarization
