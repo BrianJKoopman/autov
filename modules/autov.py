@@ -93,6 +93,10 @@ class AutoV(object):
             text += "XDE S41 -1.38151498554729\n"
             text += "XDE S42 -1.6\n"
 
+            text += "! can't forget your beta tilts!\n"
+            text += "BDE S31 2.914\n"
+            text += "BDE S43 4.039980255467\n"
+
         self.seq.append(text)
         return text
 
@@ -224,6 +228,10 @@ class AutoV(object):
             for (i, val) in zip(field_no, fields[:, 1].tolist()):
                 text += "in CV_MACRO:cvsetfield Y %s F%s\n"%(val, i)
 
+            text += "! set polarization fraction of all fields to 1\n"
+            for i in range(25):
+                text += "PFR F%s 1\n"%(i+1)
+
         if self.array in ['2', '3']:
             text += "! set polarization fraction of all fields to 1\n"
             for i in range(25):
@@ -239,6 +247,11 @@ class AutoV(object):
     def set_image_semi_aperture(self):
         """Enlarge the semi-aperture of the image surface for polarization
         studies."""
+        if self.array in ['1']:
+            text = "! Modify Semi-Aperture of Image surface for poldsp output\n"
+            text += "CIR S45 8\n"
+            self.seq.append(text)
+            return text
         if self.array in ['2', '3']:
             text = "! Modify Semi-Aperture of Image surface for poldsp output\n"
             text += "CIR S42 8\n"
