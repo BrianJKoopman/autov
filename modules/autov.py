@@ -228,12 +228,13 @@ class AutoV(object):
             text += "! set polarization fraction of all fields to 1\n"
             for i in range(25):
                 text += "PFR F%s 1\n"%(i+1)
-            self.seq.append(text)
             return text
 
         text += "! set weights to 1 for all fields\n"
         for field in range(1,26):
             text += "WTF F%s 1\n"%(field)
+
+        self.seq.append(text)
         else:
             ValueError("Automation not complete for array 1 right now.")
 
