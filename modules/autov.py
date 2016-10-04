@@ -247,12 +247,7 @@ class AutoV(object):
     def set_image_semi_aperture(self):
         """Enlarge the semi-aperture of the image surface for polarization
         studies."""
-        if self.array in ['1']:
-            text = "! Modify Semi-Aperture of Image surface for poldsp output\n"
-            text += "CIR S45 8\n"
-            self.seq.append(text)
-            return text
-        if self.array in ['2', '3']:
+        if self.array in ['1', '2', '3']:
             text = "! Modify Semi-Aperture of Image surface for poldsp output\n"
             text += "CIR S42 8\n"
             self.seq.append(text)
