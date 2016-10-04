@@ -95,7 +95,7 @@ class AutoV(object):
 
             text += "! can't forget your beta tilts!\n"
             text += "BDE S30 2.914\n"
-            text += "BDE S43 4.039980255467\n"
+            text += "BDE S42 4.039980255467\n"
 
         self.seq.append(text)
         return text
