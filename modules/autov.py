@@ -214,7 +214,7 @@ class AutoV(object):
         text = "! set fields\n"
         if self.array in ['1']:
             field_no = range(1,26)
-            fields = get_fields(self.array)
+            fields = get_fields(int(self.array))
 
             text += "! set field x values\n"
             for (i, val) in zip(field_no, fields[:,0].tolist()):
