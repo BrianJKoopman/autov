@@ -45,6 +45,7 @@ qq.exit()
 autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
 
 # Make the CODEV Call
+autov.check_dir("%s%s"%(outDir, DATE))
 subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\\autov.seq")
 
 # Move automation .seq file for permanent record
