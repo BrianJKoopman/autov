@@ -24,7 +24,7 @@ qq = autov.AutoV(ARRAY)
 qq.create_header()
 qq.load_clean_len()
 qq.remove_glass()
-qq.apply_ar_coatings(coating_file = r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_138_p5_250_p5.mul")
+qq.apply_ar_coatings(coating_file = r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_138_m5_250_m5.mul")
 if ARRAY in ['1', '2']:
     qq.set_wavelengths(wavelengths=[2140000, 2070000, 2000000], reference=1) # ar1, ar2
     ref_wl = 2070000
