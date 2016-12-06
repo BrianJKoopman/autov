@@ -31,7 +31,7 @@ if ARRAY in ['1', '2']:
 elif ARRAY in ['3']:
     qq.set_wavelengths(wavelengths=[3000000, 2070000, 1380000], reference=0) # ar3
     ref_wl = 3000000
-qq.set_fields()
+qq.set_fields(polarization=0)
 qq.set_vignetting()
 qq.activate_pol_ray_trace()
 qq.set_image_semi_aperture()
@@ -39,7 +39,7 @@ qq.run_psf([str(int(ref_wl))])
 qq.run_real_ray_trace(file_descriptors=[str(int(ref_wl))])
 qq.run_poldsp(input_angle=0, file_descriptors=[str(int(ref_wl))], pupil_number=23)
 qq.run_poldsp(input_angle=90, file_descriptors=[str(int(ref_wl))], pupil_number=23)
-qq.exit()
+#qq.exit()
 
 # Write the file
 autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
