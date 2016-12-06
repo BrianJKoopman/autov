@@ -31,7 +31,7 @@ qq.remove_glass()
 qq.apply_ar_coatings(coating_file=r"E:\ownCloud\optics\mul" + "\\" + "two_layer_coating_138_250_pa1_pa2_21_wavelengths.mul")
 #qq.set_wavelengths(wavelengths=[2140000, 2070000, 2000000], reference=2)
 qq.set_wavelengths(wavelengths=wavelengths, reference=10)
-qq.set_fields()
+qq.set_fields(polarization=0)
 qq.set_vignetting()
 qq.activate_pol_ray_trace()
 qq.set_image_semi_aperture()
@@ -50,7 +50,7 @@ for ref_wl in range(21):
     #qq.store_output("poldsp_0deg.txt", [str(int(wavelengths[ref_wl])), "23_rays"], DATE, CTIME)
     #qq.store_output("poldsp_90deg.txt", [str(int(wavelengths[ref_wl])), "23_rays"], DATE, CTIME)
 
-qq.exit()
+#qq.exit()
 
 # Write the file
 autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")

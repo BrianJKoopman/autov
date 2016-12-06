@@ -209,7 +209,7 @@ class AutoV(object):
         self.seq.append(text)
         return text
 
-    def set_fields(self):
+    def set_fields(self, polarization=1):
         """Set the CODEV fields.
 
         Currently only defined for PA2, since they're already in the clean lens
@@ -230,12 +230,12 @@ class AutoV(object):
 
             text += "! set polarization fraction of all fields to 1\n"
             for i in range(25):
-                text += "PFR F%s 1\n"%(i+1)
+                text += "PFR F%s %s\n"%(i+1, polarization)
 
         if self.array in ['2', '3']:
             text += "! set polarization fraction of all fields to 1\n"
             for i in range(25):
-                text += "PFR F%s 1\n"%(i+1)
+                text += "PFR F%s %s\n"%(i+1, polarization)
 
         text += "! set weights to 1 for all fields\n"
         for field in range(1, 26):
