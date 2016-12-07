@@ -40,11 +40,11 @@ qq.enter_single_command("CIR S6 35") # increase semi-aperture of image
 #qq.quick_best_focus()
 
 # Run tests
-#qq.run_psf([str(int(ref_wl))])
-#qq.run_real_ray_trace(file_descriptors=[str(int(ref_wl))])
-#qq.run_poldsp(input_angle=0, file_descriptors=[str(int(ref_wl))], pupil_number=23)
-#
-#qq.exit()
+qq.run_psf([str(int(ref_wl))])
+qq.run_real_ray_trace(file_descriptors=[str(int(ref_wl))])
+qq.run_poldsp(input_angle=0, file_descriptors=[str(int(ref_wl))], pupil_number=23)
+
+qq.exit()
 
 # Write the file
 autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
