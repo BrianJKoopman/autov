@@ -37,7 +37,7 @@ qq.set_image_semi_aperture()
 # just the telescope
 qq.enter_single_command("DEL S6..41") # reduce to just the telescope
 qq.enter_single_command("CIR S6 35") # increase semi-aperture of image
-#qq.quick_best_focus()
+qq.quick_best_focus(force=True)
 
 # Run tests
 #qq.run_psf([str(int(ref_wl))])

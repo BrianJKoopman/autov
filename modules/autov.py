@@ -255,14 +255,16 @@ class AutoV(object):
         else:
             ValueError("Automation not complete for array 1 right now.")
 
-    def quick_best_focus(self):
-        raise RuntimeError("Throwing this because you shouldn't be using quick_best focus.")
-        #"""Insert two quick best focus commands."""
-        #text = "! quick best focus, twice\n"
-        #text += "WAV ; BES; RFO; GO\n"
-        #text += "WAV ; BES; RFO; GO\n"
-        #self.seq.append(text)
-        #return text
+    def quick_best_focus(self, force=False):
+        if not force:
+            raise RuntimeError("Throwing this because you shouldn't be using quick_best focus.")
+        else:
+            """Insert two quick best focus commands."""
+            text = "! quick best focus, twice\n"
+            text += "WAV ; BES; RFO; GO\n"
+            text += "WAV ; BES; RFO; GO\n"
+            self.seq.append(text)
+            return text
 
     def run_psf(self, file_descriptors):
         """Run the point spread function commands.
