@@ -7,4 +7,5 @@
 #python single_wavelength_run.py 3
 
 #python ar_coating_systematics.py 2
-python single_wavelength_run.py 2
+#python single_wavelength_run.py 2
+python telescope_only_single_wl.py 2
