@@ -38,15 +38,4 @@ qq.run_real_ray_trace(file_descriptors=[str(int(ref_wl))])
 qq.run_poldsp(input_angle=0, file_descriptors=[str(int(ref_wl))], pupil_number=23)
 qq.run_poldsp(input_angle=90, file_descriptors=[str(int(ref_wl))], pupil_number=23)
 qq.exit()
-
-# Write the file
-autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
-
-# Make the CODEV Call
-autov.check_dir("%s%s"%(outDir, DATE))
-subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\\autov.seq")
-
-# Move automation .seq file for permanent record
-autov.check_dir("%s%s"%(outDir, DATE))
-print "mv E:\ownCloud\optics\\autov\seq\\autov.seq %s%s\\%s_autov.seq.pa%s"%(outDir, DATE, CTIME, ARRAY)
-subprocess.call("mv E:\ownCloud\optics\\autov\seq\\autov.seq %s%s\\%s_autov.seq.pa%s"%(outDir, DATE, CTIME, ARRAY))
+qq.run()

@@ -378,6 +378,48 @@ class AutoV(object):
             print "mv %s%s %s"%(self.tmp_dir, filename, out_file)
             subprocess.call("mv %s%s %s"%(self.tmp_dir, filename, out_file))
 
+    def _write_seq(self):
+        """Write the master CODEV sequence file.
+
+        This will always write to the same autov.seq file, which will get moved permanently 
+
+        Keyword arguments:
+        inputs -- list of input strings
+        seqfile -- name of output .seq file"""
+
+        # CODE V will choke on a complicated filename, we need to keep it simple and move the file later for saving.
+        seqfile = "E:\ownCloud\optics\\autov\seq\\autov.seq"
+        # seqfile = "%s%s\\%s_autov.seq.pa%s"%(self.out_dir, self.date, self.ctime, self.array)
+
+        with open(seqfile, 'w') as f:
+            for item in self.seq:
+                f.write(item)
+                f.write('\n')
+
+        return seqfile
+
+    def _move_seq(self):
+        # # Move automation .seq file for permanent record
+        # Check for existence of output directory before writing.
+        check_dir("%s%s"%(self.out_dir, self.date))
+
+        seqfile = "%s%s\\%s_autov.seq.pa%s"%(self.out_dir, self.date, self.ctime, self.array)
+        print "mv E:\ownCloud\optics\\autov\seq\\autov.seq %s"%(seqfile)
+        subprocess.call("mv E:\ownCloud\optics\\autov\seq\\autov.seq %s"%(seqfile))
+
+        return seqfile
+
+    def _call_codev(self, seqfile):
+        """Make the call to CODE V."""
+        # Make the CODEV Call
+        subprocess.call("C:\CODEV105_FCS\codev.exe %s"%seqfile)
+
+    def run(self):
+        """Write then run the .seq file."""
+        seqfile = self._write_seq() # write
+        self._call_codev(seqfile) # run
+        self._move_seq() # move
+
 def byteify(input):
     # https://stackoverflow.com/questions/956867/how-to-get-string-objects-instead-of-unicode-ones-from-json-in-python/13105359#13105359
     if isinstance(input, dict):
@@ -401,17 +443,6 @@ def readseq(seqfile):
         read_data = f.read()
 
     return read_data
-
-def writeseq(inputs, seqfile):
-    """Write the master CODEV sequence file.
-
-    Keyword arguments:
-    inputs -- list of input strings
-    seqfile -- name of output .seq file"""
-    with open(seqfile, 'w') as f:
-        for item in inputs:
-            f.write(item)
-            f.write('\n')
 
 SPEED_OF_LIGHT = 299792458 # [m/s]
 
