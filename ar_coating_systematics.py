@@ -4,7 +4,7 @@ import subprocess
 import time
 import os
 import argparse
-import autov
+from modules import autov
 import numpy as np
 
 # Parse arguments passed to the script.
