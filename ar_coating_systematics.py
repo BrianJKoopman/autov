@@ -2,10 +2,8 @@
 
 import subprocess
 import time
-import os
 import argparse
 from modules import autov
-import numpy as np
 
 # Parse arguments passed to the script.
 parser = argparse.ArgumentParser()
