@@ -16,13 +16,20 @@ class AutoV(object):
     .seq file which can be called by CODEV and used to automate testing
     parameters in a lens design.
 
+    Keyword arguments:
+        array (str): Which ACTPol array we're automating
+        descriptors (list[str]): List of file descriptors to append in file
+                                 names. Called by most (all?) methods which
+                                 output files.
+
     Attributes:
         array (str): Which ACTPol array we're automating
         seq (list[str]): List of strings which will be written sequentially to
                          a .seq file for running in CODEV
     """
-    def __init__(self, array):
+    def __init__(self, array, descriptors):
         self.array = array
+        self.descriptors = descriptors
         self.seq = []
 
         self.out_dir = r"E:\ownCloud\optics\data" + "\\"
@@ -266,7 +273,7 @@ class AutoV(object):
             self.seq.append(text)
             return text
 
-    def run_psf(self, file_descriptors):
+    def run_psf(self):
         """Run the point spread function commands.
 
         Will output psf results to a tmp file, psf.txt which will be moved by
@@ -276,7 +283,7 @@ class AutoV(object):
         # Can't have file name with any .'s other than in .txt
         filename = "psf"
         out_file = "%s%s\\%s_%s"%(self.out_dir, self.date, self.ctime, filename)
-        for descriptor in file_descriptors:
+        for descriptor in self.descriptors:
             out_file += "_%s"%(descriptor)
         out_file += "_ar%s.txt"%(self.array)
 
@@ -297,7 +304,7 @@ class AutoV(object):
         self.seq.append(text)
         return text
 
-    def run_real_ray_trace(self, file_descriptors):
+    def run_real_ray_trace(self):
         """Run the real ray trace commands.
 
         Will output ray trace results to temp file, real_ray_trace.txt, which
@@ -305,7 +312,7 @@ class AutoV(object):
         # TODO: This wants to know about the fields set.
         filename = "real_ray_trace"
         out_file = "%s%s\\%s_%s"%(self.out_dir, self.date, self.ctime, filename)
-        for descriptor in file_descriptors:
+        for descriptor in self.descriptors:
             out_file += "_%s"%(descriptor)
         out_file += "_ar%s.txt"%(self.array)
 
@@ -317,7 +324,7 @@ class AutoV(object):
         self.seq.append(text)
         return text
 
-    def run_poldsp(self, input_angle, file_descriptors, pupil_number=11):
+    def run_poldsp(self, input_angle, pupil_number=11):
         """Run the poldsp macro for polarization studies.
 
         Keyword arguments:
@@ -331,7 +338,7 @@ class AutoV(object):
         out_file = "%s%s\\%s_%s"%(self.out_dir, self.date, self.ctime, filename)
         out_file += "_%sdeg"%(input_angle)
         out_file += "_%srays"%(pupil_number)
-        for descriptor in file_descriptors:
+        for descriptor in self.descriptors:
             out_file += "_%s"%(descriptor)
         out_file += "_ar%s.txt"%(self.array)
 
@@ -362,21 +369,22 @@ class AutoV(object):
         return text
 
     #def store_output(filename, tmpDir, outDir, date, ctime, ARRAY):
-    def store_output(self, filename, descriptors, date, ctime):
-        check_dir("%s%s"%(self.out_dir, date))
+    def store_output(self, filename, date, ctime):
+        raise DeprecationWarning("Pretty sure this isn't used/needed any more.")
+        # check_dir("%s%s"%(self.out_dir, date))
 
-        out_file = "%s%s\\%s_%s"%(self.out_dir, date, ctime, filename)
-        for descriptor in descriptors:
-            out_file += "_%s"%(descriptor)
-        out_file += ".pa%s"%(self.array)
+        # out_file = "%s%s\\%s_%s"%(self.out_dir, date, ctime, filename)
+        # for descriptor in self.descriptors:
+        #     out_file += "_%s"%(descriptor)
+        # out_file += ".pa%s"%(self.array)
 
-        # I guess we'll do this regardless of whether the file exists
-        text = "! mv %s%s %s \n"%(self.tmp_dir, filename, out_file)
-        self.seq.append(text) # inform the .seq script we're moving things
+        # # I guess we'll do this regardless of whether the file exists
+        # text = "! mv %s%s %s \n"%(self.tmp_dir, filename, out_file)
+        # self.seq.append(text) # inform the .seq script we're moving things
 
-        if os.path.isfile("%s%s"%(self.tmp_dir, filename)):
-            print "mv %s%s %s"%(self.tmp_dir, filename, out_file)
-            subprocess.call("mv %s%s %s"%(self.tmp_dir, filename, out_file))
+        # if os.path.isfile("%s%s"%(self.tmp_dir, filename)):
+        #     print "mv %s%s %s"%(self.tmp_dir, filename, out_file)
+        #     subprocess.call("mv %s%s %s"%(self.tmp_dir, filename, out_file))
 
     def _write_seq(self):
         """Write the master CODEV sequence file.
@@ -400,10 +408,12 @@ class AutoV(object):
 
     def _move_seq(self):
         # # Move automation .seq file for permanent record
-        # Check for existence of output directory before writing.
-        check_dir("%s%s"%(self.out_dir, self.date))
+        filename = "autov"
+        seqfile = "%s%s\\%s_%s"%(self.out_dir, self.date, self.ctime, filename)
+        for descriptor in self.descriptors:
+            seqfile += "_%s"%(descriptor)
+        seqfile += "_ar%s.seq"%(self.array)
 
-        seqfile = "%s%s\\%s_autov.seq.pa%s"%(self.out_dir, self.date, self.ctime, self.array)
         print "mv E:\ownCloud\optics\\autov\seq\\autov.seq %s"%(seqfile)
         subprocess.call("mv E:\ownCloud\optics\\autov\seq\\autov.seq %s"%(seqfile))
 
@@ -417,6 +427,10 @@ class AutoV(object):
     def run(self):
         """Write then run the .seq file."""
         seqfile = self._write_seq() # write
+
+        # Check for existence of output directory before writing.
+        check_dir("%s%s"%(self.out_dir, self.date))
+
         self._call_codev(seqfile) # run
         self._move_seq() # move
 
