@@ -16,19 +16,17 @@ class AutoV(object):
     .seq file which can be called by CODEV and used to automate testing
     parameters in a lens design.
 
-    Keyword arguments:
-        array (str): Which ACTPol array we're automating
-        descriptors (list[str]): List of file descriptors to append in file
-                                 names. Called by most (all?) methods which
-                                 output files.
-
-    Attributes:
-        array (str): Which ACTPol array we're automating
-        seq (list[str]): List of strings which will be written sequentially to
-                         a .seq file for running in CODEV
+    :param array: Which ACTPol array we're automating
+    :type array: str
+    :param descriptors: List of file descriptors to append in file names.
+                        Called by most (all?) methods which output files.
+    :type descriptors: :obj:`list` of :obj:`str`
     """
     def __init__(self, array, descriptors):
+        #: A string describes the ACTPol array number.
         self.array = array
+
+        #: A list of strings which will be written sequentially to the name of output files.
         self.descriptors = descriptors
         self.seq = []
 
@@ -156,11 +154,10 @@ class AutoV(object):
         only passing the same set of wavelengths with a different reference
         number to change the REF and weight of the REF WL.
 
-        Keyword arguments:
-        wavelengths -- list of wavelengths, max length is 21
-        reference -- change what the reference wavelength is (note, indexed on
-                     0). The reference is used to change the weight of the
-                     called wavelength to 1, the rest to 0.
+        :param wavelengths: list of wavelengths, max length is 21
+        :param reference: change what the reference wavelength is (note,
+                          indexed on 0). The reference is used to change the
+                          weight of the called wavelength to 1, the rest to 0.
         """
         if wavelengths is None:
             raise ValueError("No wavelenth specified, presumably just changing reference.")
@@ -327,12 +324,12 @@ class AutoV(object):
     def run_poldsp(self, input_angle, pupil_number=11):
         """Run the poldsp macro for polarization studies.
 
-        Keyword arguments:
-        input_angle -- Sets the field orientation angle at the input for all
-                       fields.
-        filename -- Set the filename for temporary output. This is likely to
-                    want to change based on input angle.
-        pupil_number -- Number of rays across the pupil diameter."""
+        :param input_angle: Sets the field orientation angle at the input for
+                            all fields.
+        :param filename: Set the filename for temporary output. This is likely
+                         to want to change based on input angle.
+        :param pupil_number: Number of rays across the pupil diameter.
+        """
         # TODO: This also wants to know about the fields set
         filename = "poldsp"
         out_file = "%s%s\\%s_%s"%(self.out_dir, self.date, self.ctime, filename)
