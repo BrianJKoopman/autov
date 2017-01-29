@@ -10,7 +10,7 @@ Welcome to autov's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-.. automodule:: autov
+.. automodule:: modules.autov
 
 .. autoclass:: AutoV
     :members:
