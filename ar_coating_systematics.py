@@ -17,9 +17,11 @@ CTIME = int(time.time())
 outDir = "E:\ownCloud\optics\data\\"
 tmpDir = "E:\ownCloud\optics\data\\tmp\\"
 
-coating_list = [(r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_138_m0p05_250_m0p05.mul",["arc_n_change_m0p05"]),
-                (r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_138_p0p05_250_p0p05.mul",["arc_n_change_p0p05"]),
-                (r"E:\ownCloud\optics\mul\two_layer_coating_138_250.mul",["arc_n_change_0"])]
+coating_list = [(r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_138_m0p05_250_m0p05.mul",["arc_n_change_m0p05"])]
+
+#coating_list = [(r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_138_m0p05_250_m0p05.mul",["arc_n_change_m0p05"]),
+#                (r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_138_p0p05_250_p0p05.mul",["arc_n_change_p0p05"]),
+#                (r"E:\ownCloud\optics\mul\two_layer_coating_138_250.mul",["arc_n_change_0"])]
 
 def test_ar_coatings(coatings):
     for (coating, descriptors) in coatings:
@@ -51,6 +53,7 @@ def test_ar_coatings(coatings):
         arc_autov.run_poldsp(input_angle=90, pupil_number=23)
         arc_autov.exit()
         arc_autov.run()
+        arc_autov.save_cfg("./output/")
 
 test_ar_coatings(coating_list)
 

@@ -5,9 +5,10 @@ import hashlib
 import subprocess
 import os
 import time
+import json
 import numpy as np
 
-from codey import get_fields
+from modules.codey import get_fields
 
 class AutoV(object):
     """Class for writing custom .seq files for automating CODEV.
@@ -38,6 +39,19 @@ class AutoV(object):
 
         self.wl_set = False # have wavelengths been set yet?
         self.wavelengths = None # save wavelengths after setting
+
+        #: Dictionary containing information to be written to a codevpol style cfg file.
+        _out_dir = '/home/koopman/ownCloud/niemack_lab/analysis/codevpol/img/'
+        _data_dir = '/home/koopman/ownCloud/niemack_lab/optics/data/'
+        self.cfg_dict = {"array": int(self.array),
+                         "directories": {"outDir": _out_dir,
+                                         "data_dir": _data_dir},
+                         "codev_inputs": {"freq": [145]}
+                        }
+
+        # More array dependant setup for cfg_dict.
+        if self.array in ["2"]:
+            self.cfg_dict["offset_file"] = "./data/season3_positions/template_ar2_150529s.txt"
 
     def create_header(self):
         """Create header comments for the .seq file."""
@@ -174,7 +188,7 @@ class AutoV(object):
         text = "! modify wavelengths\n"
 
         for wavelength in wavelengths:
-            if wavelengths.index(wavelength) > 2: 
+            if wavelengths.index(wavelength) > 2:
                 # always skip first 3, which are set in both clean copies
                 if self.wl_set == False:
                     text += "IN CV_MACRO:inswl %s+1\n"%(wavelengths.index(wavelength))
@@ -270,6 +284,42 @@ class AutoV(object):
             self.seq.append(text)
             return text
 
+    def decenter_cryostat(self, parameter, value):
+        """Apply a "Basic" decenter to window, decentering entire cryostat.
+
+        :param parameter: Parameter to decenter. This corresponds to any
+                          decenter parameter in CODE V. We're focusing on x, y,
+                          z, alpha and beta.
+        :type parameter: str
+        :param value: Value for decenter in system units.
+        :type value: float
+
+        """
+        parameter_lookup = {"x": "XDE", "y": "YDE", "z": "ZDE", "alpha": "ADE", "beta": "BDE"}
+        decenter_command = parameter_lookup[parameter.lower()]
+
+        if self.array in ['1', '2']:
+            text = "! Apply Decenter to window, decentering entire cryostat/optics tube.\n"
+            text += "%s S6 %s\n"%(decenter_command, str(value))
+            self.seq.append(text)
+            return text
+        else:
+            ValueError("Automation not complete for array 1 right now.")
+
+    def _make_windows_out_file(self, filename):
+        out_file = "%s%s\\%s_%s"%(self.out_dir, self.date, self.ctime, filename)
+        for descriptor in self.descriptors:
+            out_file += "_%s"%(descriptor)
+        out_file += "_ar%s.txt"%(self.array)
+        return out_file
+
+    def _make_cfg_dict_out_file(self, filename):
+        dict_out_file = "%s/%s_%s"%(self.date, self.ctime, filename)
+        for descriptor in self.descriptors:
+            dict_out_file += "_%s"%(descriptor)
+        dict_out_file += "_ar%s.txt"%(self.array)
+        return dict_out_file
+
     def run_psf(self):
         """Run the point spread function commands.
 
@@ -279,10 +329,10 @@ class AutoV(object):
         # the user worry about it.
         # Can't have file name with any .'s other than in .txt
         filename = "psf"
-        out_file = "%s%s\\%s_%s"%(self.out_dir, self.date, self.ctime, filename)
-        for descriptor in self.descriptors:
-            out_file += "_%s"%(descriptor)
-        out_file += "_ar%s.txt"%(self.array)
+        out_file = self._make_windows_out_file(filename)
+        # Add psf file output to cfg_dict.
+        dict_out_file = self._make_cfg_dict_out_file(filename)
+        self.cfg_dict["codev_inputs"]["psf"] = dict_out_file
 
         text = "! auto_psf.seq\n"
         text += "OUT " + out_file + " ! Sets output file\n"
@@ -308,10 +358,10 @@ class AutoV(object):
         will be moved by the user later for permanent storage."""
         # TODO: This wants to know about the fields set.
         filename = "real_ray_trace"
-        out_file = "%s%s\\%s_%s"%(self.out_dir, self.date, self.ctime, filename)
-        for descriptor in self.descriptors:
-            out_file += "_%s"%(descriptor)
-        out_file += "_ar%s.txt"%(self.array)
+        out_file = self._make_windows_out_file(filename)
+        # Add ray trace file output to cfg_dict.
+        dict_out_file = self._make_cfg_dict_out_file(filename)
+        self.cfg_dict["codev_inputs"]["ray_trace"] = [dict_out_file]
 
         text = "! Adopted from auto_ray_trace.seq, which was used for 20141107 analysis\n"
         text += "OUT " + out_file + " ! Sets output file\n"
@@ -319,6 +369,7 @@ class AutoV(object):
             text += "RSI S42 R1 F%s\n"%(i+1)
         text += "OUT T ! Restores regular output\n"
         self.seq.append(text)
+
         return text
 
     def run_poldsp(self, input_angle, pupil_number=11):
@@ -331,13 +382,11 @@ class AutoV(object):
         :param pupil_number: Number of rays across the pupil diameter.
         """
         # TODO: This also wants to know about the fields set
-        filename = "poldsp"
-        out_file = "%s%s\\%s_%s"%(self.out_dir, self.date, self.ctime, filename)
-        out_file += "_%sdeg"%(input_angle)
-        out_file += "_%srays"%(pupil_number)
-        for descriptor in self.descriptors:
-            out_file += "_%s"%(descriptor)
-        out_file += "_ar%s.txt"%(self.array)
+        filename = "poldsp_%sdeg"%(str(int(input_angle)))
+        out_file = self._make_windows_out_file(filename)
+        # Add poldsp file output to cfg_dict.
+        dict_out_file = self._make_cfg_dict_out_file(filename)
+        self.cfg_dict["codev_inputs"]["poldsp_%sdeg"%(str(int(input_angle)))] = [dict_out_file]
 
         text = "! Set input field orientation\n"
         for i in range(25):
@@ -386,7 +435,7 @@ class AutoV(object):
     def _write_seq(self):
         """Write the master CODEV sequence file.
 
-        This will always write to the same autov.seq file, which will get moved permanently 
+        This will always write to the same autov.seq file, which will get moved permanently
 
         Keyword arguments:
         inputs -- list of input strings
@@ -430,6 +479,20 @@ class AutoV(object):
 
         self._call_codev(seqfile) # run
         self._move_seq() # move
+
+    def save_cfg(self, out_dir):
+        """Save the configuration dictionary for use with codevpol.
+
+        :param out_dir: Output directory, end with a /.
+        :type out_dir: str
+        """
+        file_name = "%scfg_ar%s"%(out_dir, self.array)
+        for descriptor in self.descriptors:
+            file_name += "_%s"%(descriptor)
+        file_name += ".in"
+        with open(file_name, 'w') as f:
+            f.write("extract = ")
+            json.dump(self.cfg_dict, f)
 
 def byteify(input):
     # https://stackoverflow.com/questions/956867/how-to-get-string-objects-instead-of-unicode-ones-from-json-in-python/13105359#13105359
