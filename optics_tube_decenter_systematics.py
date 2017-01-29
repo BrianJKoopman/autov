@@ -31,7 +31,7 @@ def test_decenter(parameter, values):
             raise ValueError("Array 3 not yet supported.")
             #ref_wl = 3000000
 
-        descriptors = [parameter, "%scm"%(value)]
+        descriptors = [parameter, "%smm"%(int(value*10))]
         # Build .seq file for automated run.
         arc_autov = autov.AutoV(ARRAY, descriptors)
         arc_autov.create_header()
