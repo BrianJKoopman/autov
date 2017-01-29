@@ -53,7 +53,7 @@ def test_ar_coatings(coatings):
         arc_autov.run_poldsp(input_angle=90, pupil_number=23)
         arc_autov.exit()
         arc_autov.run()
-        arc_autov.save_cfg("./output/")
+        arc_autov.save_cfg()
 
 test_ar_coatings(coating_list)
 

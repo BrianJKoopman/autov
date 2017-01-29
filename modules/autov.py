@@ -480,7 +480,7 @@ class AutoV(object):
         self._call_codev(seqfile) # run
         self._move_seq() # move
 
-    def save_cfg(self, out_dir):
+    def save_cfg(self, out_dir="./output/"):
         """Save the configuration dictionary for use with codevpol.
 
         :param out_dir: Output directory, end with a /.
