@@ -52,6 +52,9 @@ class AutoV(object):
         # More array dependant setup for cfg_dict.
         if self.array in ["2"]:
             self.cfg_dict["offset_file"] = "./data/season3_positions/template_ar2_150529s.txt"
+        elif self.array in ["4"]:
+            self.cfg_dict["offset_file"] = "./actpol_data_shared/RelativeOffsets/template_ar4_160830.txt"
+
 
     def create_header(self):
         """Create header comments for the .seq file."""
@@ -75,7 +78,9 @@ class AutoV(object):
         md5sums = {'ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq':
                    'a90ffa3f0983dbb303ceec66ae689edd',
                    'ACTPol_90GHz_v29_optical_filter_aperture_study_20111204.seq':
-                   'da8d3ecb420283261220ab4175b0a7d6'}
+                   'da8d3ecb420283261220ab4175b0a7d6',
+                   'AdvACT_HF_v31_20150416.seq':
+                   '0027ace22465d607d8ffd6f53e62bed5'}
 
         clean_file_dir = r"E:\ownCloud\optics\len\clean_copies" + "\\"
         for item in md5sums.keys():
@@ -95,6 +100,11 @@ class AutoV(object):
             text = "! Load a clean copy of the optical design.\n"
             text += r'in "E:\ownCloud\optics\len\clean_copies' + \
                     r'\ACTPol_90GHz_v29_optical_filter_aperture_study_20111204.seq"' + \
+                    "\n"
+        elif self.array in ['4']:
+            text = "! Load a clean copy of the optical design.\n"
+            text += r'in "E:\ownCloud\optics\len\clean_copies' + \
+                    r'\AdvACT_HF_v31_20150416.seq"' + \
                     "\n"
 
         if self.array in ['1']:
@@ -125,9 +135,18 @@ class AutoV(object):
         We don't know the properties of the filters very well, so in my initial
         study I just removed all the glass definitions that weren't the silicon
         lenses. Do that again here.
+
+        Note: The surfaces with a "glass" defined are the same in PA1 and PA2, but
+        differ when referring to the files for PA3 and PA4.
+
         """
         text = "! automated glass defintion removal\n"
-        surfaces = [6, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 34]
+        if self.array in ['1', '2']:
+            surfaces = [6, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 34]
+        elif self.array in ['4']:
+            surfaces = [6, 11, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 39]
+        else:
+            raise ValueError("Array %s not yet supported."%(self.array))
         for surface in surfaces:
             text += "GL1 S%s\n"%surface
         self.seq.append(text)
@@ -137,16 +156,27 @@ class AutoV(object):
         """Apply .mul anti-reflection coatings to lenses.
 
         Requires .mul file to already be generated from a .seq AR coating
-        file."""
+        file.
+
+        Note: AR coatings are optics tube dependant, be sure to load the
+              appropriate one.
+        """
 
         text = "! apply MUL coating\n"
-        surfaces = [32, 33, 36, 37, 39, 40]
+        if self.array in ['1', '2']:
+            surfaces = [32, 33, 36, 37, 39, 40]
+        elif self.array in ['4']:
+            surfaces = [37, 38, 41, 42, 44, 45]
+        else:
+            raise ValueError("Array %s not yet fully supported."%(self.array))
 
         if coating_file is None:
             if self.array in ['1', '2']:
                 coating_file = r"E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
             elif self.array in ['3']:
                 coating_file = r"E:\ownCloud\optics\mul\three_layer_coating_128_195_284.mul"
+            elif self.array in ['4']:
+                coating_file = r"E:\ownCloud\optics\mul\hf\three_layer_coating_120_185_285.mul"
 
         for surface in surfaces:
             text += "MLT S%s %s\n"%(surface, coating_file)
@@ -227,16 +257,23 @@ class AutoV(object):
         self.seq.append(text)
         return text
 
-    def set_fields(self, polarization=1):
+    def set_fields(self, array_loc=None, polarization=1):
         """Set the CODEV fields.
 
         Currently only defined for PA2, since they're already in the clean lens
         system file. This currently just sets the polarization fraction to 1
         for all fields, something we'll always want to do."""
         text = "! set fields\n"
-        if self.array in ['1']:
+
+        # This way we can choose an array position (PA1 for looking at HF for instance).
+        if array_loc is None:
+            _array = self.array
+        else:
+            _array = array_loc
+
+        if _array in ['1', '4']:
             field_no = range(1, 26)
-            fields = get_fields(int(self.array))
+            fields = get_fields(int(_array))
 
             text += "! set field x values\n"
             for (i, val) in zip(field_no, fields[:, 0].tolist()):
@@ -250,7 +287,9 @@ class AutoV(object):
             for i in range(25):
                 text += "PFR F%s %s\n"%(i+1, polarization)
 
-        if self.array in ['2', '3']:
+        # Note the change above to identify position won't work for MF1/2 and
+        # PA2 and PA3, since those fields will probably differ.
+        if _array in ['2', '3']:
             text += "! set polarization fraction of all fields to 1\n"
             for i in range(25):
                 text += "PFR F%s %s\n"%(i+1, polarization)
@@ -265,13 +304,18 @@ class AutoV(object):
     def set_image_semi_aperture(self):
         """Enlarge the semi-aperture of the image surface for polarization
         studies."""
+        text = "! Modify Semi-Aperture of Image surface for poldsp output\n"
+
         if self.array in ['1', '2', '3']:
-            text = "! Modify Semi-Aperture of Image surface for poldsp output\n"
-            text += "CIR S42 8\n"
-            self.seq.append(text)
-            return text
+            image_surface = 42
+        elif self.array in ['4']:
+            image_surface = 47
         else:
-            ValueError("Automation not complete for array 1 right now.")
+            raise ValueError("Automation not complete for array %s right now."%(self.array))
+
+        text += "CIR S%s 8\n"%(image_surface)
+        self.seq.append(text)
+        return text
 
     def quick_best_focus(self, force=False):
         if not force:
@@ -363,10 +407,17 @@ class AutoV(object):
         dict_out_file = self._make_cfg_dict_out_file(filename)
         self.cfg_dict["codev_inputs"]["ray_trace"] = [dict_out_file]
 
+        if self.array in ['1', '2', '3']:
+            image_surface = 42
+        elif self.array in ['4']:
+            image_surface = 47
+        else:
+            raise ValueError("Automation not complete for array %s right now."%(self.array))
+
         text = "! Adopted from auto_ray_trace.seq, which was used for 20141107 analysis\n"
         text += "OUT " + out_file + " ! Sets output file\n"
         for i in range(25):
-            text += "RSI S42 R1 F%s\n"%(i+1)
+            text += "RSI S%s R1 F%s\n"%(image_surface, i+1)
         text += "OUT T ! Restores regular output\n"
         self.seq.append(text)
 

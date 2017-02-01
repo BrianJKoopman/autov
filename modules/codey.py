@@ -151,7 +151,7 @@ def get_fields(pa):
     [0.407032       , -1.0195]]),4)
 
 
-    if pa == 1:
+    if pa in [1, 4]:
         return pa1_fields
     elif pa == 2:
         return pa2_fields
