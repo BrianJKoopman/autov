@@ -10,9 +10,18 @@ Welcome to autov's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+Auto V Object
+-------------
+
 .. automodule:: modules.autov
 
 .. autoclass:: AutoV
+    :members:
+
+.seq File Parsing
+-----------------
+
+.. automodule:: modules.parse_seq
     :members:
 
 Indices and tables
