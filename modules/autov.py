@@ -33,6 +33,8 @@ class AutoV(object):
         self.descriptors = descriptors
         self.seq = []
 
+        self.seq_file = None
+
         self.out_dir = r"E:\ownCloud\optics\data" + "\\"
         self.tmp_dir = r"E:\ownCloud\optics\data\tmp" + "\\"
 
@@ -103,6 +105,7 @@ class AutoV(object):
         try:
             text = "! Load a clean copy of the optical design.\n"
             text += 'in "%s%s"\n'%(clean_file_dir, file_lookup[self.array])
+            self.seq_file = "%s%s"%(clean_file_dir, file_lookup[self.array])
             logging.info("Loaded clean lens %s", file_lookup[self.array])
         except KeyError:
             logging.critical("Array %s not supported for loading a clean lens.", self.array)
@@ -348,8 +351,10 @@ class AutoV(object):
             cabin_win_surface = 6
 
             # Determine current value for decenter
-            seq_file = r"E:\ownCloud\optics\len\clean_copies\ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq"
-            seq_dict = parse_surface(read_seq(seq_file), cabin_win_surface)
+            # TODO: For Array 1, we set decenters. Should use parse the
+            # surfaces before setting those and record these values as we set
+            # them.
+            seq_dict = parse_surface(read_seq(self.seq_file), cabin_win_surface)
             print "Current %s value: %s"%(decenter_command, seq_dict[decenter_command])
             logging.debug("Current %s value: %s", decenter_command, seq_dict[decenter_command])
             new_decenter = seq_dict[decenter_command] + offset
