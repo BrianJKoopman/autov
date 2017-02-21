@@ -86,6 +86,12 @@ class AutoV(object):
                    '0027ace22465d607d8ffd6f53e62bed5'}
 
         clean_file_dir = r"E:\ownCloud\optics\len\clean_copies" + "\\"
+
+        file_lookup = {'1': r'ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq',
+                       '2': r'ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq',
+                       '3': r'ACTPol_90GHz_v29_optical_filter_aperture_study_20111204.seq',
+                       '4': r'AdvACT_HF_v31_20150416.seq'}
+
         for item in md5sums.keys():
             md5 = hashlib.md5(open(clean_file_dir + item, 'rb').read()).hexdigest()
             if md5 != md5sums[item]:
@@ -94,21 +100,13 @@ class AutoV(object):
             else:
                 print item, "md5sum matches, proceeding"
 
-        if self.array in ['1', '2']:
+        try:
             text = "! Load a clean copy of the optical design.\n"
-            text += r'in "E:\ownCloud\optics\len\clean_copies' + \
-                    r'\ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq"' + \
-                    "\n"
-        elif self.array in ['3']:
-            text = "! Load a clean copy of the optical design.\n"
-            text += r'in "E:\ownCloud\optics\len\clean_copies' + \
-                    r'\ACTPol_90GHz_v29_optical_filter_aperture_study_20111204.seq"' + \
-                    "\n"
-        elif self.array in ['4']:
-            text = "! Load a clean copy of the optical design.\n"
-            text += r'in "E:\ownCloud\optics\len\clean_copies' + \
-                    r'\AdvACT_HF_v31_20150416.seq"' + \
-                    "\n"
+            text += 'in "%s%s"\n'%(clean_file_dir, file_lookup[self.array])
+            logging.info("Loaded clean lens %s", file_lookup[self.array])
+        except KeyError:
+            logging.critical("Array %s not supported for loading a clean lens.", self.array)
+            raise ValueError("Array %s not yet supported."%(self.array))
 
         if self.array in ['1']:
             print "change to PA1 from PA2"
