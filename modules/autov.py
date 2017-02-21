@@ -217,7 +217,7 @@ class AutoV(object):
 
         if self.wl_set is True:
             if len(wavelengths) != len(self.wavelengths):
-                raise ValueError("Please specify same number of wavelengths for each function call.")
+                raise ValueError("Specify same number of wavelengths for each function call.")
 
         text = "! modify wavelengths\n"
 
@@ -508,7 +508,8 @@ class AutoV(object):
         inputs -- list of input strings
         seqfile -- name of output .seq file"""
 
-        # CODE V will choke on a complicated filename, we need to keep it simple and move the file later for saving.
+        # CODE V will choke on a complicated filename, we need to keep it
+        # simple and move the file later for saving.
         seqfile = "E:\ownCloud\optics\\autov\seq\\autov.seq"
         # seqfile = "%s%s\\%s_autov.seq.pa%s"%(self.out_dir, self.date, self.ctime, self.array)
 
