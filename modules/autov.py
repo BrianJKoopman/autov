@@ -518,8 +518,9 @@ class AutoV(object):
         # # Move automation .seq file for permanent record
         filename = "autov"
         seqfile = "%s%s\\%s_%s"%(self.out_dir, self.date, self.ctime, filename)
-        for descriptor in self.descriptors:
-            seqfile += "_%s"%(descriptor)
+        if self.descriptors is not None:
+            for descriptor in self.descriptors:
+                seqfile += "_%s"%(descriptor)
         seqfile += "_ar%s.seq"%(self.array)
 
         print "mv E:\ownCloud\optics\\autov\seq\\autov.seq %s"%(seqfile)
