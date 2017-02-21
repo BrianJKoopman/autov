@@ -6,6 +6,7 @@ import subprocess
 import os
 import time
 import json
+import logging
 import numpy as np
 
 from modules.codey import get_fields
@@ -352,7 +353,9 @@ class AutoV(object):
             seq_file = r"E:\ownCloud\optics\len\clean_copies\ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq"
             seq_dict = parse_surface(read_seq(seq_file), cabin_win_surface)
             print "Current %s value: %s"%(decenter_command, seq_dict[decenter_command])
+            logging.debug("Current %s value: %s", decenter_command, seq_dict[decenter_command])
             new_decenter = seq_dict[decenter_command] + offset
+            logging.debug("New %s value set to: %s", decenter_command, new_decenter)
 
             text += "%s S%s %s\n"%(decenter_command, str(cabin_win_surface), str(new_decenter))
             self.seq.append(text)

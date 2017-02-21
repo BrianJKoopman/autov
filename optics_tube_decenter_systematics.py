@@ -4,6 +4,7 @@
 import subprocess
 import time
 import argparse
+import logging
 import numpy as np
 from modules import autov
 
@@ -12,6 +13,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument("array", choices=['1', '2', '3'], help="Array you want to automate.")
 args = parser.parse_args()
 
+# Setup logging
+logging.basicConfig(filename='./log/optics_tube_decenter.log', format='%(asctime)s - %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S', filemode='w', level=logging.DEBUG)
+logging.debug("Logging started.")
+
 ARRAY = args.array
 DATE = time.strftime('%Y%m%d')
 CTIME = int(time.time())
@@ -19,7 +24,7 @@ CTIME = int(time.time())
 outDir = "E:\ownCloud\optics\data\\"
 tmpDir = "E:\ownCloud\optics\data\\tmp\\"
 
-parameter = "z"
+parameter = "y"
 values = np.arange(-10,11)/10.
 
 def test_decenter(parameter, values):
