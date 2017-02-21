@@ -9,6 +9,7 @@ import json
 import numpy as np
 
 from modules.codey import get_fields
+from modules.parse_seq import read_seq, parse_surface
 
 class AutoV(object):
     """Class for writing custom .seq files for automating CODEV.
@@ -53,7 +54,8 @@ class AutoV(object):
         if self.array in ["2"]:
             self.cfg_dict["offset_file"] = "./data/season3_positions/template_ar2_150529s.txt"
         elif self.array in ["4"]:
-            self.cfg_dict["offset_file"] = "./actpol_data_shared/RelativeOffsets/template_ar4_160830.txt"
+            self.cfg_dict["offset_file"] = "./actpol_data_shared/" \
+                                           "RelativeOffsets/template_ar4_160830.txt"
 
 
     def create_header(self):
@@ -328,15 +330,15 @@ class AutoV(object):
             self.seq.append(text)
             return text
 
-    def decenter_cryostat(self, parameter, value):
+    def decenter_cryostat(self, parameter, offset):
         """Apply a "Basic" decenter to window, decentering entire cryostat.
 
         :param parameter: Parameter to decenter. This corresponds to any
                           decenter parameter in CODE V. We're focusing on x, y,
                           z, alpha and beta.
         :type parameter: str
-        :param value: Value for decenter in system units.
-        :type value: float
+        :param offset: Offset value, from current, for decenter in system units.
+        :type offset: float
 
         """
         parameter_lookup = {"x": "XDE", "y": "YDE", "z": "ZDE", "alpha": "ADE", "beta": "BDE"}
@@ -344,7 +346,15 @@ class AutoV(object):
 
         if self.array in ['1', '2']:
             text = "! Apply Decenter to window, decentering entire cryostat/optics tube.\n"
-            text += "%s S6 %s\n"%(decenter_command, str(value))
+            cabin_win_surface = 6
+
+            # Determine current value for decenter
+            seq_file = r"E:\ownCloud\optics\len\clean_copies\ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq"
+            seq_dict = parse_surface(read_seq(seq_file), cabin_win_surface)
+            print "Current %s value: %s"%(decenter_command, seq_dict[decenter_command])
+            new_decenter = seq_dict[decenter_command] + offset
+
+            text += "%s S%s %s\n"%(decenter_command, str(cabin_win_surface), str(new_decenter))
             self.seq.append(text)
             return text
         else:
