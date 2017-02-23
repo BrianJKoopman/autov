@@ -61,7 +61,7 @@ def test_decenter(parameter, values):
         arc_autov.run_psf()
         arc_autov.run_real_ray_trace()
         arc_autov.run_poldsp(input_angle=0, pupil_number=23)
-        arc_autov.run_poldsp(input_angle=90, pupil_number=23)
+        #arc_autov.run_poldsp(input_angle=90, pupil_number=23)
 
         arc_autov.exit()
         arc_autov.run()
