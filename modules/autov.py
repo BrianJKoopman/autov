@@ -62,7 +62,11 @@ class AutoV(object):
 
 
     def create_header(self):
-        """Create header comments for the .seq file."""
+        """Create header comments for the .seq file.
+
+        :return: header text
+        :rtype: str
+        """
         # TODO: Add parameters to the header, which array, etc. anything in __init__.
         header = "! This .seq file was created by the AutoV automation class. \n"
         header += "! How to run me: " + \
@@ -351,7 +355,7 @@ class AutoV(object):
             window_clamp_surface = 8
 
             # Determine current value for decenter
-            # TODO: For Array 1, we set decenters. Should use parse the
+            # TODO: For PA1, we set decenters. Should use parse the
             # surfaces before setting those and record these values as we set
             # them.
             seq_dict = parse_surface(read_seq(self.seq_file), window_clamp_surface)

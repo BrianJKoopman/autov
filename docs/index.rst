@@ -7,8 +7,10 @@ Welcome to autov's documentation!
 =================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 2
+    :caption: Contents:
+
+    decenter   
 
 Auto V Object
 -------------
@@ -23,6 +25,7 @@ Auto V Object
 
 .. automodule:: modules.parse_seq
     :members:
+    :private-members:
 
 Indices and tables
 ==================
