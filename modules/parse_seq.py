@@ -91,6 +91,8 @@ def parse_surface(content, surface):
     :type seq_content: list of str
     :param surface: Surface to parse.
     :type surface: int
+    :return: surface info dictionary
+    :rtype: dict
     """
     surface_start_stop_dict = _generate_raw_surf_dict(content) # need to get surfaces automatically
     all_params = content[surface_start_stop_dict[surface][0]:surface_start_stop_dict[surface][1]+1]
