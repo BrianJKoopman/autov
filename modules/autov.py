@@ -347,20 +347,20 @@ class AutoV(object):
         decenter_command = parameter_lookup[parameter.lower()]
 
         if self.array in ['1', '2']:
-            text = "! Apply Decenter to window, decentering entire cryostat/optics tube.\n"
-            cabin_win_surface = 6
+            text = "! Apply Decenter to window clamp, decentering entire cryostat/optics tube.\n"
+            window_clamp_surface = 8
 
             # Determine current value for decenter
             # TODO: For Array 1, we set decenters. Should use parse the
             # surfaces before setting those and record these values as we set
             # them.
-            seq_dict = parse_surface(read_seq(self.seq_file), cabin_win_surface)
-            print "Current %s value: %s"%(decenter_command, seq_dict[decenter_command])
-            logging.debug("Current %s value: %s", decenter_command, seq_dict[decenter_command])
+            seq_dict = parse_surface(read_seq(self.seq_file), window_clamp_surface)
+            #print "Current %s value: %s"%(decenter_command, seq_dict[decenter_command])
+            logging.debug("Original %s value: %s", decenter_command, seq_dict[decenter_command])
             new_decenter = seq_dict[decenter_command] + offset
             logging.debug("New %s value set to: %s", decenter_command, new_decenter)
 
-            text += "%s S%s %s\n"%(decenter_command, str(cabin_win_surface), str(new_decenter))
+            text += "%s S%s %s\n"%(decenter_command, str(window_clamp_surface), str(new_decenter))
             self.seq.append(text)
             return text
         else:
