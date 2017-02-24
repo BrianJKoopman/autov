@@ -14,7 +14,7 @@ parser.add_argument("array", choices=['1', '2', '3'], help="Array you want to au
 args = parser.parse_args()
 
 # Setup logging
-logging.basicConfig(filename='./log/optics_tube_decenter.log', format='%(asctime)s - %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S', filemode='w', level=logging.DEBUG)
+logging.basicConfig(filename='./log/optics_tube_x_decenter.log', format='%(asctime)s - %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S', filemode='w', level=logging.DEBUG)
 logging.debug("Logging started.")
 
 ARRAY = args.array
@@ -24,7 +24,7 @@ CTIME = int(time.time())
 outDir = "E:\ownCloud\optics\data\\"
 tmpDir = "E:\ownCloud\optics\data\\tmp\\"
 
-parameter = "y"
+parameter = "x"
 values = np.arange(-10,11)/10.
 
 def test_decenter(parameter, values):
