@@ -151,8 +151,10 @@ class AutoV(object):
         text = "! automated glass defintion removal\n"
         if self.array in ['1', '2']:
             surfaces = [6, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 34]
+            logging.info("Removed glass definitions from surfaces %s", surfaces)
         elif self.array in ['4']:
             surfaces = [6, 11, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 39]
+            logging.info("Removed glass definitions from surfaces %s", surfaces)
         else:
             raise ValueError("Array %s not yet supported."%(self.array))
         for surface in surfaces:
@@ -188,6 +190,7 @@ class AutoV(object):
 
         for surface in surfaces:
             text += "MLT S%s %s\n"%(surface, coating_file)
+            logging.info("Applied .mul coating %s to S%s", coating_file, surface)
         self.seq.append(text)
 
         return text
@@ -216,6 +219,7 @@ class AutoV(object):
         else:
             if len(wavelengths) > 21:
                 raise ValueError("More than 21 wavelengths submitted, this is too many.")
+                logging.critical("More than 21 wavelength passed in wavelengths argument, 21 is the max supported by Code V.")
             if len(wavelengths) != len(np.unique(wavelengths)):
                 raise ValueError("Wavelengths submitted not unique, please remove duplicates.")
 
@@ -256,6 +260,7 @@ class AutoV(object):
         text = "! set vignetting\n"
         text += "run " + r"C:\CODEV105_FCS\macro\setvig.seq" + " 1e-007 0.1 100 NO ;GO\n"
         self.seq.append(text)
+        logging.info("Vignetting set.")
         return text
 
     def activate_pol_ray_trace(self):
@@ -263,6 +268,7 @@ class AutoV(object):
         text = "! activate polarization ray tracing\n"
         text += "POL YES\n"
         self.seq.append(text)
+        logging.info("Polarization sensitive ray trace enabled.")
         return text
 
     def set_fields(self, array_loc=None, polarization=1):
