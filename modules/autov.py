@@ -206,7 +206,8 @@ class AutoV(object):
     def set_wavelengths(self, wavelengths, reference):
         """Set the wavelengths in CODEV.
 
-        General: Y
+        General: N
+        TODO: Assumes 3 wavelengths already set.
 
         For studies that are wavelength dependant we need only a single WL to
         have weight 1, the rest 0. We set the reference wavelength to 1 and the
@@ -251,6 +252,8 @@ class AutoV(object):
             if wavelengths.index(wavelength) is not 0:
                 text += "WTW W%s 0\n"%(wavelengths.index(wavelength)+1) # set others to 0
 
+            logging.info("Wavelengths set to %s", wavelengths)
+
         if reference is not None:
             text += "REF %s\n"%(reference+1)
             text += "WTW W%s 1\n"%(reference+1) # Change the weight of ref to 1
@@ -258,6 +261,7 @@ class AutoV(object):
             if reference is not 0:
                 text += "WTW W1 0\n" # set WL1 weight to 0 if it's not the ref
 
+            logging.info("Reference wavelength set to %s", wavelengths[reference])
             self.seq.append(text)
 
         self.wl_set = True
@@ -291,6 +295,7 @@ class AutoV(object):
         """Set the CODEV fields.
 
         General: N
+        TODO: Fields fetched from get_fields, which could be okay, but also it's array specific.
 
         Currently only defined for PA2, since they're already in the clean lens
         system file. This currently just sets the polarization fraction to 1
@@ -330,6 +335,7 @@ class AutoV(object):
         for field in range(1, 26):
             text += "WTF F%s 1\n"%(field)
 
+        logging.info("Fields set.")
         self.seq.append(text)
         return text
 
@@ -349,6 +355,7 @@ class AutoV(object):
             raise ValueError("Automation not complete for array %s right now."%(self.array))
 
         text += "CIR S%s 8\n"%(image_surface)
+        logging.info("Semi-aperture of image surface increased for poldsp.")
         self.seq.append(text)
         return text
 
@@ -448,6 +455,7 @@ class AutoV(object):
         text += "GO\n"
         text += "OUT T ! Restores regular output\n"
         self.seq.append(text)
+        logging.info("PSF .seq inserted.")
         return text
 
     def run_real_ray_trace(self):
@@ -478,6 +486,7 @@ class AutoV(object):
             text += "RSI S%s R1 F%s\n"%(image_surface, i+1)
         text += "OUT T ! Restores regular output\n"
         self.seq.append(text)
+        logging.info("RSI .seq inserted.")
 
         return text
 
@@ -510,6 +519,7 @@ class AutoV(object):
                 " 0 %s \"Polarization State\" \"Full\"\n"%(pupil_number)
         text += "OUT T ! Restores regular output\n"
         self.seq.append(text)
+        logging.info("poldsp .seq inserted.")
         return text
 
     def enter_single_command(self, command):
@@ -520,6 +530,7 @@ class AutoV(object):
         text = "! Manual command entry\n"
         text += "%s\n"%(command)
         self.seq.append(text)
+        logging.info("Single Command '%s' inserted.", command)
         return text
 
     def exit(self):
@@ -530,6 +541,7 @@ class AutoV(object):
         text = "! exit without prompt when finished\n"
         text += "exit y\n"
         self.seq.append(text)
+        logging.info("Exit .seq inserted.", command)
         return text
 
     #def store_output(filename, tmpDir, outDir, date, ctime, ARRAY):
@@ -588,6 +600,7 @@ class AutoV(object):
     def _call_codev(self, seqfile):
         """Make the call to CODE V."""
         # Make the CODEV Call
+        logging.info("Calling codev.exe")
         subprocess.call("C:\CODEV105_FCS\codev.exe %s"%seqfile)
 
     def run(self):
@@ -634,6 +647,7 @@ def byteify(input):
 def check_dir(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
+        logging.info("Checking directory %s%s", directory)
 
 def readseq(seqfile):
     """Read a CODEV sequence file, for use in combining a master .seq for
