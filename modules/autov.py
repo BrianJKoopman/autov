@@ -64,6 +64,8 @@ class AutoV(object):
     def create_header(self):
         """Create header comments for the .seq file.
 
+        General: Y
+
         :return: header text
         :rtype: str
         """
@@ -76,6 +78,8 @@ class AutoV(object):
 
     def load_clean_len(self):
         """Load a clean optical design.
+
+        General: N
 
         This method first checks the md5sums of both optical designs
         (regardless of the chosen one to load. These should never be modified,
@@ -140,6 +144,8 @@ class AutoV(object):
     def remove_glass(self):
         """Remove glass definitions for polarization study.
 
+        General: N
+
         We don't know the properties of the filters very well, so in my initial
         study I just removed all the glass definitions that weren't the silicon
         lenses. Do that again here.
@@ -164,6 +170,8 @@ class AutoV(object):
 
     def apply_ar_coatings(self, coating_file=None):
         """Apply .mul anti-reflection coatings to lenses.
+
+        General: N
 
         Requires .mul file to already be generated from a .seq AR coating
         file.
@@ -197,6 +205,8 @@ class AutoV(object):
 
     def set_wavelengths(self, wavelengths, reference):
         """Set the wavelengths in CODEV.
+
+        General: Y
 
         For studies that are wavelength dependant we need only a single WL to
         have weight 1, the rest 0. We set the reference wavelength to 1 and the
@@ -256,7 +266,10 @@ class AutoV(object):
         return text
 
     def set_vignetting(self):
-        """Run the default set vignetting command in CODEV."""
+        """Run the default set vignetting command in CODEV.
+
+        General: Y
+        """
         text = "! set vignetting\n"
         text += "run " + r"C:\CODEV105_FCS\macro\setvig.seq" + " 1e-007 0.1 100 NO ;GO\n"
         self.seq.append(text)
@@ -264,7 +277,10 @@ class AutoV(object):
         return text
 
     def activate_pol_ray_trace(self):
-        """Active polarization ray tracing."""
+        """Active polarization ray tracing.
+
+        General: Y
+        """
         text = "! activate polarization ray tracing\n"
         text += "POL YES\n"
         self.seq.append(text)
@@ -273,6 +289,8 @@ class AutoV(object):
 
     def set_fields(self, array_loc=None, polarization=1):
         """Set the CODEV fields.
+
+        General: N
 
         Currently only defined for PA2, since they're already in the clean lens
         system file. This currently just sets the polarization fraction to 1
@@ -317,7 +335,10 @@ class AutoV(object):
 
     def set_image_semi_aperture(self):
         """Enlarge the semi-aperture of the image surface for polarization
-        studies."""
+        studies.
+
+        General: N
+        """
         text = "! Modify Semi-Aperture of Image surface for poldsp output\n"
 
         if self.array in ['1', '2', '3']:
@@ -332,6 +353,10 @@ class AutoV(object):
         return text
 
     def quick_best_focus(self, force=False):
+        """Perform two quick best focuses.
+
+        General: Y
+        """
         if not force:
             raise RuntimeError("Throwing this because you shouldn't be using quick_best focus.")
         else:
@@ -344,6 +369,8 @@ class AutoV(object):
 
     def decenter_cryostat(self, parameter, offset):
         """Apply a "Basic" decenter to window, decentering entire cryostat.
+
+        General: N
 
         :param parameter: Parameter to decenter. This corresponds to any
                           decenter parameter in CODE V. We're focusing on x, y,
@@ -393,6 +420,8 @@ class AutoV(object):
     def run_psf(self):
         """Run the point spread function commands.
 
+        General: Y
+
         Will output psf results to a tmp file, psf.txt which will be moved by
         the user later for permanent storage."""
         # TODO: make a method for storing temporary files, rather than having
@@ -424,6 +453,9 @@ class AutoV(object):
     def run_real_ray_trace(self):
         """Run the real ray trace commands.
 
+        General: N
+        TODO: Pass image surface in as option.
+
         Will output ray trace results to temp file, real_ray_trace.txt, which
         will be moved by the user later for permanent storage."""
         # TODO: This wants to know about the fields set.
@@ -452,6 +484,9 @@ class AutoV(object):
     def run_poldsp(self, input_angle, pupil_number=11):
         """Run the poldsp macro for polarization studies.
 
+        General: N
+        TODO: Currently assumes 25 fields.
+
         :param input_angle: Sets the field orientation angle at the input for
                             all fields.
         :param filename: Set the filename for temporary output. This is likely
@@ -478,14 +513,20 @@ class AutoV(object):
         return text
 
     def enter_single_command(self, command):
-        """Enter single command in event I don't have a method for it."""
+        """Enter single command in event I don't have a method for it.
+
+        General: Y
+        """
         text = "! Manual command entry\n"
         text += "%s\n"%(command)
         self.seq.append(text)
         return text
 
     def exit(self):
-        """Exit from CODEV without prompt."""
+        """Exit from CODEV without prompt.
+
+        General: Y
+        """
         text = "! exit without prompt when finished\n"
         text += "exit y\n"
         self.seq.append(text)
@@ -550,7 +591,10 @@ class AutoV(object):
         subprocess.call("C:\CODEV105_FCS\codev.exe %s"%seqfile)
 
     def run(self):
-        """Write then run the .seq file."""
+        """Write then run the .seq file.
+
+        General: Y
+        """
         seqfile = self._write_seq() # write
 
         # Check for existence of output directory before writing.
@@ -561,6 +605,8 @@ class AutoV(object):
 
     def save_cfg(self, out_dir="./output/"):
         """Save the configuration dictionary for use with codevpol.
+
+        General: Y
 
         :param out_dir: Output directory, end with a /.
         :type out_dir: str
