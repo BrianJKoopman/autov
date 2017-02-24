@@ -277,7 +277,7 @@ class AutoV(object):
         text = "! set vignetting\n"
         text += "run " + r"C:\CODEV105_FCS\macro\setvig.seq" + " 1e-007 0.1 100 NO ;GO\n"
         self.seq.append(text)
-        logging.info("Vignetting set.")
+        logging.info("Vignetting set")
         return text
 
     def activate_pol_ray_trace(self):
@@ -288,7 +288,7 @@ class AutoV(object):
         text = "! activate polarization ray tracing\n"
         text += "POL YES\n"
         self.seq.append(text)
-        logging.info("Polarization sensitive ray trace enabled.")
+        logging.info("Polarization sensitive ray trace enabled")
         return text
 
     def set_fields(self, array_loc=None, polarization=1):
@@ -355,7 +355,7 @@ class AutoV(object):
             raise ValueError("Automation not complete for array %s right now."%(self.array))
 
         text += "CIR S%s 8\n"%(image_surface)
-        logging.info("Semi-aperture of image surface increased for poldsp.")
+        logging.info("Semi-aperture of image surface increased for poldsp")
         self.seq.append(text)
         return text
 
@@ -455,7 +455,7 @@ class AutoV(object):
         text += "GO\n"
         text += "OUT T ! Restores regular output\n"
         self.seq.append(text)
-        logging.info("PSF .seq inserted.")
+        logging.info("PSF .seq inserted")
         return text
 
     def run_real_ray_trace(self):
@@ -486,7 +486,7 @@ class AutoV(object):
             text += "RSI S%s R1 F%s\n"%(image_surface, i+1)
         text += "OUT T ! Restores regular output\n"
         self.seq.append(text)
-        logging.info("RSI .seq inserted.")
+        logging.info("RSI .seq inserted")
 
         return text
 
@@ -519,7 +519,7 @@ class AutoV(object):
                 " 0 %s \"Polarization State\" \"Full\"\n"%(pupil_number)
         text += "OUT T ! Restores regular output\n"
         self.seq.append(text)
-        logging.info("poldsp .seq inserted.")
+        logging.info("poldsp .seq inserted")
         return text
 
     def enter_single_command(self, command):
@@ -530,7 +530,7 @@ class AutoV(object):
         text = "! Manual command entry\n"
         text += "%s\n"%(command)
         self.seq.append(text)
-        logging.info("Single Command '%s' inserted.", command)
+        logging.info("Single Command '%s' inserted", command)
         return text
 
     def exit(self):
@@ -541,7 +541,7 @@ class AutoV(object):
         text = "! exit without prompt when finished\n"
         text += "exit y\n"
         self.seq.append(text)
-        logging.info("Exit .seq inserted.", command)
+        logging.info("Exit .seq inserted")
         return text
 
     #def store_output(filename, tmpDir, outDir, date, ctime, ARRAY):
