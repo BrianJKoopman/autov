@@ -379,6 +379,8 @@ class AutoV(object):
 
         General: N
 
+        Units: ADE and BDE are in degrees, XDE, YDE, ZDE are in System Units.
+
         :param parameter: Parameter to decenter. This corresponds to any
                           decenter parameter in CODE V. We're focusing on x, y,
                           z, alpha and beta.
@@ -399,6 +401,7 @@ class AutoV(object):
             # surfaces before setting those and record these values as we set
             # them.
             seq_dict = parse_surface(read_seq(self.seq_file), window_clamp_surface)
+            print seq_dict
             #print "Current %s value: %s"%(decenter_command, seq_dict[decenter_command])
             logging.debug("Original %s value: %s", decenter_command, seq_dict[decenter_command])
             new_decenter = seq_dict[decenter_command] + offset

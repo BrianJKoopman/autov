@@ -84,6 +84,22 @@ def _generate_raw_surf_dict(content):
             surface_start_stop_dict[i] = (surfaces[i], surface_end)
     return surface_start_stop_dict
 
+def _zero_missing_values(surface_info_dict):
+    """Zero values that aren't set in the .seq file.
+
+    :param surface_info_dict: Dictionary containing values read in with parse_surface()
+    :type surface_info_dict: dict
+
+    :return surface_info_dict: The same dictionary passed in will be modified in place.
+    :rtype: dict
+    """
+    expected_surface_values = ["XDE", "YDE", "ZDE", "ADE", "BDE"]
+    for value in expected_surface_values:
+        if value not in surface_info_dict.keys():
+            surface_info_dict[value] = 0.0
+
+    return surface_info_dict
+
 def parse_surface(content, surface):
     """Extract parameter values from a surface.
 
@@ -123,10 +139,11 @@ def parse_surface(content, surface):
         if decenter and ('Decenter Type' not in surface_info.keys()):
             print "Basic Decenter"
 
-    return surface_info
+    _zero_missing_values(surface_info)
 
+    return surface_info
 
 if __name__ == "__main__":
     seq_file = "ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq"
     seq_file_contents = read_seq(seq_file)
-    print parse_surface(seq_file_contents, 5)
+    print parse_surface(seq_file_contents, 8)
