@@ -29,6 +29,13 @@ Decenter and Return
 -------------------
 Decenters only the current surface.
 
+Coordinate Systems Definitions
+------------------------------
+The definition of the alpha, beta, gamma tilts are shown in the below figure
+from the Code V documentation.
+
+.. image:: _static/tilt_definitions_codev.png
+
 AutoV's Decenter Methods
 -------------------------
 For decentering the entire cryostat
