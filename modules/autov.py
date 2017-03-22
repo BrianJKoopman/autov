@@ -1,6 +1,12 @@
 #!/usr/bin/python2
 # Brian Koopman
 """Module for helping autov functions."""
+
+#TODO: best bet for descriptive info in file output is to continue ! comments with some pattern to extract later
+# serially increment output text files and have a descriptive directory structure?
+# my concern with dating and ctiming output was archiving, but I honestly never go back and look
+# I think the Makefile archiving scheme outlined in that tutorial would help solve this....
+
 import hashlib
 import subprocess
 import os
@@ -168,6 +174,36 @@ class AutoV(object):
         self.seq.append(text)
         return text
 
+    def remove_surface(self, surface):
+        """Remove specified surface from lens data manager.
+
+        General: Y
+
+        :param surface: surface number in lens data manager to remove
+        :type surface: int
+        :return: text which removes the surface
+        :rtype: str
+        """
+        text = "! Removing Surface %s \n"%(int(surface))
+        text += "DEL S%s"%(int(surface))
+        self.seq.append(text)
+        return text
+
+    def remove_field(self, field):
+        """Remove specified surface from lens data manager.
+
+        General: Y
+
+        :param field: field number in system data fields to remove
+        :type field: int
+        :return: text which removes the field
+        :rtype: str
+        """
+        text = "! Removing Field %s \n"%(int(field))
+        text += "DEL F%s+1"%(int(field)-1)
+        self.seq.append(text)
+        return text
+
     def apply_ar_coatings(self, coating_file=None):
         """Apply .mul anti-reflection coatings to lenses.
 
@@ -296,6 +332,7 @@ class AutoV(object):
 
         General: N
         TODO: Fields fetched from get_fields, which could be okay, but also it's array specific.
+        TODO: Pass fields list in, delete all fields (if possible) and enter in new fields.
 
         Currently only defined for PA2, since they're already in the clean lens
         system file. This currently just sets the polarization fraction to 1
@@ -389,6 +426,7 @@ class AutoV(object):
         :type offset: float
 
         """
+        #TODO: Ugh, this needs to be broken up a bit I think, so that it's decenter a general surface.
         parameter_lookup = {"x": "XDE", "y": "YDE", "z": "ZDE", "alpha": "ADE", "beta": "BDE"}
         decenter_command = parameter_lookup[parameter.lower()]
 
@@ -413,6 +451,54 @@ class AutoV(object):
         else:
             ValueError("Automation not complete for array 1 right now.")
 
+    def decenter_surface(self, surface, parameter, offset):
+        """Apply a "Basic" decenter to window, decentering entire cryostat.
+
+        General: N
+
+        Note, this is all in reference to the surfaces as they were defined in
+        the original .seq file, no surface deletion/addition tracking is implimented
+        yet, so autov doesn't know if you've changed surfaces at all.
+
+        Units: ADE and BDE are in degrees, XDE, YDE, ZDE are in System Units.
+
+        :param surface: Surface number in original .seq file to decenter.
+        :type surface: int
+        :param parameter: Parameter to decenter. This corresponds to any
+                          decenter parameter in CODE V. We're focusing on x, y,
+                          z, alpha and beta.
+        :type parameter: str
+        :param offset: Offset value, from current, for decenter in system units.
+        :type offset: float
+
+        """
+        #TODO: Ugh, this needs to be broken up a bit I think, so that it's decenter a general surface.
+        parameter_lookup = {"x": "XDE", "y": "YDE", "z": "ZDE", "alpha": "ADE", "beta": "BDE"}
+        decenter_command = parameter_lookup[parameter.lower()]
+
+        if self.array in ['1', '2']:
+            text = "! Apply Decenter to window clamp, decentering entire cryostat/optics tube.\n"
+            window_clamp_surface = surface
+
+            # Determine current value for decenter
+            # TODO: For PA1, we set decenters. Should use parse the
+            # surfaces before setting those and record these values as we set
+            # them.
+            seq_dict = parse_surface(read_seq(self.seq_file), window_clamp_surface)
+            print seq_dict
+            #print "Current %s value: %s"%(decenter_command, seq_dict[decenter_command])
+            logging.debug("Original %s value: %s", decenter_command, seq_dict[decenter_command])
+            new_decenter = seq_dict[decenter_command] + offset
+            logging.debug("New %s value set to: %s", decenter_command, new_decenter)
+
+            text += "%s S%s %s\n"%(decenter_command, str(window_clamp_surface), str(new_decenter))
+            self.seq.append(text)
+            return text
+        else:
+            ValueError("Automation not complete for array 1 right now.")
+
+    # TODO: maybe make these not class methods and pass in descriptors, since
+    # we could be making a windows outfile separate from the class...
     def _make_windows_out_file(self, filename):
         out_file = "%s%s\\%s_%s"%(self.out_dir, self.date, self.ctime, filename)
         for descriptor in self.descriptors:
@@ -462,31 +548,46 @@ class AutoV(object):
         logging.info("PSF .seq inserted")
         return text
 
-    def run_real_ray_trace(self):
+    def run_real_ray_trace(self, num_fields=None, alt_image=0, name_mod=None):
         """Run the real ray trace commands.
 
         General: N
         TODO: Pass image surface in as option.
 
         Will output ray trace results to temp file, real_ray_trace.txt, which
-        will be moved by the user later for permanent storage."""
+        will be moved by the user later for permanent storage.
+
+        :param alt_image: If the image isn't a default image, provide the int for it here.
+        """
         # TODO: This wants to know about the fields set.
-        filename = "real_ray_trace"
+        if name_mod is None:
+            filename = "real_ray_trace"
+        else:
+            filename = "real_ray_trace_%s"%(name_mod)
         out_file = self._make_windows_out_file(filename)
         # Add ray trace file output to cfg_dict.
         dict_out_file = self._make_cfg_dict_out_file(filename)
         self.cfg_dict["codev_inputs"]["ray_trace"] = [dict_out_file]
 
-        if self.array in ['1', '2', '3']:
-            image_surface = 42
-        elif self.array in ['4']:
-            image_surface = 47
+        # Definte image_surface defaults or take alt_image
+        if alt_image is 0:
+            if self.array in ['1', '2', '3']:
+                image_surface = 42
+            elif self.array in ['4']:
+                image_surface = 47
+            else:
+                raise ValueError("Automation not complete for array %s right now."%(self.array))
         else:
-            raise ValueError("Automation not complete for array %s right now."%(self.array))
+            image_surface = alt_image
 
         text = "! Adopted from auto_ray_trace.seq, which was used for 20141107 analysis\n"
         text += "OUT " + out_file + " ! Sets output file\n"
-        for i in range(25):
+
+        # Set number of fields to 25 as default.
+        if num_fields is None:
+            num_fields = 25
+
+        for i in range(num_fields):
             text += "RSI S%s R1 F%s\n"%(image_surface, i+1)
         text += "OUT T ! Restores regular output\n"
         self.seq.append(text)
