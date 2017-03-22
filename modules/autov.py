@@ -439,6 +439,7 @@ class AutoV(object):
         # Can't have file name with any .'s other than in .txt
         filename = "psf"
         out_file = self._make_windows_out_file(filename)
+        logging.info("Saving psf output to %s", out_file)
         # Add psf file output to cfg_dict.
         dict_out_file = self._make_cfg_dict_out_file(filename)
         self.cfg_dict["codev_inputs"]["psf"] = dict_out_file
