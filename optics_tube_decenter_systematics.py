@@ -14,7 +14,7 @@ parser.add_argument("array", choices=['1', '2', '3'], help="Array you want to au
 args = parser.parse_args()
 
 # Setup logging
-logging.basicConfig(filename='./log/optics_tube_z_decenter.log', format='%(asctime)s - %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S', filemode='w', level=logging.DEBUG)
+logging.basicConfig(filename='./log/optics_tube_decenter.log', format='%(asctime)s - %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S', filemode='w', level=logging.DEBUG)
 logging.debug("Logging started.")
 
 ARRAY = args.array
@@ -24,8 +24,10 @@ CTIME = int(time.time())
 outDir = "E:\ownCloud\optics\data\\"
 tmpDir = "E:\ownCloud\optics\data\\tmp\\"
 
-parameter = "z"
-values = np.arange(-10,11)/10.
+#parameter = "x"
+#values = np.arange(-10,11)/10.
+#parameter = "alpha"
+values = np.arange(-20,22,2)/10. #-2 to 2 degrees in 0.2 deg steps
 
 def test_decenter(parameter, values):
     for value in values:
@@ -36,7 +38,10 @@ def test_decenter(parameter, values):
             raise ValueError("Array 3 not yet supported.")
             #ref_wl = 3000000
 
-        descriptors = [parameter, "%smm"%(int(value*10))]
+        if parameter in ['x', 'y', 'z']:
+            descriptors = [parameter, "%smm"%(int(value*10))] # Note, this is done to avoid a decimal in the filename!
+        else:
+            descriptors = [parameter, "%sdeg"%(str(value).replace('.','p'))]
         # Build .seq file for automated run.
         arc_autov = autov.AutoV(ARRAY, descriptors)
         arc_autov.create_header()
@@ -67,7 +72,9 @@ def test_decenter(parameter, values):
         arc_autov.run()
         arc_autov.save_cfg()
 
-test_decenter(parameter, values)
+test_decenter("alpha", values)
+test_decenter("beta", values)
+#test_decenter(parameter, [-2.0])
 
 # Old script before looping.
 ## Build .seq file for automated run.
