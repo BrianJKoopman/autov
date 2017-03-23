@@ -79,6 +79,7 @@ class AutoV(object):
         header = "! This .seq file was created by the AutoV automation class. \n"
         header += "! How to run me: " + \
                   r"C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\autov\seq\script.seq" + "\n"
+        logging.debug("Adding text to .seq file: \n%s", header)
         self.seq.append(header)
         return header
 
@@ -145,6 +146,7 @@ class AutoV(object):
             text += "BDE S42 4.039980255467\n"
 
         self.seq.append(text)
+        logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
     def remove_glass(self):
@@ -172,6 +174,7 @@ class AutoV(object):
         for surface in surfaces:
             text += "GL1 S%s\n"%surface
         self.seq.append(text)
+        logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
     def remove_surface(self, surface):
@@ -187,6 +190,7 @@ class AutoV(object):
         text = "! Removing Surface %s \n"%(int(surface))
         text += "DEL S%s"%(int(surface))
         self.seq.append(text)
+        logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
     def remove_field(self, field):
@@ -202,6 +206,7 @@ class AutoV(object):
         text = "! Removing Field %s \n"%(int(field))
         text += "DEL F%s+1"%(int(field)-1)
         self.seq.append(text)
+        logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
     def apply_ar_coatings(self, coating_file=None):
@@ -237,6 +242,7 @@ class AutoV(object):
             logging.info("Applied .mul coating %s to S%s", coating_file, surface)
         self.seq.append(text)
 
+        logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
     def set_wavelengths(self, wavelengths, reference):
@@ -303,6 +309,7 @@ class AutoV(object):
         self.wl_set = True
         self.wavelengths = wavelengths
 
+        logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
     def set_vignetting(self):
@@ -314,6 +321,7 @@ class AutoV(object):
         text += "run " + r"C:\CODEV105_FCS\macro\setvig.seq" + " 1e-007 0.1 100 NO ;GO\n"
         self.seq.append(text)
         logging.info("Vignetting set")
+        logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
     def activate_pol_ray_trace(self):
@@ -325,6 +333,7 @@ class AutoV(object):
         text += "POL YES\n"
         self.seq.append(text)
         logging.info("Polarization sensitive ray trace enabled")
+        logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
     def set_fields(self, array_loc=None, polarization=1):
@@ -374,6 +383,7 @@ class AutoV(object):
 
         logging.info("Fields set.")
         self.seq.append(text)
+        logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
     def set_image_semi_aperture(self):
@@ -394,6 +404,7 @@ class AutoV(object):
         text += "CIR S%s 8\n"%(image_surface)
         logging.info("Semi-aperture of image surface increased for poldsp")
         self.seq.append(text)
+        logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
     def quick_best_focus(self, force=False):
@@ -409,6 +420,7 @@ class AutoV(object):
             text += "WAV ; BES; RFO; GO\n"
             text += "WAV ; BES; RFO; GO\n"
             self.seq.append(text)
+            logging.debug("Adding text to .seq file: \n%s", text)
             return text
 
     def decenter_cryostat(self, parameter, offset):
@@ -447,6 +459,7 @@ class AutoV(object):
 
             text += "%s S%s %s\n"%(decenter_command, str(window_clamp_surface), str(new_decenter))
             self.seq.append(text)
+            logging.debug("Adding text to .seq file: \n%s", text)
             return text
         else:
             ValueError("Automation not complete for array 1 right now.")
@@ -493,6 +506,7 @@ class AutoV(object):
 
             text += "%s S%s %s\n"%(decenter_command, str(window_clamp_surface), str(new_decenter))
             self.seq.append(text)
+            logging.debug("Adding text to .seq file: \n%s", text)
             return text
         else:
             ValueError("Automation not complete for array 1 right now.")
@@ -546,6 +560,7 @@ class AutoV(object):
         text += "OUT T ! Restores regular output\n"
         self.seq.append(text)
         logging.info("PSF .seq inserted")
+        logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
     def run_real_ray_trace(self, num_fields=None, alt_image=0, name_mod=None):
@@ -593,6 +608,7 @@ class AutoV(object):
         self.seq.append(text)
         logging.info("RSI .seq inserted")
 
+        logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
     def run_poldsp(self, input_angle, pupil_number=11):
@@ -625,6 +641,7 @@ class AutoV(object):
         text += "OUT T ! Restores regular output\n"
         self.seq.append(text)
         logging.info("poldsp .seq inserted")
+        logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
     def enter_single_command(self, command):
@@ -636,6 +653,7 @@ class AutoV(object):
         text += "%s\n"%(command)
         self.seq.append(text)
         logging.info("Single Command '%s' inserted", command)
+        logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
     def exit(self):
@@ -647,6 +665,7 @@ class AutoV(object):
         text += "exit y\n"
         self.seq.append(text)
         logging.info("Exit .seq inserted")
+        logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
     #def store_output(filename, tmpDir, outDir, date, ctime, ARRAY):
@@ -750,9 +769,10 @@ def byteify(input):
         return input
 
 def check_dir(directory):
+    """Check if the directory exists, if not, create it."""
     if not os.path.exists(directory):
         os.makedirs(directory)
-        logging.info("Checking directory %s%s", directory)
+        logging.info("Checking directory %s", directory)
 
 def readseq(seqfile):
     """Read a CODEV sequence file, for use in combining a master .seq for
