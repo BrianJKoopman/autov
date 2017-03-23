@@ -114,8 +114,11 @@ class AutoV(object):
             if md5 != md5sums[item]:
                 raise RuntimeError("The md5sum does not match a known value! \
                       This means a 'clean' file has been modified! Exiting.")
+                logging.critical("md5sum mis-match: %s", item)
+                logging.critical("Mis-match indicates a dirty starting file. Please examine.")
             else:
-                print item, "md5sum matches, proceeding"
+                logging.info("md5sum match: %s", item)
+                logging.info("Match indicates file unmodified, proceeding with script.")
 
         try:
             text = "! Load a clean copy of the optical design.\n"
@@ -451,7 +454,7 @@ class AutoV(object):
             # surfaces before setting those and record these values as we set
             # them.
             seq_dict = parse_surface(read_seq(self.seq_file), window_clamp_surface)
-            print seq_dict
+            #print seq_dict
             #print "Current %s value: %s"%(decenter_command, seq_dict[decenter_command])
             logging.debug("Original %s value: %s", decenter_command, seq_dict[decenter_command])
             new_decenter = seq_dict[decenter_command] + offset
