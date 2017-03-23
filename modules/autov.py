@@ -743,14 +743,28 @@ class AutoV(object):
         self._call_codev(seqfile) # run
         self._move_seq() # move
 
+
+    def add_to_json_cfg(self, key, value):
+        """Add to the dictionary that we'll be dumping to a JSON configuration file.
+
+        :param key: The key in the dictionary to be dumped to JSON config file.
+        :type key: str
+        :param value: The value for the associated key in the dictionary to be dumped to JSON config file.
+        :type value: any valid dictionary value
+        """
+        self.cfg_dict[key] = value
+
     def save_cfg(self, out_dir="./output/"):
         """Save the configuration dictionary for use with codevpol.
+
+        Check the directory with check_dir before outputting.
 
         General: Y
 
         :param out_dir: Output directory, end with a /.
         :type out_dir: str
         """
+        check_dir(out_dir)
         file_name = "%scfg_ar%s"%(out_dir, self.array)
         for descriptor in self.descriptors:
             file_name += "_%s"%(descriptor)
