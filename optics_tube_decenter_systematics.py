@@ -24,11 +24,6 @@ CTIME = int(time.time())
 outDir = "E:\ownCloud\optics\data\\"
 tmpDir = "E:\ownCloud\optics\data\\tmp\\"
 
-#parameter = "x"
-#values = np.arange(-10,11)/10.
-#parameter = "alpha"
-tilt_values = np.arange(-20, 22, 2)/10. #-2 to 2 degrees in 0.2 deg steps
-
 def test_decenter(parameter, values, units):
     for value in values:
         if parameter in ['x', 'y', 'z']:
@@ -67,8 +62,19 @@ def test_decenter(parameter, values, units):
 
         arc_autov.exit()
         arc_autov.run()
-        arc_autov.save_cfg(out_dir="./output/%s_decenter/"%(parameter))
+        arc_autov.save_cfg(out_dir="./output/optics_tube/%s_decenter/"%(parameter))
 
+# x, y, z decenters -1 to 1 cm
+#parameter = "x"
+#values = np.arange(-10,11)/10.
+translation_values = np.linspace(-1, 1, 5)
+test_decenter("x", translation_values, "cm")
+test_decenter("y", translation_values, "cm")
+test_decenter("z", translation_values, "cm")
+
+# alpha, beta
+#parameter = "alpha"
+#tilt_values = np.arange(-20, 22, 2)/10. #-2 to 2 degrees in 0.2 deg steps
+tilt_values = np.linspace(-2, 2, 5) # -2 to 2 degrees 
 test_decenter("alpha", tilt_values, "deg")
-#test_decenter("beta", values, "deg")
-#test_decenter(parameter, [-2.0])
+test_decenter("beta", tilt_values, "deg")
