@@ -6,5 +6,6 @@ symlinks :
 .PHONY : clean
 clean :
 	rm -f output
+	rm -f *.rec
 
 # vim: set expandtab!:
