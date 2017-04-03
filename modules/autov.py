@@ -353,6 +353,7 @@ class AutoV(object):
             text = "! quick best focus, twice\n"
             text += "WAV ; BES; RFO; GO\n"
             text += "WAV ; BES; RFO; GO\n"
+            logging.info("Performing a quick best focus, twice")
             self.seq.append(text)
             logging.debug("Adding text to .seq file: \n%s", text)
             return text
