@@ -7,7 +7,6 @@
 # my concern with dating and ctiming output was archiving, but I honestly never go back and look
 # I think the Makefile archiving scheme outlined in that tutorial would help solve this....
 
-import hashlib
 import subprocess
 import os
 import time
