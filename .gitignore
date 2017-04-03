@@ -1,4 +1,7 @@
 *.swp
 *.pyc
 *.rec
+
+# symlinked output directories
 output
+log
