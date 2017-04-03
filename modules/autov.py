@@ -205,8 +205,8 @@ class AutoV(object):
             raise ValueError("No wavelenth specified, presumably just changing reference.")
         else:
             if len(wavelengths) > 21:
-                raise ValueError("More than 21 wavelengths submitted, this is too many.")
                 logging.critical("More than 21 wavelength passed in wavelengths argument, 21 is the max supported by Code V.")
+                raise ValueError("More than 21 wavelengths submitted, this is too many.")
             if len(wavelengths) != len(np.unique(wavelengths)):
                 raise ValueError("Wavelengths submitted not unique, please remove duplicates.")
 
