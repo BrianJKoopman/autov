@@ -705,6 +705,16 @@ class AutoV(object):
             f.write("extract = ")
             json.dump(self.cfg_dict, f)
 
+    def set_buffer_len(self, length):
+        """Change the length of B0, the default buffer.
+
+        General: Y
+        """
+        text = "! Change B0 length\n"
+        text += "BUF LEN %s\n"%(length)
+        self.seq.append(text)
+        return text
+
 def byteify(input):
     # https://stackoverflow.com/questions/956867/how-to-get-string-objects-instead-of-unicode-ones-from-json-in-python/13105359#13105359
     if isinstance(input, dict):
