@@ -324,54 +324,6 @@ class AutoV(object):
         logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
-    def run_real_ray_trace(self, num_fields=None, alt_image=0, name_mod=None):
-        """Run the real ray trace commands.
-
-        General: N
-        TODO: Pass image surface in as option.
-
-        Will output ray trace results to temp file, real_ray_trace.txt, which
-        will be moved by the user later for permanent storage.
-
-        :param alt_image: If the image isn't a default image, provide the int for it here.
-        """
-        # TODO: This wants to know about the fields set.
-        if name_mod is None:
-            filename = "real_ray_trace"
-        else:
-            filename = "real_ray_trace_%s"%(name_mod)
-        out_file = self._make_windows_out_file(filename)
-        # Add ray trace file output to cfg_dict.
-        dict_out_file = self._make_cfg_dict_out_file(filename)
-        self.cfg_dict["codev_inputs"]["ray_trace"] = [dict_out_file]
-
-        # Definte image_surface defaults or take alt_image
-        if alt_image is 0:
-            if self.array in ['1', '2', '3']:
-                image_surface = 42
-            elif self.array in ['4']:
-                image_surface = 47
-            else:
-                raise ValueError("Automation not complete for array %s right now."%(self.array))
-        else:
-            image_surface = alt_image
-
-        text = "! Adopted from auto_ray_trace.seq, which was used for 20141107 analysis\n"
-        text += "OUT " + out_file + " ! Sets output file\n"
-
-        # Set number of fields to 25 as default.
-        if num_fields is None:
-            num_fields = 25
-
-        for i in range(num_fields):
-            text += "RSI S%s R1 F%s\n"%(image_surface, i+1)
-        text += "OUT T ! Restores regular output\n"
-        self.seq.append(text)
-        logging.info("RSI .seq inserted")
-
-        logging.debug("Adding text to .seq file: \n%s", text)
-        return text
-
     def run_poldsp(self, input_angle, pupil_number=11):
         """Run the poldsp macro for polarization studies.
 
