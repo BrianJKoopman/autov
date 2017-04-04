@@ -57,15 +57,3 @@ subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\\autov.
 autov.check_dir("%s%s"%(outDir, DATE))
 print "mv E:\ownCloud\optics\\autov\seq\\autov.seq %s%s\\%s_autov.seq.pa%s"%(outDir, DATE, CTIME, ARRAY)
 subprocess.call("mv E:\ownCloud\optics\\autov\seq\\autov.seq %s%s\\%s_autov.seq.pa%s"%(outDir, DATE, CTIME, ARRAY))
-
-## Move temporary output files to permanent storage location
-#def store_output(filename, tmpDir, outDir, DATE, CTIME, ARRAY):
-#    if (os.path.isfile("%s\%s"%(tmpDir, filename))):
-#        autov.checkDir("%s%s"%(outDir, DATE))
-#        print "mv %s\%s %s%s\\%s_%s.pa%s"%(tmpDir, filename, outDir, DATE, CTIME, filename, ARRAY)
-#        subprocess.call("mv %s\%s %s%s\\%s_%s.pa%s"%(tmpDir, filename, outDir, DATE, CTIME, filename, ARRAY))
-
-#store_output("psf.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
-#store_output("real_ray_trace.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
-#store_output("poldsp_0deg.txt", tmpDir, outDir, DATE, CTIME, ARRAY)
-#store_output("poldsp_90deg.txt", tmpDir, outDir, DATE, CTIME, ARRAY)

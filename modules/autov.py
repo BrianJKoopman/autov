@@ -602,24 +602,6 @@ class AutoV(object):
         logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
-    #def store_output(filename, tmpDir, outDir, date, ctime, ARRAY):
-    def store_output(self, filename, date, ctime):
-        raise DeprecationWarning("Pretty sure this isn't used/needed any more.")
-        # check_dir("%s%s"%(self.out_dir, date))
-
-        # out_file = "%s%s\\%s_%s"%(self.out_dir, date, ctime, filename)
-        # for descriptor in self.descriptors:
-        #     out_file += "_%s"%(descriptor)
-        # out_file += ".pa%s"%(self.array)
-
-        # # I guess we'll do this regardless of whether the file exists
-        # text = "! mv %s%s %s \n"%(self.tmp_dir, filename, out_file)
-        # self.seq.append(text) # inform the .seq script we're moving things
-
-        # if os.path.isfile("%s%s"%(self.tmp_dir, filename)):
-        #     print "mv %s%s %s"%(self.tmp_dir, filename, out_file)
-        #     subprocess.call("mv %s%s %s"%(self.tmp_dir, filename, out_file))
-
     def _write_seq(self):
         """Write the master CODEV sequence file.
 
