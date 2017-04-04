@@ -110,3 +110,10 @@ class AutoCCATp(AutoV):
         else:
             raise ValueError("Unknown tolerance.")
         return text
+
+    def save_lens(self, filename):
+        """Save the lens file to temporary location for running tolfdif."""
+        text = "! Save lens file\n"
+        text += "SAV \"%s\"\n"%(filename)
+        self.seq.append(text)
+        return text
