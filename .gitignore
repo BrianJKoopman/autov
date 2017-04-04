@@ -5,3 +5,6 @@
 # symlinked output directories
 output
 log
+
+# pip files
+AutoV.egg-info/
