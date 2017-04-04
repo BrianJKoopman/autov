@@ -2,6 +2,8 @@
 *.pyc
 *.rec
 
+a1b2c3_junk.len
+
 # symlinked output directories
 output
 log

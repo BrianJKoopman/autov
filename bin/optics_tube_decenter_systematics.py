@@ -6,7 +6,7 @@ import time
 import argparse
 import logging
 import numpy as np
-from modules import autov
+from autov import autoact
 
 # Parse arguments passed to the script.
 parser = argparse.ArgumentParser()
@@ -31,7 +31,7 @@ def test_decenter(parameter, values, units):
         else:
             descriptors = [parameter, "%sdeg"%(str(value).replace('.', 'p'))]
         # Build .seq file for automated run.
-        arc_autov = autov.AutoV(ARRAY, descriptors)
+        arc_autov = autoact.AutoACT(ARRAY, descriptors)
 
         decenter_description_dict = {"parameter": parameter, "offset": value, "units": units}
         arc_autov.add_to_json_cfg("decenter", decenter_description_dict)
