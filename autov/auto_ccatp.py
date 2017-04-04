@@ -3,7 +3,7 @@
 # CCATp specific AutoV class.
 
 import hashlib
-from modules.autov import AutoV
+from autov import AutoV
 
 class AutoCCATp(AutoV):
     def load_clean_len(self, seq_file):

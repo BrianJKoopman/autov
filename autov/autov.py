@@ -14,7 +14,7 @@ import json
 import logging
 import numpy as np
 
-from modules.codey import get_fields
+from codey import get_fields
 
 class AutoV(object):
     """Class for writing custom .seq files for automating CODEV.

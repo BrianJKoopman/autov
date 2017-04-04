@@ -1,13 +1,13 @@
 
 .PHONY : symlinks
 symlinks : 
-	if [ ! -L output ]; then ln -sT /home/koopman/lab/output/autov/ output; fi
-	if [ ! -L log ]; then ln -sT /home/koopman/lab/output/log/autov/ log; fi
+	if [ ! -L ./bin/output ]; then ln -sT /home/koopman/lab/output/autov/ ./bin/output; fi
+	if [ ! -L ./bin/log ]; then ln -sT /home/koopman/lab/output/log/autov/ ./bin/log; fi
 
 .PHONY : clean
 clean :
-	rm -f output
-	rm -f log
+	rm -f ./bin/output
+	rm -f ./bin/log
 	rm -f *.rec
 
 # vim: set expandtab!:

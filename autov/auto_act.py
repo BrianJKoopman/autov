@@ -5,8 +5,8 @@
 import hashlib
 import logging
 
-from modules.autov import AutoV
-from modules.parse_seq import read_seq, parse_surface
+from autov import AutoV
+from parse_seq import read_seq, parse_surface
 
 class AutoACT(AutoV):
     def load_clean_len(self):
