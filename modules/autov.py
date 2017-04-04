@@ -272,53 +272,6 @@ class AutoV(object):
             logging.debug("Adding text to .seq file: \n%s", text)
             return text
 
-    def decenter_surface(self, surface, parameter, offset):
-        """Apply a "Basic" decenter to window, decentering entire cryostat.
-
-        General: N
-
-        Note, this is all in reference to the surfaces as they were defined in
-        the original .seq file, no surface deletion/addition tracking is implimented
-        yet, so autov doesn't know if you've changed surfaces at all.
-
-        Units: ADE and BDE are in degrees, XDE, YDE, ZDE are in System Units.
-
-        :param surface: Surface number in original .seq file to decenter.
-        :type surface: int
-        :param parameter: Parameter to decenter. This corresponds to any
-                          decenter parameter in CODE V. We're focusing on x, y,
-                          z, alpha and beta.
-        :type parameter: str
-        :param offset: Offset value, from current, for decenter in system units.
-        :type offset: float
-
-        """
-        #TODO: Ugh, this needs to be broken up a bit I think, so that it's decenter a general surface.
-        parameter_lookup = {"x": "XDE", "y": "YDE", "z": "ZDE", "alpha": "ADE", "beta": "BDE"}
-        decenter_command = parameter_lookup[parameter.lower()]
-
-        if self.array in ['1', '2']:
-            text = "! Apply Decenter to window clamp, decentering entire cryostat/optics tube.\n"
-            window_clamp_surface = surface
-
-            # Determine current value for decenter
-            # TODO: For PA1, we set decenters. Should use parse the
-            # surfaces before setting those and record these values as we set
-            # them.
-            seq_dict = parse_surface(read_seq(self.seq_file), window_clamp_surface)
-            print seq_dict
-            #print "Current %s value: %s"%(decenter_command, seq_dict[decenter_command])
-            logging.debug("Original %s value: %s", decenter_command, seq_dict[decenter_command])
-            new_decenter = seq_dict[decenter_command] + offset
-            logging.debug("New %s value set to: %s", decenter_command, new_decenter)
-
-            text += "%s S%s %s\n"%(decenter_command, str(window_clamp_surface), str(new_decenter))
-            self.seq.append(text)
-            logging.debug("Adding text to .seq file: \n%s", text)
-            return text
-        else:
-            ValueError("Automation not complete for array 1 right now.")
-
     # TODO: maybe make these not class methods and pass in descriptors, since
     # we could be making a windows outfile separate from the class...
     def _make_windows_out_file(self, filename):
