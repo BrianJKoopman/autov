@@ -99,3 +99,14 @@ class AutoCCATp(AutoV):
         text += "OUT T ! Restores regular output\n"
         self.seq.append(text)
         return text
+
+    def set_tolerance(self, tolerance, surface, value):
+        """Set tolerance for a surface."""
+        tolerances = ["DLX", "DLY", "DLZ", "DLT", "DLA", "DLB", "DLG"]
+        if tolerance in tolerances:
+            text = "! Set tolerance %s for surface %s to %s\n"%(tolerance, surface, value)
+            text += "%s S%s V %s\n"%(tolerance, surface, value)
+            self.seq.append(text)
+        else:
+            raise ValueError("Unknown tolerance.")
+        return text
