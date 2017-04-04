@@ -272,47 +272,6 @@ class AutoV(object):
             logging.debug("Adding text to .seq file: \n%s", text)
             return text
 
-    def decenter_cryostat(self, parameter, offset):
-        """Apply a "Basic" decenter to window, decentering entire cryostat.
-
-        General: N
-
-        Units: ADE and BDE are in degrees, XDE, YDE, ZDE are in System Units.
-
-        :param parameter: Parameter to decenter. This corresponds to any
-                          decenter parameter in CODE V. We're focusing on x, y,
-                          z, alpha and beta.
-        :type parameter: str
-        :param offset: Offset value, from current, for decenter in system units.
-        :type offset: float
-
-        """
-        #TODO: Ugh, this needs to be broken up a bit I think, so that it's decenter a general surface.
-        parameter_lookup = {"x": "XDE", "y": "YDE", "z": "ZDE", "alpha": "ADE", "beta": "BDE"}
-        decenter_command = parameter_lookup[parameter.lower()]
-
-        if self.array in ['1', '2']:
-            text = "! Apply Decenter to window clamp, decentering entire cryostat/optics tube.\n"
-            window_clamp_surface = 8
-
-            # Determine current value for decenter
-            # TODO: For PA1, we set decenters. Should use parse the
-            # surfaces before setting those and record these values as we set
-            # them.
-            seq_dict = parse_surface(read_seq(self.seq_file), window_clamp_surface)
-            #print seq_dict
-            #print "Current %s value: %s"%(decenter_command, seq_dict[decenter_command])
-            logging.debug("Original %s value: %s", decenter_command, seq_dict[decenter_command])
-            new_decenter = seq_dict[decenter_command] + offset
-            logging.debug("New %s value set to: %s", decenter_command, new_decenter)
-
-            text += "%s S%s %s\n"%(decenter_command, str(window_clamp_surface), str(new_decenter))
-            self.seq.append(text)
-            logging.debug("Adding text to .seq file: \n%s", text)
-            return text
-        else:
-            ValueError("Automation not complete for array 1 right now.")
-
     def decenter_surface(self, surface, parameter, offset):
         """Apply a "Basic" decenter to window, decentering entire cryostat.
 
