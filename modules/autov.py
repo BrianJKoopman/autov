@@ -114,42 +114,6 @@ class AutoV(object):
         logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
-    def apply_ar_coatings(self, coating_file=None):
-        """Apply .mul anti-reflection coatings to lenses.
-
-        General: N
-
-        Requires .mul file to already be generated from a .seq AR coating
-        file.
-
-        Note: AR coatings are optics tube dependant, be sure to load the
-              appropriate one.
-        """
-
-        text = "! apply MUL coating\n"
-        if self.array in ['1', '2']:
-            surfaces = [32, 33, 36, 37, 39, 40]
-        elif self.array in ['4']:
-            surfaces = [37, 38, 41, 42, 44, 45]
-        else:
-            raise ValueError("Array %s not yet fully supported."%(self.array))
-
-        if coating_file is None:
-            if self.array in ['1', '2']:
-                coating_file = r"E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
-            elif self.array in ['3']:
-                coating_file = r"E:\ownCloud\optics\mul\three_layer_coating_128_195_284.mul"
-            elif self.array in ['4']:
-                coating_file = r"E:\ownCloud\optics\mul\hf\three_layer_coating_120_185_285.mul"
-
-        for surface in surfaces:
-            text += "MLT S%s %s\n"%(surface, coating_file)
-            logging.info("Applied .mul coating %s to S%s", coating_file, surface)
-        self.seq.append(text)
-
-        logging.debug("Adding text to .seq file: \n%s", text)
-        return text
-
     def set_wavelengths(self, wavelengths, reference):
         """Set the wavelengths in CODEV.
 
