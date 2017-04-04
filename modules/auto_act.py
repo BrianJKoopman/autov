@@ -75,3 +75,31 @@ class AutoACT(AutoV):
         self.seq.append(text)
         logging.debug("Adding text to .seq file: \n%s", text)
         return text
+
+    def remove_glass(self):
+        """Remove glass definitions for polarization study.
+
+        General: N
+
+        We don't know the properties of the filters very well, so in my initial
+        study I just removed all the glass definitions that weren't the silicon
+        lenses. Do that again here.
+
+        Note: The surfaces with a "glass" defined are the same in PA1 and PA2, but
+        differ when referring to the files for PA3 and PA4.
+
+        """
+        text = "! automated glass defintion removal\n"
+        if self.array in ['1', '2']:
+            surfaces = [6, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 34]
+            logging.info("Removed glass definitions from surfaces %s", surfaces)
+        elif self.array in ['4']:
+            surfaces = [6, 11, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 39]
+            logging.info("Removed glass definitions from surfaces %s", surfaces)
+        else:
+            raise ValueError("Array %s not yet supported."%(self.array))
+        for surface in surfaces:
+            text += "GL1 S%s\n"%surface
+        self.seq.append(text)
+        logging.debug("Adding text to .seq file: \n%s", text)
+        return text
