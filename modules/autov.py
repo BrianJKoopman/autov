@@ -15,7 +15,6 @@ import logging
 import numpy as np
 
 from modules.codey import get_fields
-from modules.parse_seq import read_seq, parse_surface
 
 class AutoV(object):
     """Class for writing custom .seq files for automating CODEV.
@@ -263,7 +262,6 @@ class AutoV(object):
         if not force:
             raise RuntimeError("Throwing this because you shouldn't be using quick_best focus.")
         else:
-            """Insert two quick best focus commands."""
             text = "! quick best focus, twice\n"
             text += "WAV ; BES; RFO; GO\n"
             text += "WAV ; BES; RFO; GO\n"

@@ -4,7 +4,9 @@
 
 import hashlib
 import logging
+
 from modules.autov import AutoV
+from modules.parse_seq import read_seq, parse_surface
 
 class AutoACT(AutoV):
     def load_clean_len(self):
@@ -176,7 +178,8 @@ class AutoACT(AutoV):
         :type offset: float
 
         """
-        #TODO: Ugh, this needs to be broken up a bit I think, so that it's decenter a general surface.
+        #TODO: Ugh, this needs to be broken up a bit I think, so that it's
+        #      decenter a general surface.
         parameter_lookup = {"x": "XDE", "y": "YDE", "z": "ZDE", "alpha": "ADE", "beta": "BDE"}
         decenter_command = parameter_lookup[parameter.lower()]
 
@@ -223,7 +226,8 @@ class AutoACT(AutoV):
         :type offset: float
 
         """
-        #TODO: Ugh, this needs to be broken up a bit I think, so that it's decenter a general surface.
+        #TODO: Ugh, this needs to be broken up a bit I think, so that it's
+        # decenter a general surface.
         parameter_lookup = {"x": "XDE", "y": "YDE", "z": "ZDE", "alpha": "ADE", "beta": "BDE"}
         decenter_command = parameter_lookup[parameter.lower()]
 
@@ -296,4 +300,3 @@ class AutoACT(AutoV):
 
         logging.debug("Adding text to .seq file: \n%s", text)
         return text
-
