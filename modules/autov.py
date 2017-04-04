@@ -255,27 +255,6 @@ class AutoV(object):
         logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
-    def set_image_semi_aperture(self):
-        """Enlarge the semi-aperture of the image surface for polarization
-        studies.
-
-        General: N
-        """
-        text = "! Modify Semi-Aperture of Image surface for poldsp output\n"
-
-        if self.array in ['1', '2', '3']:
-            image_surface = 42
-        elif self.array in ['4']:
-            image_surface = 47
-        else:
-            raise ValueError("Automation not complete for array %s right now."%(self.array))
-
-        text += "CIR S%s 8\n"%(image_surface)
-        logging.info("Semi-aperture of image surface increased for poldsp")
-        self.seq.append(text)
-        logging.debug("Adding text to .seq file: \n%s", text)
-        return text
-
     def quick_best_focus(self, force=False):
         """Perform two quick best focuses.
 
