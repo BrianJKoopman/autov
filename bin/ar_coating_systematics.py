@@ -1,14 +1,19 @@
-# To run a single wavelength and test for difference without Quick Best Focus.
+# Test polarization rotation result when index is changed +/- 5, 10%
 
 import subprocess
 import time
 import argparse
-from modules import autov
+import logging
+from autov import autoact
 
 # Parse arguments passed to the script.
 parser = argparse.ArgumentParser()
 parser.add_argument("array", choices=['1', '2', '3'], help="Array you want to automate.")
 args = parser.parse_args()
+
+# Setup logging
+logging.basicConfig(filename='./log/arc_index.log', format='%(asctime)s - %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S', filemode='w', level=logging.DEBUG)
+logging.debug("Logging started.")
 
 ARRAY = args.array
 DATE = time.strftime('%Y%m%d')
@@ -17,14 +22,18 @@ CTIME = int(time.time())
 outDir = "E:\ownCloud\optics\data\\"
 tmpDir = "E:\ownCloud\optics\data\\tmp\\"
 
-coating_list = [(r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_138_m0p05_250_m0p05.mul",["arc_n_change_m0p05"])]
+#coating_list = [(r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_138_m0p05_250_m0p05.mul",["arc_n_change_m0p05"])]
 
-#coating_list = [(r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_138_m0p05_250_m0p05.mul",["arc_n_change_m0p05"]),
-#                (r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_138_p0p05_250_p0p05.mul",["arc_n_change_p0p05"]),
-#                (r"E:\ownCloud\optics\mul\two_layer_coating_138_250.mul",["arc_n_change_0"])]
+coating_list = [([1242, 2250], r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_1242_2250.mul",["arc_n_1242_2250"]),
+                ([1311, 2375], r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_1311_2375.mul",["arc_n_1311_2375"]),
+                ([1380, 2500], r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_1380_2500.mul",["arc_n_1380_2500"]),
+                ([1449, 2625], r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_1449_2625.mul",["arc_n_1449_2625"]),
+                ([1518, 2750], r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_1518_2750.mul",["arc_n_1518_2750"])]
+
+central_indicies = [1380, 2500]
 
 def test_ar_coatings(coatings):
-    for (coating, descriptors) in coatings:
+    for (indicies, coating, descriptors) in coatings:
         # Set ref_wl for file descriptors.
         if ARRAY in ['1', '2']:
             ref_wl = 2070000
@@ -33,7 +42,12 @@ def test_ar_coatings(coatings):
             #ref_wl = 3000000
 
         # Build .seq file for automated run.
-        arc_autov = autov.AutoV(ARRAY, descriptors)
+        arc_autov = autoact.AutoACT(ARRAY, descriptors)
+
+        offset_value = (float(central_indicies[0] - indicies[0])/central_indicies[0])*100 #percent difference from original index
+        index_variation_dict = {"parameter": "index", "offset": offset_value, "units": "Percent"}
+        arc_autov.add_to_json_cfg("variation", index_variation_dict)
+
         arc_autov.create_header()
         arc_autov.load_clean_len()
         arc_autov.remove_glass()
@@ -50,10 +64,10 @@ def test_ar_coatings(coatings):
         arc_autov.run_psf()
         arc_autov.run_real_ray_trace()
         arc_autov.run_poldsp(input_angle=0, pupil_number=23)
-        arc_autov.run_poldsp(input_angle=90, pupil_number=23)
+        #arc_autov.run_poldsp(input_angle=90, pupil_number=23)
         arc_autov.exit()
         arc_autov.run()
-        arc_autov.save_cfg()
+        arc_autov.save_cfg(out_dir="./output/arc_index/")
 
 test_ar_coatings(coating_list)
 
