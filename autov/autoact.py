@@ -10,7 +10,7 @@ from parse_seq import read_seq, parse_surface
 
 class AutoACT(AutoV):
     def __init__(self, array, descriptors):
-        super(AutoACT, self).__init__()
+        super(AutoACT, self).__init__(array, descriptors)
 
         #: A string describes the ACTPol array number.
         self.array = array
