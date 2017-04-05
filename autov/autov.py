@@ -205,56 +205,6 @@ class AutoV(object):
         logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
-    def set_fields(self, array_loc=None, polarization=1):
-        """Set the CODEV fields.
-
-        General: N
-        TODO: Fields fetched from get_fields, which could be okay, but also it's array specific.
-        TODO: Pass fields list in, delete all fields (if possible) and enter in new fields.
-
-        Currently only defined for PA2, since they're already in the clean lens
-        system file. This currently just sets the polarization fraction to 1
-        for all fields, something we'll always want to do."""
-        text = "! set fields\n"
-
-        # This way we can choose an array position (PA1 for looking at HF for instance).
-        if array_loc is None:
-            _array = self.array
-        else:
-            _array = array_loc
-
-        if _array in ['1', '4']:
-            field_no = range(1, 26)
-            fields = get_fields(int(_array))
-
-            text += "! set field x values\n"
-            for (i, val) in zip(field_no, fields[:, 0].tolist()):
-                text += "in CV_MACRO:cvsetfield X %s F%s\n"%(val, i)
-
-            text += "! set field y values\n"
-            for (i, val) in zip(field_no, fields[:, 1].tolist()):
-                text += "in CV_MACRO:cvsetfield Y %s F%s\n"%(val, i)
-
-            text += "! set polarization fraction of all fields to 1\n"
-            for i in range(25):
-                text += "PFR F%s %s\n"%(i+1, polarization)
-
-        # Note the change above to identify position won't work for MF1/2 and
-        # PA2 and PA3, since those fields will probably differ.
-        if _array in ['2', '3']:
-            text += "! set polarization fraction of all fields to 1\n"
-            for i in range(25):
-                text += "PFR F%s %s\n"%(i+1, polarization)
-
-        text += "! set weights to 1 for all fields\n"
-        for field in range(1, 26):
-            text += "WTF F%s 1\n"%(field)
-
-        logging.info("Fields set.")
-        self.seq.append(text)
-        logging.debug("Adding text to .seq file: \n%s", text)
-        return text
-
     def quick_best_focus(self, force=False):
         """Perform two quick best focuses.
 

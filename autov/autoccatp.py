@@ -111,3 +111,17 @@ class AutoCCATp(AutoV):
         text += "SAV \"%s\"\n"%(filename)
         self.seq.append(text)
         return text
+
+    def set_fields(self, fields):
+        """Set the CODEV fields.
+
+        Currently only defined for PA2, since they're already in the clean lens
+        system file. This currently just sets the polarization fraction to 1
+        for all fields, something we'll always want to do."""
+        text = "! set fields\n"
+        for i in range(len(fields)):
+            text += "in CV_MACRO:cvsetfield X %s F%s\n"%(fields[i][0], i+1)
+            text += "in CV_MACRO:cvsetfield Y %s F%s\n"%(fields[i][1], i+1)
+            text += "WTF F%s 1\n"%(i+1)
+        self.seq.append(text)
+        return text
