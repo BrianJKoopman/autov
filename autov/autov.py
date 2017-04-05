@@ -15,8 +15,6 @@ import logging
 import hashlib
 import numpy as np
 
-from codey import get_fields
-
 class AutoV(object):
     """Class for writing custom .seq files for automating CODEV.
 
@@ -31,6 +29,15 @@ class AutoV(object):
     :type descriptors: :obj:`list` of :obj:`str`
     """
     def __init__(self, array, descriptors):
+        # General, shared AutoV instance attributes
+        self.seq_file = None
+
+        self.date = time.strftime('%Y%m%d')
+        self.ctime = int(time.time())
+
+        self.wl_set = False # have wavelengths been set yet?
+        self.wavelengths = None # save wavelengths after setting
+
         #: A string describes the ACTPol array number.
         self.array = array
 
@@ -38,16 +45,8 @@ class AutoV(object):
         self.descriptors = descriptors
         self.seq = []
 
-        self.seq_file = None
-
         self.out_dir = r"E:\ownCloud\optics\data" + "\\"
         self.tmp_dir = r"E:\ownCloud\optics\data\tmp" + "\\"
-
-        self.date = time.strftime('%Y%m%d')
-        self.ctime = int(time.time())
-
-        self.wl_set = False # have wavelengths been set yet?
-        self.wavelengths = None # save wavelengths after setting
 
         #: Dictionary containing information to be written to a codevpol style cfg file.
         _out_dir = '/home/koopman/ownCloud/niemack_lab/analysis/codevpol/img/'

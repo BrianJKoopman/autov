@@ -5,6 +5,22 @@
 from autov import AutoV, check_md5sums
 
 class AutoCCATp(AutoV):
+    """Class for writing custom .seq files for automating tolerancing of CCATp
+    design in CODEV.
+
+    The methods in this class will append the appropriate text for writing a
+    .seq file which can be called by CODEV and used to automate tol
+    parameters in a lens design.
+
+    Attributes:
+        seq (list[str]): List of strings which will be written sequentially to
+                         a .seq file for running in CODEV
+    """
+    def __init__(self):
+        super(AutoCCATp, self).__init__()
+
+        self.out_dir = r"E:\ownCloud\ccat\optics\data" + "\\"
+        self.tmp_dir = r"E:\ownCloud\ccat\optics\data\tmp" + "\\"
     def load_clean_len(self, seq_file):
         """Load a clean optical design.
 

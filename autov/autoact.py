@@ -5,9 +5,40 @@
 import logging
 
 from autov import AutoV, check_md5sums
+from codey import get_fields
 from parse_seq import read_seq, parse_surface
 
 class AutoACT(AutoV):
+    def __init__(self, array, descriptors):
+        super(AutoACT, self).__init__()
+
+        #: A string describes the ACTPol array number.
+        self.array = array
+
+        #: A list of strings which will be written sequentially to the name of output files.
+        self.descriptors = descriptors
+
+        self.seq_file = None
+
+        self.out_dir = r"E:\ownCloud\optics\data" + "\\"
+        self.tmp_dir = r"E:\ownCloud\optics\data\tmp" + "\\"
+
+        #: Dictionary containing information to be written to a codevpol style cfg file.
+        _out_dir = '/home/koopman/ownCloud/niemack_lab/analysis/codevpol/img/'
+        _data_dir = '/home/koopman/ownCloud/niemack_lab/optics/data/'
+        self.cfg_dict = {"array": int(self.array),
+                         "directories": {"outDir": _out_dir,
+                                         "data_dir": _data_dir},
+                         "codev_inputs": {"freq": [145]}
+                        }
+
+        # More array dependant setup for cfg_dict.
+        if self.array in ["2"]:
+            self.cfg_dict["offset_file"] = "./data/season3_positions/template_ar2_150529s.txt"
+        elif self.array in ["4"]:
+            self.cfg_dict["offset_file"] = "./actpol_data_shared/" \
+                                           "RelativeOffsets/template_ar4_160830.txt"
+
     def load_clean_len(self):
         """Load a clean optical design.
 
