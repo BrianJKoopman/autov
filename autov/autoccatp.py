@@ -141,3 +141,14 @@ class AutoCCATp(AutoV):
             text += "WTF F%s 1\n"%(i+1)
         self.seq.append(text)
         return text
+
+def writeseq(inputs, seqfile):
+    """Write the master CODEV sequence file.
+
+    Keyword arguments:
+    inputs -- list of input strings
+    seqfile -- name of output .seq file"""
+    with open(seqfile, 'w') as f:
+        for item in inputs:
+            f.write(item)
+            f.write('\n')
