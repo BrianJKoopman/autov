@@ -2,8 +2,7 @@
 # Brian Koopman
 # CCATp specific AutoV class.
 
-import hashlib
-from autov import AutoV
+from autov import AutoV, check_md5sums
 
 class AutoCCATp(AutoV):
     def load_clean_len(self, seq_file):
@@ -24,13 +23,8 @@ class AutoCCATp(AutoV):
                    'b10e35a3a0c1dd753dd5a0866462b489'}
 
         clean_file_dir = r"E:\ownCloud\ccat\len" + "\\"
-        for item in md5sums.keys():
-            md5 = hashlib.md5(open(clean_file_dir + item, 'rb').read()).hexdigest()
-            if md5 != md5sums[item]:
-                raise RuntimeError("The md5sum does not match a known value! \
-                      This means a 'clean' file has been modified! Exiting.")
-            else:
-                print item, "md5sum matches, proceeding"
+
+        check_md5sums(clean_file_dir, md5sums)
 
         text = "! Load a clean copy of the optical design.\n"
         #r'\Granet_CrDr_Prim6m_F3_20151007_folded_S7_f3000_Ls1860_start_3Dplot_v2.seq"' + \

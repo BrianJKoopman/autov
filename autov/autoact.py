@@ -2,10 +2,9 @@
 # Brian Koopman
 # ACTPol specific AutoV class.
 
-import hashlib
 import logging
 
-from autov import AutoV
+from autov import AutoV, check_md5sums
 from parse_seq import read_seq, parse_surface
 
 class AutoACT(AutoV):
@@ -35,16 +34,7 @@ class AutoACT(AutoV):
                        '3': r'ACTPol_90GHz_v29_optical_filter_aperture_study_20111204.seq',
                        '4': r'AdvACT_HF_v31_20150416.seq'}
 
-        for item in md5sums.keys():
-            md5 = hashlib.md5(open(clean_file_dir + item, 'rb').read()).hexdigest()
-            if md5 != md5sums[item]:
-                logging.critical("md5sum mis-match: %s", item)
-                logging.critical("Mis-match indicates a dirty starting file. Please examine.")
-                raise RuntimeError("The md5sum does not match a known value! \
-                      This means a 'clean' file has been modified! Exiting.")
-            else:
-                logging.info("md5sum match: %s", item)
-                logging.info("Match indicates file unmodified, proceeding with script.")
+        check_md5sums(clean_file_dir, md5sums)
 
         try:
             text = "! Load a clean copy of the optical design.\n"

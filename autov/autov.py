@@ -12,6 +12,7 @@ import os
 import time
 import json
 import logging
+import hashlib
 import numpy as np
 
 from codey import get_fields
@@ -526,6 +527,31 @@ def freq2lambda(freq):
         wavelength (float): wavelength in nm
     """
     return SPEED_OF_LIGHT/float(freq) #[nm]
+
+def check_md5sums(clean_file_dir, md5sums_list):
+    """Check a file against a known list of md5sums for a match.
+
+    :param clean_file_dir: Directory the clean files are kept in
+    :type clean_file_dir: str
+    :param m5sums_list: Dictionary of md5sums with filenames for keys and md5sums as values
+    :type md5sums_list: dict
+
+    :return: True, since if it finishes without raising an error, all md5sums match.
+    :rtype: boolean
+    """
+    for item in md5sums_list.keys():
+        md5 = hashlib.md5(open(clean_file_dir + item, 'rb').read()).hexdigest()
+        if md5 != md5sums_list[item]:
+            logging.critical("md5sum mis-match: %s", item)
+            logging.critical("Mis-match indicates a dirty starting file. Please examine.")
+            raise RuntimeError("The md5sum does not match a known value! \
+                  This means a 'clean' file has been modified! Exiting.")
+        else:
+            logging.info("md5sum match: %s", item)
+            logging.info("Match indicates file unmodified, proceeding with script.")
+
+    return True
+
 
 #class AutoMul(object):
 #    def __init__(self):
