@@ -45,8 +45,8 @@ def test_ar_coatings(coatings):
         arc_autov = autoact.AutoACT(ARRAY, descriptors)
 
         offset_value = (float(central_indicies[0] - indicies[0])/central_indicies[0])*100 #percent difference from original index
-        index_variation_dict = {"parameter": "index", "offset": offset_value, "units": "Percent"}
-        arc_autov.add_to_json_cfg("variation", index_variation_dict)
+        index_variation_dict = {"type": "arc_index", "parameter": "index", "offset": offset_value, "units": "Percent"}
+        arc_autov.add_to_json_cfg("perturbation", index_variation_dict)
 
         arc_autov.create_header()
         arc_autov.load_clean_len()

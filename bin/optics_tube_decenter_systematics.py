@@ -33,8 +33,8 @@ def test_decenter(parameter, values, units):
         # Build .seq file for automated run.
         arc_autov = autoact.AutoACT(ARRAY, descriptors)
 
-        decenter_description_dict = {"parameter": parameter, "offset": value, "units": units}
-        arc_autov.add_to_json_cfg("decenter", decenter_description_dict)
+        decenter_description_dict = {"type": "decenter", "parameter": parameter, "offset": value, "units": units}
+        arc_autov.add_to_json_cfg("perturbation", decenter_description_dict)
 
         arc_autov.create_header()
         arc_autov.load_clean_len()
