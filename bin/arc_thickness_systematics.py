@@ -25,7 +25,7 @@ tmpDir = "E:\ownCloud\optics\data\\tmp\\"
 #coating_list = [(r"E:\ownCloud\optics\mul\ar_coating_sys\two_layer_coating_138_m0p05_250_m0p05.mul",["arc_n_change_m0p05"])]
 
 coating_list = [([346750, 190000], r"E:\ownCloud\optics\mul\ar_coating_sys\arc_1380_346750_2500_190000.mul",["arc_1380_346750_2500_190000"]),
-                ([355875, 195000], r"E:\ownCloud\optics\mul\ar_coating_sys\arc_1380_355875 2500_195000.mul",["arc_1380_355875 2500_195000"]),
+                ([355875, 195000], r"E:\ownCloud\optics\mul\ar_coating_sys\arc_1380_355875_2500_195000.mul",["arc_1380_355875_2500_195000"]),
                 ([365000, 200000], r"E:\ownCloud\optics\mul\ar_coating_sys\arc_1380_365000_2500_200000.mul",["arc_1380_365000_2500_200000"]),
                 ([374125, 205000], r"E:\ownCloud\optics\mul\ar_coating_sys\arc_1380_374125_2500_205000.mul",["arc_1380_374125_2500_205000"]),
                 ([383250, 210000], r"E:\ownCloud\optics\mul\ar_coating_sys\arc_1380_383250_2500_210000.mul",["arc_1380_383250_2500_210000"])]
