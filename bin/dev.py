@@ -6,7 +6,8 @@ import time
 import argparse
 import logging
 import numpy as np
-from modules import autov
+#from modules import autov
+from autov import autoact
 
 # Parse arguments passed to the script.
 parser = argparse.ArgumentParser()
@@ -32,8 +33,9 @@ elif ARRAY in ['3']:
 
 descriptors = []
 # Build .seq file for automated run.
-arc_autov = autov.AutoV(ARRAY, descriptors)
+arc_autov = autoact.AutoACT(ARRAY, descriptors)
 arc_autov.create_header()
 arc_autov.load_clean_len()
-arc_autov.decenter_cryostat('y', 1)
+#arc_autov.decenter_cryostat('y', 1)
+arc_autov.perturb_lens_thickness(1, 0.5)
 arc_autov.run()

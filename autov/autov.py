@@ -423,6 +423,27 @@ class AutoV(object):
         self.seq.append(text)
         return text
 
+    def delete_solve(self, surface):
+        """Remove the solve on a surface, probably used for removing a solve on
+        a lens thickness.
+
+        General: Y
+        """
+        text = "! Delete solve on S%s\n"%(surface)
+        text += "DEL SOL THI S%s\n"%(surface)
+        self.seq.append(text)
+        return text
+
+    def freeze_surface(self, surface):
+        """Freeze a surface
+
+        General: Y
+        """
+        text = "! Freeze S%s\n"%(surface)
+        text += "THC S%s 100\n"%(surface)
+        self.seq.append(text)
+        return text
+
 def byteify(input):
     # https://stackoverflow.com/questions/956867/how-to-get-string-objects-instead-of-unicode-ones-from-json-in-python/13105359#13105359
     if isinstance(input, dict):

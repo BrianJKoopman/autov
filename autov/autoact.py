@@ -371,3 +371,9 @@ class AutoACT(AutoV):
         self.seq.append(text)
         logging.debug("Adding text to .seq file: \n%s", text)
         return text
+
+    def perturb_lens_thickness(self, lens, amount):
+        if lens == 1:
+            super(AutoACT, self).delete_solve(32)
+            super(AutoACT, self).freeze_surface(32)
+            #TODO: Need to extract Surface thickness from S command in .seq file with parse_seq module. Needs to be written to do this.
