@@ -15,7 +15,7 @@ Welcome to autov's documentation!
 Auto V Object
 -------------
 
-.. automodule:: modules.autov
+.. automodule:: autov.autov
 
 .. autoclass:: AutoV
     :members:
@@ -23,7 +23,7 @@ Auto V Object
 .seq File Parsing
 -----------------
 
-.. automodule:: modules.parse_seq
+.. automodule:: autov.parse_seq
     :members:
     :private-members:
 

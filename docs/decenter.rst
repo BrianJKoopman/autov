@@ -39,12 +39,12 @@ from the Code V documentation.
 AutoV's Decenter Methods
 -------------------------
 For decentering the entire cryostat
-:meth:`modules.autov.AutoV.decenter_cryostat` applies a decenter to the "window
+:meth:`autov.autoact.AutoACT.decenter_cryostat` applies a decenter to the "window
 clamp" surface, which doesn't have a corresponding reverse decenter. This
 should have the effect that the entire cryostat is decentered by the given
 amount.
 
-.. automodule:: modules.autov
-.. autoclass:: AutoV
+.. automodule:: autov.autoact
+.. autoclass:: AutoACT
     :members: decenter_cryostat
     :noindex:
