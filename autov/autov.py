@@ -502,6 +502,7 @@ class AutoV(object):
             raise ValueError("Unknown tolerance.")
         return text
 
+    # TODO: need to write cleanup method for rm'ing the tmp directory. ccatp had 16,000 tmp files.
     def save_lens(self, filename):
         """Save the lens file to temporary location for running tolfdif."""
         text = "! Save lens file\n"

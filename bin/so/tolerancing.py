@@ -28,8 +28,8 @@ if tol in ['DLX', 'DLY', 'DLZ', 'DLT']:
     units = 'cm'
     #tol_range = (np.array(range(50))+1)/10. # 0 to 5 in 0.1 cm steps
     # 0 to 1 in 0.05 cm steps, 1 to 5 in 0.1 cm steps
-    #tol_range = np.hstack((np.arange(0.05, 1, 0.05), np.arange(1, 5, 0.1)))
-    tol_range = np.hstack((np.arange(0.05, 1, 0.10), np.arange(1, 5, 0.25), np.arange(5,10,0.5)))
+    tol_range = np.hstack((np.arange(0.05, 1, 0.05), np.arange(1, 5, 0.1)))
+    #tol_range = np.hstack((np.arange(0.05, 1, 0.10), np.arange(1, 5, 0.25), np.arange(5,10,0.5)))
     #tol_range = tol_range*10*1e3 #mm, then nm
     #units = 'nm' # changed to nm
     #tol_range = (np.array(range(10))+1)/1. # 0 to 5 in 0.1 cm steps
