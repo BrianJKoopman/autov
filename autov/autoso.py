@@ -22,6 +22,18 @@ class AutoSO(AutoV):
         self.out_dir = r"E:\ownCloud\simons_observatory\optics\data" + "\\"
         self.tmp_dir = r"E:\ownCloud\simons_observatory\optics\data\tmp" + "\\"
 
+        self.cfg_dict.pop("array", None)
+        self.cfg_dict.pop("codev_inputs", None)
+        self.cfg_dict.pop("directories", None)
+
+        #: Dictionary containing information for tolerancing/plot.py script.
+        _dataDir = '/home/koopman/ownCloud/niemack_lab/simons_observatory/optics/data/%s/'%self.date
+        _plotDir = '/home/koopman/lab/output/autov/simons_observatory/'
+        self.cfg_dict = {"dir": {"dataDir": _dataDir,
+                                 "plotDir": _plotDir}
+                        }
+
+
     def load_clean_len(self, seq_file):
         """Load a clean optical design.
 
