@@ -16,8 +16,8 @@ class AutoSO(AutoV):
         seq (list[str]): List of strings which will be written sequentially to
                          a .seq file for running in CODEV
     """
-    def __init__(self):
-        super(AutoSO, self).__init__()
+    def __init__(self, descriptors):
+        super(AutoSO, self).__init__(1, descriptors)
 
         self.out_dir = r"E:\ownCloud\simons_observatory\optics\data" + "\\"
         self.tmp_dir = r"E:\ownCloud\simons_observatory\optics\data\tmp" + "\\"
