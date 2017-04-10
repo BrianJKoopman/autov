@@ -51,6 +51,7 @@ class AutoCCATp(AutoV):
         self.seq.append(text)
         return text
 
+    #TODO: use super call to instead call autov.remove_surface()
     def remove_receiver(self):
         """Remove receiver definition for tolerancing study.
 

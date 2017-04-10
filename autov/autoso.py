@@ -21,6 +21,7 @@ class AutoSO(AutoV):
 
         self.out_dir = r"E:\ownCloud\simons_observatory\optics\data" + "\\"
         self.tmp_dir = r"E:\ownCloud\simons_observatory\optics\data\tmp" + "\\"
+
     def load_clean_len(self, seq_file):
         """Load a clean optical design.
 
@@ -44,19 +45,6 @@ class AutoSO(AutoV):
                 r'\%s"'%(seq_file) + \
                 "\n"
 
-        self.seq.append(text)
-        return text
-
-    def remove_receiver(self):
-        """Remove receiver definition for tolerancing study.
-
-        For his paper Mike made a receiver looking surface that we don't want
-        for the tolerancing analysis.
-        """
-        text = "! automated glass defintion removal\n"
-        surfaces = [11]
-        for surface in surfaces:
-            text += "DEL S%s\n"%surface
         self.seq.append(text)
         return text
 
