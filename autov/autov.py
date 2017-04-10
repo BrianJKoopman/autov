@@ -404,7 +404,7 @@ class AutoV(object):
         :type out_dir: str
         """
         check_dir(out_dir)
-        file_name = "%scfg_ar%s"%(out_dir, self.array)
+        file_name = "%scfg"%(out_dir)
         for descriptor in self.descriptors:
             file_name += "_%s"%(descriptor)
         file_name += ".in"
