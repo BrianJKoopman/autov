@@ -65,13 +65,6 @@ class AutoCCATp(AutoV):
         self.seq.append(text)
         return text
 
-    def save_lens(self, filename):
-        """Save the lens file to temporary location for running tolfdif."""
-        text = "! Save lens file\n"
-        text += "SAV \"%s\"\n"%(filename)
-        self.seq.append(text)
-        return text
-
     def set_fields(self, fields):
         """Set the CODEV fields.
 

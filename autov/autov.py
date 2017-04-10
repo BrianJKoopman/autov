@@ -502,6 +502,13 @@ class AutoV(object):
             raise ValueError("Unknown tolerance.")
         return text
 
+    def save_lens(self, filename):
+        """Save the lens file to temporary location for running tolfdif."""
+        text = "! Save lens file\n"
+        text += "SAV \"%s\"\n"%(filename)
+        self.seq.append(text)
+        return text
+
 def byteify(input):
     # https://stackoverflow.com/questions/956867/how-to-get-string-objects-instead-of-unicode-ones-from-json-in-python/13105359#13105359
     if isinstance(input, dict):
