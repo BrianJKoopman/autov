@@ -6,6 +6,7 @@ import time
 import os
 import numpy as np
 import argparse
+import logging
 
 from autov import autov
 from autov import autoso
@@ -16,6 +17,10 @@ parser.add_argument("tolerance", choices=['DLX', 'DLY', 'DLZ', 'DLT', 'DLA',
                                           'DLB', 'DLG'], help="Tolerance you want to automate.")
 parser.add_argument("surface", choices=['3', '5', '8', '9'], help="Surface you want to tolerance.")
 args = parser.parse_args()
+
+# Setup logging
+logging.basicConfig(filename='./log/so_tolerancing.log', format='%(asctime)s - %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S', filemode='w', level=logging.DEBUG)
+logging.debug("Logging started.")
 
 tol = args.tolerance
 sur = args.surface
