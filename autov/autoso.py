@@ -48,17 +48,6 @@ class AutoSO(AutoV):
         self.seq.append(text)
         return text
 
-    def set_tolerance(self, tolerance, surface, value):
-        """Set tolerance for a surface."""
-        tolerances = ["DLX", "DLY", "DLZ", "DLT", "DLA", "DLB", "DLG"]
-        if tolerance in tolerances:
-            text = "! Set tolerance %s for surface %s to %s\n"%(tolerance, surface, value)
-            text += "%s S%s V %s\n"%(tolerance, surface, value)
-            self.seq.append(text)
-        else:
-            raise ValueError("Unknown tolerance.")
-        return text
-
     def save_lens(self, filename):
         """Save the lens file to temporary location for running tolfdif."""
         text = "! Save lens file\n"

@@ -491,6 +491,17 @@ class AutoV(object):
         self.seq.append(text)
         return text
 
+    def set_tolerance(self, tolerance, surface, value):
+        """Set tolerance for a surface."""
+        tolerances = ["DLX", "DLY", "DLZ", "DLT", "DLA", "DLB", "DLG"]
+        if tolerance in tolerances:
+            text = "! Set tolerance %s for surface %s to %s\n"%(tolerance, surface, value)
+            text += "%s S%s V %s\n"%(tolerance, surface, value)
+            self.seq.append(text)
+        else:
+            raise ValueError("Unknown tolerance.")
+        return text
+
 def byteify(input):
     # https://stackoverflow.com/questions/956867/how-to-get-string-objects-instead-of-unicode-ones-from-json-in-python/13105359#13105359
     if isinstance(input, dict):
