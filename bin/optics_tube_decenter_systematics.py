@@ -21,9 +21,6 @@ ARRAY = args.array
 DATE = time.strftime('%Y%m%d')
 CTIME = int(time.time())
 
-outDir = "E:\ownCloud\optics\data\\"
-tmpDir = "E:\ownCloud\optics\data\\tmp\\"
-
 def test_decenter(parameter, values, units):
     for value in values:
         if parameter in ['x', 'y', 'z']:

@@ -49,14 +49,17 @@ elif tol in ['DLA', 'DLB', 'DLG']:
 DATE = time.strftime('%Y%m%d')
 CTIME = int(time.time())
 
-outDir = "E:\ownCloud\simons_observatory\optics\data\\"
-tmpDir = "E:\ownCloud\simons_observatory\optics\data\\tmp\\"
-
 # Build .seq file for automated run.
-qq = autoso.AutoSO(descriptors=["so_tol"])
+qq = autoso.AutoSO(descriptors=["so_tol_%s"%(tol), "S%s"%args.surface])
 qq.create_header()
 qq.load_clean_len(seq_file)
 qq.set_buffer_len(20000)
+
+qq.add_to_json_cfg("surface", 5)
+qq.add_to_json_cfg("wavelength", "2mm")
+
+file_inputs_dict = {"%s"%tol: "%s"%qq.ctime}
+qq.add_to_json_cfg("file_inputs", file_inputs_dict)
 
 # set the wavelength
 qq.enter_single_command('DEL W0+1')
@@ -65,6 +68,10 @@ qq.enter_single_command('DEL W0+1')
 qq.enter_single_command('DEL W0+1')
 qq.enter_single_command('DEL W0+1')
 qq.set_wavelengths([wavelength], 0) # 2mm
+
+# number of fields
+num_fields = 13
+qq.add_to_json_cfg("num_fields", num_fields)
 
 # Assign weight of 1 to fields that were set otherwise.
 qq.enter_single_command('WTF F6 1')
@@ -96,3 +103,4 @@ for dis in tol_range:
         qq.run_tolfdif([tol, "S%s"%(sur), "%s%s"%(dis, units)], r"E:\ownCloud\simons_observatory\len\tmp\test.len")
 qq.exit()
 qq.run()
+qq.save_cfg(out_dir="./output/")
