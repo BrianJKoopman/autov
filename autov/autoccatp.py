@@ -65,6 +65,7 @@ class AutoCCATp(AutoV):
         self.seq.append(text)
         return text
 
+    # TODO: Move to autov, do not edit! Identical code in autoso.py
     def set_fields(self, fields):
         """Set the CODEV fields.
 
