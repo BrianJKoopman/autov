@@ -55,7 +55,7 @@ qq.create_header()
 qq.load_clean_len(seq_file)
 qq.set_buffer_len(20000)
 
-qq.add_to_json_cfg("surface", 5)
+qq.add_to_json_cfg("surface", sur)
 qq.add_to_json_cfg("wavelength", "2mm")
 
 file_inputs_dict = {"%s"%tol: "%s"%qq.ctime}

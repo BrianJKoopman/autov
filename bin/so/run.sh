@@ -1,6 +1,6 @@
 # Brian Koopman
 
-#python tolerancing.py DLX 5
+python tolerancing.py DLX 5
 python tolerancing.py DLY 5
 python tolerancing.py DLZ 5
 python tolerancing.py DLA 5
