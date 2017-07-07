@@ -113,7 +113,7 @@ class AutoACT(AutoV):
 
         """
         text = "! automated glass defintion removal\n"
-        if self.array in ['1', '2']:
+        if self.array in ['1', '2', '3']:
             surfaces = [6, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 34]
             logging.info("Removed glass definitions from surfaces %s", surfaces)
         elif self.array in ['4']:
@@ -140,7 +140,7 @@ class AutoACT(AutoV):
         """
 
         text = "! apply MUL coating\n"
-        if self.array in ['1', '2']:
+        if self.array in ['1', '2', '3']:
             surfaces = [32, 33, 36, 37, 39, 40]
         elif self.array in ['4']:
             surfaces = [37, 38, 41, 42, 44, 45]
