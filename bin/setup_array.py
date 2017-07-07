@@ -4,8 +4,9 @@ import subprocess
 import time
 import os
 import argparse
-import autov
 import numpy as np
+
+from autov import autoact
 
 # Parse arguments passed to the script.
 parser = argparse.ArgumentParser()
@@ -21,7 +22,7 @@ tmpDir = "E:\ownCloud\optics\data\\tmp\\"
 #autoseq = "pa%s_automation.seq"%ARRAY
 
 # Build .seq file for automated run.
-qq = autov.AutoV(ARRAY)
+qq = autoact.AutoACT(ARRAY, "")
 qq.create_header()
 qq.load_clean_len()
 qq.remove_glass()
@@ -37,6 +38,8 @@ qq.set_image_semi_aperture()
 #qq.quick_best_focus()
 #qq.run_psf()
 #qq.run_real_ray_trace([str('%.2f'%(autov.lambda2freq(wavelengths[ref_wl])))])
+qq.run()
+
 
 # just the telescope
 #qq.enter_single_command("DEL S6..41") # reduce to just the telescope
@@ -46,14 +49,14 @@ qq.set_image_semi_aperture()
 
 #qq.exit()
 
-# Write the file
-autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
-
-# Make the CODEV Call
-#subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\%s"%(autoseq))
-subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\\autov.seq")
-
-# Move automation .seq file for permanent record
-autov.check_dir("%s%s"%(outDir, DATE))
-print "mv E:\ownCloud\optics\\autov\seq\\autov.seq %s%s\\%s_autov.seq.pa%s"%(outDir, DATE, CTIME, ARRAY)
-subprocess.call("mv E:\ownCloud\optics\\autov\seq\\autov.seq %s%s\\%s_autov.seq.pa%s"%(outDir, DATE, CTIME, ARRAY))
+## Write the file
+#autov.writeseq(qq.seq, "E:\ownCloud\optics\\autov\seq\\autov.seq")
+#
+## Make the CODEV Call
+##subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\%s"%(autoseq))
+#subprocess.call("C:\CODEV105_FCS\codev.exe E:\ownCloud\optics\\autov\seq\\autov.seq")
+#
+## Move automation .seq file for permanent record
+#autov.check_dir("%s%s"%(outDir, DATE))
+#print "mv E:\ownCloud\optics\\autov\seq\\autov.seq %s%s\\%s_autov.seq.pa%s"%(outDir, DATE, CTIME, ARRAY)
+#subprocess.call("mv E:\ownCloud\optics\\autov\seq\\autov.seq %s%s\\%s_autov.seq.pa%s"%(outDir, DATE, CTIME, ARRAY))
