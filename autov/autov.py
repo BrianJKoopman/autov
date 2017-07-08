@@ -49,20 +49,9 @@ class AutoV(object):
         self.tmp_dir = r"E:\ownCloud\optics\data\tmp" + "\\"
 
         #: Dictionary containing information to be written to a codevpol style cfg file.
-        _out_dir = '/home/koopman/ownCloud/niemack_lab/analysis/codevpol/img/'
-        _data_dir = '/home/koopman/ownCloud/niemack_lab/optics/data/'
         self.cfg_dict = {"array": int(self.array),
-                         "directories": {"outDir": _out_dir,
-                                         "data_dir": _data_dir},
-                         "codev_inputs": {"freq": [145]}
+                         "codev_inputs": {}
                         }
-
-        # More array dependant setup for cfg_dict.
-        if self.array in ["2"]:
-            self.cfg_dict["offset_file"] = "./data/season3_positions/template_ar2_150529s.txt"
-        elif self.array in ["4"]:
-            self.cfg_dict["offset_file"] = "./actpol_data_shared/" \
-                                           "RelativeOffsets/template_ar4_160830.txt"
 
     def create_header(self):
         """Create header comments for the .seq file.
