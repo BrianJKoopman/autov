@@ -33,10 +33,7 @@ arc_autov.enter_single_command('THC S47  100') # freeze focal plane
 arc_autov.enter_single_command('CCY S45  100') # freeze l3_b y-radius
 arc_autov.enter_single_command('CCY S41  100') # freeze l3_b y-radius
 arc_autov.apply_ar_coatings(coating_file=coating)
-if ARRAY in ['4']:
-    arc_autov.set_wavelengths(wavelengths=[2070000, 1380000, 1130000, int(autov.freq2lambda(args.frequency))], reference=3) # ar4
-else:
-    raise ValueError("Array %s not yet supported."%(ARRAY))
+arc_autov.set_wavelengths(wavelengths=[int(autov.freq2lambda(args.frequency))], reference=0)
 arc_autov.set_fields(polarization=1)
 arc_autov.set_vignetting()
 arc_autov.activate_pol_ray_trace()

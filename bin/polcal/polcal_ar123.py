@@ -28,12 +28,7 @@ qq.create_header()
 qq.load_clean_len()
 qq.remove_glass()
 qq.apply_ar_coatings()
-# There's some sublte difficulty in setting wavelengths, the first three here are assumed to be already set in a clean file.
-# We just set to the passed in frequency and use that as a reference.
-if ARRAY in ['1', '2']:
-    qq.set_wavelengths(wavelengths=[2140000, 2070000, 2000000, int(autov.freq2lambda(args.frequency))], reference=3) # ar1, ar2
-elif ARRAY in ['3']:
-    qq.set_wavelengths(wavelengths=[3000000, 2070000, 1380000, int(autov.freq2lambda(args.frequency))], reference=3) # ar3
+qq.set_wavelengths(wavelengths=[int(autov.freq2lambda(args.frequency))], reference=0)
 qq.set_fields(polarization=1)
 qq.set_vignetting()
 qq.activate_pol_ray_trace()
