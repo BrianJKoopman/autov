@@ -3,13 +3,11 @@
 
 # Usage: python polcal_ar123.py [ARRAY] [FREQ]
 
-import subprocess
 import time
-import os
 import argparse
-import numpy as np
 
 from autov import autoact
+from autov import autov
 
 # Parse arguments passed to the script.
 parser = argparse.ArgumentParser()
@@ -36,7 +34,7 @@ if ARRAY in ['1', '2']:
     qq.set_wavelengths(wavelengths=[2140000, 2070000, 2000000, int(autov.freq2lambda(args.frequency))], reference=3) # ar1, ar2
 elif ARRAY in ['3']:
     qq.set_wavelengths(wavelengths=[3000000, 2070000, 1380000, int(autov.freq2lambda(args.frequency))], reference=3) # ar3
-qq.set_fields(polarization=0)
+qq.set_fields(polarization=1)
 qq.set_vignetting()
 qq.activate_pol_ray_trace()
 qq.set_image_semi_aperture()
@@ -46,4 +44,4 @@ qq.run_poldsp(input_angle=0, pupil_number=23)
 qq.run_poldsp(input_angle=90, pupil_number=23)
 qq.exit()
 qq.run()
-qq.save_cfg(out_dir="./output/calibration/")
+qq.save_cfg(out_dir="../output/calibration/")
