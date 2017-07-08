@@ -131,12 +131,16 @@ class AutoV(object):
                 raise ValueError("More than 21 wavelengths submitted, this is too many.")
             if len(wavelengths) != len(np.unique(wavelengths)):
                 raise ValueError("Wavelengths submitted not unique, please remove duplicates.")
-
         if self.wl_set is True:
             if len(wavelengths) != len(self.wavelengths):
                 raise ValueError("Specify same number of wavelengths for each function call.")
 
         text = "! modify wavelengths\n"
+
+        if len(wavelengths) < 3:
+            # If we're setting just one wavelength, delete two set wavelengths first.
+            text += "DEL W0+1\n"
+            text += "DEL W0+1\n"
 
         for wavelength in wavelengths:
             if wavelengths.index(wavelength) > 2:
