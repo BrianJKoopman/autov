@@ -1,6 +1,6 @@
 # https://phy-wiki.princeton.edu/polwiki/pmwiki.php?n=Calibration.InputsForMapping
 {
-"codevpol_dir": "/home/koopman/git/codevpol/cfg/calibration/",
+"codevpol_dir": "/home/koopman/git/codevpol/bin/cfg/calibration/",
 "2013": {"ar1": "template_ar1_130821s.txt"},
 "2014": {"ar1": "template_ar1_150201us.txt",
          "ar2": "template_ar2_150201us.txt"},
