@@ -27,7 +27,7 @@ $(CODEVPOL_CAL_CFG_DIR).%.in.dummy : ../output/calibration/%.in codevpol_pointin
 	python2 add_to_config.py $< 2014
 	python2 add_to_config.py $< 2015
 	python2 add_to_config.py $< 2016
-	#python2 add_to_config.py $< 2017
+	@#python2 add_to_config.py $< 2017
 	touch $@
 
 ## variables   : Print variables.
