@@ -2,6 +2,6 @@ from distutils.core import setup
 
 setup(
     name="AutoV",
-    version="0.1",
+    version="1.0.0",
     packages=["autov",],
 )
