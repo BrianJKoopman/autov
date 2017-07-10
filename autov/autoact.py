@@ -52,7 +52,7 @@ class AutoACT(AutoV):
         file_lookup = {'1': r'ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq',
                        '2': r'ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq',
                        '3': r'ACTPol_90GHz_v29_optical_filter_aperture_study_20111204.seq',
-                       '4': r'AdvACT_HF_v31_20150416.seq'}
+                       '4': r'ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq'}
 
         check_md5sums(clean_file_dir, md5sums)
 
@@ -65,9 +65,9 @@ class AutoACT(AutoV):
             logging.critical("Array %s not supported for loading a clean lens.", self.array)
             raise ValueError("Array %s not yet supported."%(self.array))
 
-        if self.array in ['1']:
-            print "change to PA1 from PA2"
-            text += "! PA1 needs to have optics mirrored from PA2 clean copy.\n"
+        if self.array in ['1', '4']:
+            print "change to PA1/4 from PA2"
+            text += "! PA1/4 needs to have optics mirrored from PA2 clean copy.\n"
             text += "XDE S8 -16.1\n"
             text += "XDE S15 -0.2\n"
             text += "XDE S24 -0.2\n"
@@ -102,12 +102,12 @@ class AutoACT(AutoV):
 
         """
         text = "! automated glass defintion removal\n"
-        if self.array in ['1', '2', '3']:
+        if self.array in ['1', '2', '3', '4']:
             surfaces = [6, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 34]
             logging.info("Removed glass definitions from surfaces %s", surfaces)
-        elif self.array in ['4']:
-            surfaces = [6, 11, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 39]
-            logging.info("Removed glass definitions from surfaces %s", surfaces)
+        #elif self.array in ['4']:
+        #    surfaces = [6, 11, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 39]
+        #    logging.info("Removed glass definitions from surfaces %s", surfaces)
         else:
             raise ValueError("Array %s not yet supported."%(self.array))
         for surface in surfaces:
@@ -129,10 +129,10 @@ class AutoACT(AutoV):
         """
 
         text = "! apply MUL coating\n"
-        if self.array in ['1', '2', '3']:
+        if self.array in ['1', '2', '3', '4']:
             surfaces = [32, 33, 36, 37, 39, 40]
-        elif self.array in ['4']:
-            surfaces = [37, 38, 41, 42, 44, 45]
+        #elif self.array in ['4']:
+        #    surfaces = [37, 38, 41, 42, 44, 45]
         else:
             raise ValueError("Array %s not yet fully supported."%(self.array))
 
@@ -160,10 +160,10 @@ class AutoACT(AutoV):
         """
         text = "! Modify Semi-Aperture of Image surface for poldsp output\n"
 
-        if self.array in ['1', '2', '3']:
+        if self.array in ['1', '2', '3', '4']:
             image_surface = 42
-        elif self.array in ['4']:
-            image_surface = 47
+        #elif self.array in ['4']:
+        #    image_surface = 47
         else:
             raise ValueError("Automation not complete for array %s right now."%(self.array))
 
@@ -286,10 +286,10 @@ class AutoACT(AutoV):
 
         # Definte image_surface defaults or take alt_image
         if alt_image is 0:
-            if self.array in ['1', '2', '3']:
+            if self.array in ['1', '2', '3', '4']:
                 image_surface = 42
-            elif self.array in ['4']:
-                image_surface = 47
+            #elif self.array in ['4']:
+            #    image_surface = 47
             else:
                 raise ValueError("Automation not complete for array %s right now."%(self.array))
         else:

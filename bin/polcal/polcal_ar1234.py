@@ -11,7 +11,7 @@ from autov import autov
 
 # Parse arguments passed to the script.
 parser = argparse.ArgumentParser()
-parser.add_argument("array", choices=['1', '2', '3'], help="Array you want to automate.")
+parser.add_argument("array", choices=['1', '2', '3', '4'], help="Array you want to automate.")
 parser.add_argument("frequency", help="Frequency to run the Code V calculations at in units of GHz.")
 args = parser.parse_args()
 
