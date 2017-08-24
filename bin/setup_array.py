@@ -22,7 +22,7 @@ tmpDir = "E:\ownCloud\optics\data\\tmp\\"
 #autoseq = "pa%s_automation.seq"%ARRAY
 
 # Build .seq file for automated run.
-qq = autoact.AutoACT(ARRAY, "")
+qq = autoact.AutoACT(ARRAY, [""])
 qq.create_header()
 qq.load_clean_len()
 qq.remove_glass()
