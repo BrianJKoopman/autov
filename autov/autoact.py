@@ -5,7 +5,7 @@
 import logging
 
 from autov import AutoV, check_md5sums
-from codey import get_fields
+from codevpol.codey import get_fields
 from parse_seq import read_seq, parse_surface
 
 class AutoACT(AutoV):
