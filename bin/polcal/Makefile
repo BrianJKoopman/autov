@@ -10,12 +10,25 @@ CODEVPOL_CONFIGS = $(patsubst %.in, $(CODEVPOL_CAL_CFG_DIR).%.in.dummy, $(AUTOV_
 CODEVPOL_CONFIG_OUTPUT = $(wildcard $(CODEVPOL_CAL_CFG_DIR)*.json)
 #CODEVPOL_CONFIG_OUTPUT_YEARS = $(wildcard $(CODEVPOL_CAL_CFG_DIR)20*)
 
+POLCAL_IN_FILES = cfg_calibration_pa5_150ghz.in cfg_calibration_pa5_90ghz.in cfg_calibration_pa6_150ghz.in cfg_calibration_pa6_90ghz.in
+POLCAL_CFG_LOCATION = ../output/calibration/
+POLCAL_TARGETS = $(addprefix $(POLCAL_CFG_LOCATION), $(POLCAL_IN_FILES))
+
 # Targets
 .PHONY : codevpol_cal_cfg
 codevpol_cal_cfg : $(CODEVPOL_CONFIGS)
 
+.PHONY : polcal
+polcal : $(POLCAL_TARGETS)
+
+$(POLCAL_TARGETS) : polcal_ar1234.py
+	python polcal_ar1234.py 5 90
+	python polcal_ar1234.py 5 150
+	python polcal_ar1234.py 6 90
+	python polcal_ar1234.py 6 150
+
 #$(CODEVPOL_CAL_CFG_DIR).cfg_calibration_pa1_150ghz.in.dummy : cfg_calibration_pa1_150ghz.in
-#	python2 add_to_config.py $^ 2013
+#	python2 add_to_config.py $^ 2014
 #	touch $(CODEVPOL_CAL_CFG_DIR).cfg_calibration_pa1_150ghz.in.dummy
 
 # Note this targets a dummy file, which relates to the dep of the autov output
@@ -38,6 +51,7 @@ variables:
 	@echo CODEVPOL_CONFIGS: $(CODEVPOL_CONFIGS)
 	@echo CODEVPOL_CONFIG_DUMMIES: $(CODEVPOL_CONFIG_DUMMIES)
 	@echo CODEVPOL_CONFIG_OUTPUT: $(CODEVPOL_CONFIG_OUTPUT)
+	@echo POLCAL_TARGETS: $(POLCAL_TARGETS)
 	#@echo CODEVPOL_CONFIG_OUTPUT_YEARS: $(CODEVPOL_CONFIG_OUTPUT_YEARS)
 
 .PHONY : symlinks
