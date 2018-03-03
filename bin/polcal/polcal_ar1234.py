@@ -1,5 +1,5 @@
 # Brian Koopman
-"""Create polarization calibration Code V outputs for ar1, ar2 and ar3."""
+"""Create polarization calibration Code V outputs for ar1, ar2, ar3, ar4, ar5, and ar6."""
 
 # Usage: python polcal_ar123.py [ARRAY] [FREQ]
 
@@ -11,7 +11,7 @@ from autov import autov
 
 # Parse arguments passed to the script.
 parser = argparse.ArgumentParser()
-parser.add_argument("array", choices=['1', '2', '3', '4'], help="Array you want to automate.")
+parser.add_argument("array", choices=['1', '2', '3', '4', '5', '6'], help="Array you want to automate.")
 parser.add_argument("frequency", help="Frequency to run the Code V calculations at in units of GHz.")
 args = parser.parse_args()
 

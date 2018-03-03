@@ -52,7 +52,9 @@ class AutoACT(AutoV):
         file_lookup = {'1': r'ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq',
                        '2': r'ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq',
                        '3': r'ACTPol_90GHz_v29_optical_filter_aperture_study_20111204.seq',
-                       '4': r'ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq'}
+                       '4': r'ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq',
+                       '5': r'ACTPol_150GHz_v28_optical_filter_aperture_study_20110809.seq',
+                       '6': r'ACTPol_90GHz_v29_optical_filter_aperture_study_20111204.seq'}
 
         check_md5sums(clean_file_dir, md5sums)
 
@@ -102,7 +104,7 @@ class AutoACT(AutoV):
 
         """
         text = "! automated glass defintion removal\n"
-        if self.array in ['1', '2', '3', '4']:
+        if self.array in ['1', '2', '3', '4', '5', '6']:
             surfaces = [6, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 34]
             logging.info("Removed glass definitions from surfaces %s", surfaces)
         #elif self.array in ['4']:
@@ -129,7 +131,7 @@ class AutoACT(AutoV):
         """
 
         text = "! apply MUL coating\n"
-        if self.array in ['1', '2', '3', '4']:
+        if self.array in ['1', '2', '3', '4', '5', '6']:
             surfaces = [32, 33, 36, 37, 39, 40]
         #elif self.array in ['4']:
         #    surfaces = [37, 38, 41, 42, 44, 45]
@@ -139,7 +141,7 @@ class AutoACT(AutoV):
         if coating_file is None:
             if self.array in ['1', '2']:
                 coating_file = r"E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
-            elif self.array in ['3']:
+            elif self.array in ['3', '5', '6']:
                 coating_file = r"E:\ownCloud\optics\mul\three_layer_coating_128_195_284.mul"
             elif self.array in ['4']:
                 coating_file = r"E:\ownCloud\optics\mul\hf\three_layer_coating_120_185_285.mul"
@@ -160,7 +162,7 @@ class AutoACT(AutoV):
         """
         text = "! Modify Semi-Aperture of Image surface for poldsp output\n"
 
-        if self.array in ['1', '2', '3', '4']:
+        if self.array in ['1', '2', '3', '4', '5', '6']:
             image_surface = 42
         #elif self.array in ['4']:
         #    image_surface = 47
@@ -286,7 +288,7 @@ class AutoACT(AutoV):
 
         # Definte image_surface defaults or take alt_image
         if alt_image is 0:
-            if self.array in ['1', '2', '3', '4']:
+            if self.array in ['1', '2', '3', '4', '5', '6']:
                 image_surface = 42
             #elif self.array in ['4']:
             #    image_surface = 47
@@ -347,7 +349,7 @@ class AutoACT(AutoV):
 
         # Note the change above to identify position won't work for MF1/2 and
         # PA2 and PA3, since those fields will probably differ.
-        if _array in ['2', '3']:
+        if _array in ['2', '3', '5', '6']:
             text += "! set polarization fraction of all fields to 1\n"
             for i in range(25):
                 text += "PFR F%s %s\n"%(i+1, polarization)
@@ -492,11 +494,11 @@ def get_fields(array):
 
     if array == 1:
         return pa1_fields
-    elif array == 2:
+    elif array in [2, 5]:
         return pa2_fields
     elif array == -2:
         return pa2_addition_24_fields
-    elif array == 3:
+    elif array in [3, 6]:
         return pa3_fields
     elif array == 4:
         return pa1_fields # PA4 is in PA1 position
