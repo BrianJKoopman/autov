@@ -1,3 +1,7 @@
+"""Add RelativeOffets file location to codevpol configuration file based on
+file locations in codevpol_pointing_metadata.json.
+"""
+
 import ahab
 import argparse
 

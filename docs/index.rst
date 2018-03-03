@@ -11,6 +11,16 @@ Welcome to autov's documentation!
     :caption: Contents:
 
     decenter   
+    polcal
+
+Using Auto V
+------------
+To make use of autov we need a Windows system with CODE V installed on it.
+Ideally this is a computer we administer, because we'll also need cygwin. My
+personal setup when developing this was Windows 7 on a virtual machine (using
+VirtualBox) running on a linux host. This setup allowed me to automate the CODE
+V analysis to output to a shared directory so that data could then be quickly
+analyzed using a sane development environment on linux.
 
 Auto V Object
 -------------
