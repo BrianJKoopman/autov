@@ -141,10 +141,13 @@ class AutoACT(AutoV):
         if coating_file is None:
             if self.array in ['1', '2']:
                 coating_file = r"E:\ownCloud\optics\mul\two_layer_coating_138_250.mul"
-            elif self.array in ['3', '5', '6']:
+            elif self.array in ['3', '6']:
                 coating_file = r"E:\ownCloud\optics\mul\three_layer_coating_128_195_284.mul"
             elif self.array in ['4']:
-                coating_file = r"E:\ownCloud\optics\mul\hf\three_layer_coating_120_185_285.mul"
+                #coating_file = r"E:\ownCloud\optics\mul\hf\three_layer_coating_120_185_285.mul"
+                coating_file = r"E:\ownCloud\optics\mul\hf\three_layer_coating_152_183_296.mul"
+            elif self.array in ['5']:
+                coating_file = r"E:\ownCloud\optics\mul\mf\three_layer_coating_257_310_500.mul"
 
         for surface in surfaces:
             text += "MLT S%s %s\n"%(surface, coating_file)
