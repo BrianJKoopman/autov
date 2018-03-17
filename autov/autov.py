@@ -166,7 +166,7 @@ class AutoV(object):
             logging.info("Reference wavelength set to %s", wavelengths[reference])
             self.seq.append(text)
             self.cfg_dict["codev_inputs"]["freq"] = int(lambda2freq(wavelengths[reference]))
-            self.descriptors.append("%03d"%str(int(lambda2freq(wavelengths[reference]))) + "ghz")
+            self.descriptors.append("%03d"%int(lambda2freq(wavelengths[reference])) + "ghz")
 
         self.wl_set = True
         self.wavelengths = wavelengths
@@ -531,7 +531,7 @@ def readseq(seqfile):
 
     return read_data
 
-SPEED_OF_LIGHT = 299792458 # [m/s]
+SPEED_OF_LIGHT = 299792458. # [m/s]
 
 def lambda2freq(wavelength):
     """Convert from wavelength to frequency.
@@ -544,7 +544,7 @@ def lambda2freq(wavelength):
     Returns:
         freq (float): Frequency in GHz
     """
-    return SPEED_OF_LIGHT/float(wavelength) #[GHz]
+    return SPEED_OF_LIGHT/wavelength #[GHz]
 
 def freq2lambda(freq):
     """Convert from frequency to wavelength.
@@ -557,7 +557,7 @@ def freq2lambda(freq):
     Returns:
         wavelength (float): wavelength in nm
     """
-    return SPEED_OF_LIGHT/float(freq) #[nm]
+    return SPEED_OF_LIGHT/freq #[nm]
 
 def check_md5sums(clean_file_dir, md5sums_list):
     """Check a file against a known list of md5sums for a match.
