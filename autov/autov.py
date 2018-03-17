@@ -166,7 +166,7 @@ class AutoV(object):
             logging.info("Reference wavelength set to %s", wavelengths[reference])
             self.seq.append(text)
             self.cfg_dict["codev_inputs"]["freq"] = int(lambda2freq(wavelengths[reference]))
-            self.descriptors.append(str(int(lambda2freq(wavelengths[reference]))) + "ghz")
+            self.descriptors.append("%03d"%str(int(lambda2freq(wavelengths[reference]))) + "ghz")
 
         self.wl_set = True
         self.wavelengths = wavelengths
