@@ -520,6 +520,36 @@ class AutoV(object):
         logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
+    def decenter_surface(self, surface, parameter, value):
+        """Apply a decenter value to an already existing decenter for the given surface.
+
+        To apply a decenter where there isn't one already, use autov.set_decenter_type().
+
+        Units: ADE and BDE are in degrees, XDE, YDE, ZDE are in System Units.
+
+        :param surface: Surface number in original .seq file to decenter.
+        :type surface: int
+        :param parameter: Parameter to decenter. This corresponds to any
+                          decenter parameter in CODE V. Valid values are:
+                          "x", "y", "z", "alpha", "beta", "gamma",
+                          "x-offset", "y-offset", and "z-offset".
+        :type parameter: str
+        :param value: Value for decenter in system units.
+        :type value: float
+        """
+        parameter_lookup = {"x": "XDE", "y": "YDE", "z": "ZDE",
+                            "alpha": "ADE", "beta": "BDE", "gamma": "CDE",
+                            "x-offset": "XOD", "y-offset": "YOD", "z-offset": "ZOD"}
+        decenter_command = parameter_lookup[parameter.lower()]
+
+        text = "! Apply Decenter to surface %s.\n"%surface
+        text += "%s S%s %s\n"%(decenter_command, str(surface), str(value))
+        logging.debug("Setting decenter type %s to value: %s", decenter_command, value)
+
+        self.seq.append(text)
+        logging.debug("Adding text to .seq file: \n%s", text)
+        return text
+
     # TODO: need to write cleanup method for rm'ing the tmp directory. ccatp had 16,000 tmp files.
     def save_lens(self, filename):
         """Save the lens file to temporary location for running tolfdif."""
