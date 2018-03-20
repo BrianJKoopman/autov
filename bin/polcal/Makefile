@@ -21,6 +21,8 @@ POLCAL_CFG_LOCATION = ../output/calibration/
 POLCAL_TARGETS = $(addprefix $(POLCAL_CFG_LOCATION), $(POLCAL_IN_FILES))
 
 # Targets
+# To be run externally by codevpol (could setup locally if symlink
+# actpol_data_shared properly)
 .PHONY : codevpol_cal_cfg
 codevpol_cal_cfg : $(CODEVPOL_CONFIGS)
 
