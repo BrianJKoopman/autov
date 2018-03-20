@@ -497,6 +497,29 @@ class AutoV(object):
             raise ValueError("Unknown tolerance.")
         return text
 
+    def set_decenter_type(self, surface, _type):
+        """Change the decenter type of a surface.
+
+        Supported decenter types: 'decenter and return', 'none'
+
+        :param surface: Surface number to add decenter to
+        :type surface: int
+        :param _type: type of decenter to use
+        :type _type: string
+        """
+        text = "! Changing decenter type on surface %s\n"%surface
+
+        if _type.lower() == "decenter and return":
+            text += "DAR S%s\n"%surface
+        elif _type.lower() == "none":
+            text += "DEL DDA S%s\n"%surface
+        else:
+            raise ValueError("Decenter type %s not implemented")
+
+        self.seq.append(text)
+        logging.debug("Adding text to .seq file: \n%s", text)
+        return text
+
     # TODO: need to write cleanup method for rm'ing the tmp directory. ccatp had 16,000 tmp files.
     def save_lens(self, filename):
         """Save the lens file to temporary location for running tolfdif."""
