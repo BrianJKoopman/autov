@@ -7,6 +7,7 @@ observed planet positions."""
 import time
 import argparse
 import logging
+import numpy as np
 
 from autov import autoact
 from autov import autov
@@ -28,25 +29,31 @@ CTIME = int(time.time())
 outDir = "E:\ownCloud\optics\data\\"
 tmpDir = "E:\ownCloud\optics\data\\tmp\\"
 
-# Build .seq file for automated run.
-TEL = autoact.AutoACT(ARRAY, descriptors=["secondary_decentering", "pa%s"%(ARRAY)])
-TEL.create_header()
-TEL.load_clean_len()
-TEL.remove_glass()
-TEL.apply_ar_coatings()
-TEL.set_wavelengths(wavelengths=[int(autov.freq2lambda(int(args.frequency)))], reference=0)
+tilts = np.arange(0, 0.19, 0.01)
+#tilts = [0.18, 0.19]
+decenter_parameter = 'beta'
 
-TEL.set_decenter_type(4, 'decenter and return')
-TEL.decenter_surface(4, 'alpha', 0.1)
+for tilt in tilts:
+    print tilt
+    # Build .seq file for automated run.
+    TEL = autoact.AutoACT(ARRAY, descriptors=["secondary_decentering", "pa%s"%(ARRAY), decenter_parameter, tilt])
+    TEL.create_header()
+    TEL.load_clean_len()
+    TEL.remove_glass()
+    TEL.apply_ar_coatings()
+    TEL.set_wavelengths(wavelengths=[int(autov.freq2lambda(int(args.frequency)))], reference=0)
 
-TEL.set_fields(polarization=1)
-TEL.set_vignetting()
-TEL.activate_pol_ray_trace()
-TEL.set_image_semi_aperture()
-#TEL.run_psf()
-#TEL.run_real_ray_trace()
-##TEL.run_poldsp(input_angle=0, pupil_number=23)
-##TEL.run_poldsp(input_angle=90, pupil_number=23)
-TEL.exit()
-TEL.run()
-TEL.save_cfg(out_dir="../output/secondary_decentering_exploration/")
+    TEL.set_decenter_type(4, 'decenter and return')
+    TEL.decenter_surface(4, 'alpha', tilt)
+
+    TEL.set_fields(polarization=1)
+    TEL.set_vignetting()
+    TEL.activate_pol_ray_trace()
+    TEL.set_image_semi_aperture()
+    TEL.run_psf()
+    TEL.run_real_ray_trace()
+    #TEL.run_poldsp(input_angle=0, pupil_number=23)
+    #TEL.run_poldsp(input_angle=90, pupil_number=23)
+    TEL.exit()
+    TEL.run()
+    file_name = TEL.save_cfg(out_dir="./output/")
