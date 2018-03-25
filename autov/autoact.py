@@ -236,9 +236,9 @@ class AutoACT(AutoV):
             filename = "real_ray_trace"
         else:
             filename = "real_ray_trace_%s"%(name_mod)
-        out_file = self._make_windows_out_file(filename)
+        out_file = self._make_windows_md5_out_file(filename)
         # Add ray trace file output to cfg_dict.
-        dict_out_file = self._make_cfg_dict_out_file(filename)
+        dict_out_file = self._make_cfg_dict_out_file_from_full_path(out_file)
         self.cfg_dict["codev_inputs"]["ray_trace"] = [dict_out_file]
 
         # Definte image_surface defaults or take alt_image

@@ -14,6 +14,7 @@ import json
 import logging
 import hashlib
 import numpy as np
+import md5
 
 class AutoV(object):
     """Class for writing custom .seq files for automating CODEV.
@@ -223,11 +224,54 @@ class AutoV(object):
         out_file += "_ar%s.txt"%(self.array)
         return out_file
 
+    def _make_windows_hexed_out_file(self, filename):
+        import codecs
+        hexlify = codecs.getencoder('hex')
+
+        _out_dir = "%s%s"%(self.out_dir, self.date)
+        out_file = "%s_%s"%(self.ctime, filename)
+        for descriptor in self.descriptors:
+            out_file += "_%s"%(descriptor)
+        out_file += "_ar%s.txt"%(self.array)
+
+        name, extension = os.path.splitext(out_file)
+        hex_name = hexlify(name)[0]
+
+        full_path = "%s\\%s%s"%(_out_dir, hex_name, extension)
+        return full_path
+
+    def _make_windows_md5_out_file(self, filename):
+        """Create the windows path/filename for a file.
+
+        We assemble the filename, based on descriptors and the current CTIME,
+        then compute the md5 hash value of that string and use it as the
+        filename. This will be unique, not have any extra periods in it and will be
+        short.
+        """
+        _out_dir = "%s%s"%(self.out_dir, self.date)
+
+        out_file = "%s_%s"%(self.ctime, filename)
+        for descriptor in self.descriptors:
+            out_file += "_%s"%(descriptor)
+        out_file += "_ar%s.txt"%(self.array)
+
+        name, extension = os.path.splitext(out_file)
+        hex_name = md5.new(name).hexdigest()
+
+        full_path = os.path.join(_out_dir, "%s%s"%(hex_name, extension))
+        return full_path
+
     def _make_cfg_dict_out_file(self, filename):
         dict_out_file = "%s/%s_%s"%(self.date, self.ctime, filename)
         for descriptor in self.descriptors:
             dict_out_file += "_%s"%(descriptor)
         dict_out_file += "_ar%s.txt"%(self.array)
+        return dict_out_file
+
+    def _make_cfg_dict_out_file_from_full_path(self, full_path):
+        """Make the out path for running on linux later from the Windows path."""
+        basename = os.path.basename(full_path)
+        dict_out_file = "%s/%s"%(self.date, basename)
         return dict_out_file
 
     def run_psf(self):
@@ -241,10 +285,10 @@ class AutoV(object):
         # the user worry about it.
         # Can't have file name with any .'s other than in .txt
         filename = "psf"
-        out_file = self._make_windows_out_file(filename)
+        out_file = self._make_windows_md5_out_file(filename)
         logging.info("Saving psf output to %s", out_file)
         # Add psf file output to cfg_dict.
-        dict_out_file = self._make_cfg_dict_out_file(filename)
+        dict_out_file = self._make_cfg_dict_out_file_from_full_path(out_file)
         self.cfg_dict["codev_inputs"]["psf"] = dict_out_file
 
         text = "! auto_psf.seq\n"
@@ -406,6 +450,7 @@ class AutoV(object):
         with open(file_name, 'w') as f:
             f.write("extract = ")
             json.dump(self.cfg_dict, f)
+        return file_name
 
     def set_buffer_len(self, length):
         """Change the length of B0, the default buffer.
@@ -545,6 +590,9 @@ class AutoV(object):
         text = "! Apply Decenter to surface %s.\n"%surface
         text += "%s S%s %s\n"%(decenter_command, str(surface), str(value))
         logging.debug("Setting decenter type %s to value: %s", decenter_command, value)
+
+        # Output decenters to config file.
+        self.cfg_dict["codev_inputs"]["decenters"] = {decenter_command: value}
 
         self.seq.append(text)
         logging.debug("Adding text to .seq file: \n%s", text)
