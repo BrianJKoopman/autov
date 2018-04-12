@@ -277,7 +277,15 @@ class AutoACT(AutoV):
 
         Currently only defined for PA2, since they're already in the clean lens
         system file. This currently just sets the polarization fraction to 1
-        for all fields, something we'll always want to do."""
+        for all fields, something we'll always want to do.
+
+        :param polarization: polarized fraction - specifies the degree of
+                             polarization as the ratio of the intensity of the
+                             polarized component of the beam to the total
+                             intensity of the beam. This ratio will range from
+                             0 (polarized) to 1 (completely polarized)
+        :type polarization: float
+        """
         text = "! set fields\n"
 
         # This way we can choose an array position (PA1 for looking at HF for instance).
