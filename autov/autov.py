@@ -343,6 +343,26 @@ class AutoV(object):
         logging.debug("Adding text to .seq file: \n%s", text)
         return text
 
+    def run_mmtab(self):
+        """Run the mmtab macro for computing the Mueller matrix at each surface.
+
+        General: Y
+        """
+        filename = "mmtab"
+        out_file = self._make_windows_out_file(filename)
+        # Add mmtab file output to cfg_dict.
+        dict_out_file = self._make_cfg_dict_out_file(filename)
+        self.cfg_dict["codev_inputs"]["mmtab"] = dict_out_file
+
+        text = "! Compute Mueller matricies\n"
+        text += "OUT " + out_file + " ! Sets output file\n"
+        text += 'run "C:\CODEV105_FCS\macro\mmtab.seq";GO\n'
+        text += "OUT T ! Restores regular output\n"
+        self.seq.append(text)
+        logging.info("mmtab.seq inserted")
+        logging.debug("Adding text to .seq file: \n%s", text)
+        return text
+
     def enter_single_command(self, command):
         """Enter single command in event I don't have a method for it.
 

@@ -4,11 +4,15 @@ file locations in codevpol_pointing_metadata.json.
 
 import ahab
 import argparse
+import os
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("config", help="Pass in the config file.")
 parser.add_argument("year", help="Year to add metadata from.")
 args = parser.parse_args()
+
+file_out = os.path.basename(args.config).strip('\.in')
 
 ahab.cfg.moby2ahabcfg(args.config, output="/tmp/ahab.cfg")
 config = ahab.cfg.read_cfg("/tmp/ahab.cfg")
@@ -28,6 +32,6 @@ if args.year in template_config.keys():
         #output_dir = template_config['codevpol_dir'] + "%s/ar%s/"%(args.year, config['array'])
         output_dir = './output/'
         ahab.ahab.check_dir(output_dir)
-        ahab.cfg.write_cfg(output_dir + "cfg_ar%s_%sghz_%s.json"%(config['array'], config['codev_inputs']['freq'], args.year), config)
+        ahab.cfg.write_cfg(output_dir + file_out + "_%s.json"%(args.year), config)
     except KeyError:
         print "ar%s not present in %s"%(config['array'], args.year)
