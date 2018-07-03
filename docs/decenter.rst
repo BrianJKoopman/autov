@@ -7,10 +7,9 @@ tilts. There are several different types of decenters available. The three I
 have seen used in ACTPol designs are Basic Decenters, Reverse Decenters and a
 Decenter and Return.
 
-Decenters are cumulative, as demonstrated here, in a figure from the Code V
-documentation.
-
-.. image:: _static/cumulative_decenter_codev.png
+Decenters are cumulative. For more information and figures demonstrating how
+decenters combine, see the section in Chapter 8 of the Code V documentation
+titled "Decentered System Philosophy" (reference in version 10.5.473).
 
 Basic Decenter
 --------------
@@ -31,10 +30,12 @@ Decenters only the current surface.
 
 Coordinate Systems Definitions
 ------------------------------
-The definition of the alpha, beta, gamma tilts are shown in the below figure
-from the Code V documentation.
-
-.. image:: _static/tilt_definitions_codev.png
+Decenters in X, Y, and Z are fairly self explainatory. Code V also uses tilts
+in what it refers to as alpha, beta, and gamma. These are tilts around the X,
+Y, and Z axes, respectively. Alpha and beta tilts are left-handed, while gamma
+tilts are right handed. For more information and illustrations showing these
+tilts, see Chapter 8, "Tilt and Decenter Definitions" in the Code V
+documentation (reference in version 10.5.473).
 
 AutoV's Decenter Methods
 -------------------------
