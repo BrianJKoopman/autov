@@ -35,6 +35,10 @@ qq.apply_ar_coatings()
 qq.set_wavelengths(wavelengths=[int(autov.freq2lambda(int(args.frequency)))], reference=0)
 qq.set_fields(polarization=0)
 qq.enter_single_command("INS S1") # insert dummy surface for mmtab
+
+for i in range(24):
+    qq.enter_single_command("DEL F1+1") # insert dummy surface for mmtab
+
 qq.set_vignetting()
 qq.activate_pol_ray_trace()
 qq.set_image_semi_aperture()

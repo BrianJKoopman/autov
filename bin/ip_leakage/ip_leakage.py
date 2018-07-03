@@ -16,6 +16,7 @@ from autov import autov
 parser = argparse.ArgumentParser()
 parser.add_argument("array", choices=['1', '2', '3', '4', '5', '6'], help="Array you want to automate.")
 parser.add_argument("frequency", help="Frequency to run the Code V calculations at in units of GHz.")
+parser.add_argument("-V", "--view", help="View only. Don't run the analysis steps, or save any cfg files. Will cause Code V not to exit after setup.", action="store_false")
 args = parser.parse_args()
 
 ARRAY = args.array
@@ -36,10 +37,15 @@ qq.set_fields(polarization=0)
 qq.set_vignetting()
 qq.activate_pol_ray_trace()
 qq.set_image_semi_aperture()
-qq.run_psf()
-qq.run_real_ray_trace()
-qq.run_poldsp(input_angle=0, pupil_number=23)
-qq.run_poldsp(input_angle=90, pupil_number=23)
-qq.exit()
+
+if args.view:
+    qq.run_psf()
+    qq.run_real_ray_trace()
+    qq.run_poldsp(input_angle=0, pupil_number=23)
+    qq.run_poldsp(input_angle=90, pupil_number=23)
+    qq.exit()
+
 qq.run()
-qq.save_cfg(out_dir="../output/ip_leakage/")
+
+if args.view:
+    qq.save_cfg(out_dir="../output/ip_leakage/")
